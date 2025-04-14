@@ -64,6 +64,10 @@ def painel_doador(request):
     return render(request, 'doadores/painel.html')
 
 @login_required
+def metricas_doador(request):
+    return render(request, 'doadores/metricas.html')
+
+@login_required
 def painel_gestor(request):
     return render(request, 'gestores/painel.html')
 

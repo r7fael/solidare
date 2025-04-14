@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Métricas da Doação{% endblock %}
+
+{% block content %}
+<div class="painel-container">
+    <div class="menu-lateral">
+        <ul>
+            <li><a href="{% url 'painel_doador' %}">Início</a></li>
+            <li><a href="{% url 'metricas_doador' %}">Métricas</a></li>
+        </ul>
+    </div>
+
+    <div class="conteudo-painel">
+        <h2>Suas métricas de impacto</h2>
+
+        <div class="metricas-boxes">
+            <div class="card">Total doado: <strong>R$ 1.200,00</strong></div>
+            <div class="card">Projetos apoiados: <strong>5</strong></div>
+            <div class="card">Pessoas impactadas: <strong>48</strong></div>
+        </div>
+
+        <div class="grafico-placeholder">
+            <p>[Gráfico de distribuição por categoria aqui]</p>
+        </div>
+
+        <h5 class="mt-4">Linha do tempo:</h5>
+        <ul>
+            <li>Jan/2025 – Oficinas de capacitação</li>
+            <li>Fev/2025 – Distribuição de kits escolares</li>
+            <li>Mar/2025 – Atendimento médico gratuito</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

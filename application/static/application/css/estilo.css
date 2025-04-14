@@ -70,3 +70,9 @@ ul {
 ul li {
     padding: 5px;
 }
+
+.menu-lateral ul li a.active {
+    background-color: #495057;
+    border-left: 4px solid #007bff;
+}
+

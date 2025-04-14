@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Minhas Doações - SOLIDARE{% endblock %}
+
+{% block content %}
+<div class="container-doacoes">
+    <h1>Minhas Doações</h1>
+    
+    <div class="resumo-doacoes">
+        <div class="cartao-resumo">
+            <h3>Total Doado</h3>
+            <p>R$ {{ total_doacoes|intcomma }}</p>
+        </div>
+        <a href="{% url 'doacoes:nova_doacao' %}" class="botao-primario">Nova Doação</a>
+    </div>
+    
+    <div class="tabela-doacoes">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Valor</th>
+                    <th>Método</th>
+                    <th>Destino</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for doacao in doacoes %}
+                <tr>
+                    <td>#{{ doacao.id }}</td>
+                    <td>R$ {{ doacao.valor|intcomma }}</td>
+                    <td>{{ doacao.get_metodo_display }}</td>
+                    <td>{{ doacao.get_destino_display }}</td>
+                    <td>
+                        <span class="status-{{ doacao.status|lower }}">
+                            {{ doacao.get_status_display }}
+                        </span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">Nenhuma doação registrada ainda.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .container-doacoes {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 1rem;
+    }
+    
+    .resumo-doacoes {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+    
+    .cartao-resumo {
+        background: #f8f9fa;
+        padding: 1rem 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .botao-primario {
+        background: #4e73df;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    
+    .tabela-doacoes {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    
+    .tabela-doacoes table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    .tabela-doacoes th, .tabela-doacoes td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .tabela-doacoes th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+        color: #333;
+    }
+    
+    .tabela-doacoes tr:hover {
+        background-color: #f5f7fa;
+    }
+    
+    .status-concluido {
+        color: #28a745;
+        background-color: rgba(40, 167, 69, 0.1);
+        padding: 4px 8px;
+        border-radius: 4px;
+        display: inline-block;
+    }
+    
+    .status-pendente {
+        color: #ffc107;
+        background-color: rgba(255, 193, 7, 0.1);
+        padding: 4px 8px;
+        border-radius: 4px;
+        display: inline-block;
+    }
+    
+    .status-cancelado {
+        color: #dc3545;
+        background-color: rgba(220, 53, 69, 0.1);
+        padding: 4px 8px;
+        border-radius: 4px;
+        display: inline-block;
+    }
+</style>
+{% endblock %}
