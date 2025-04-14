@@ -1,0 +1,131 @@
+.nova-doacao-container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.voltar-painel {
+    margin-bottom: 30px;
+}
+
+.voltar-painel a {
+    color: #3498db;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+}
+
+.voltar-painel a:hover {
+    text-decoration: underline;
+}
+
+.form-container {
+    background: white;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h1 {
+    color: #2c3e50;
+    margin-top: 0;
+}
+
+.form-container p {
+    color: #7f8c8d;
+    margin-bottom: 25px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.form-group input[type="text"],
+.form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group select:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.checkbox-group input {
+    width: auto;
+}
+
+.botao-confirmar {
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.botao-confirmar:hover {
+    background-color: #27ae60;
+}
+
+.info-ajuda {
+    margin-top: 40px;
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
+}
+
+.info-ajuda h3 {
+    margin-top: 0;
+    color: #2c3e50;
+}
+
+.info-ajuda p {
+    margin: 8px 0;
+    color: #7f8c8d;
+}
+
+.info-ajuda i {
+    margin-right: 10px;
+    color: #3498db;
+    width: 20px;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .nova-doacao-container {
+        padding: 15px;
+    }
+    
+    .form-container {
+        padding: 20px;
+    }
+}
