@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Plataforma ONG</title>
+    <link rel="stylesheet" href="{% static 'application/css/estilo.css' %}">
+</head>
+<body>
+    <div class="pagina-login">
+        <form method="POST" class="formulario-login">
+            {% csrf_token %}
+            <h2>Login</h2>
+            
+            <div class="grupo-campo">
+                <label>Email:</label>
+                <input type="email" name="email" required>
+            </div>
+            
+            <div class="grupo-campo">
+                <label>Senha:</label>
+                <input type="password" name="senha" required>
+            </div>
+            
+            <button type="submit" class="botao-login">Entrar</button>
+            
+            {% if messages %}
+            <div class="mensagens-erro">
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Plataforma ONG{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'application/css/estilo.css' %}">
+</head>
+<body>
+    <div class="topo-site">
+        <div class="area-logo">Plataforma ONG</div>
+        <div class="area-usuario">
+            {% if user.is_authenticated %}
+                <span class="saudacao">Olá, {{ user.nome }}!</span>
+                <a href="{% url 'logout' %}" class="botao-sair">Sair</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="conteudo-principal">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

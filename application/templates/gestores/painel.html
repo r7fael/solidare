@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Painel do Gestor{% endblock %}
+
+{% block content %}
+<h2>Bem-vindo(a), {{ user.nome_completo }}</h2>
+
+<p>Este é o seu painel de controle da ONG. Aqui você poderá:</p>
+
+<ul>
+    <li>Visualizar e enviar relatórios para doadores</li>
+    <li>Acompanhar beneficiados</li>
+    <li>Gerenciar investimentos</li>
+</ul>
+
+<div class="alert alert-info mt-4">
+    Em breve: gráfico de impacto, lista de relatórios enviados, painel de doadores.
+</div>
+{% endblock %}

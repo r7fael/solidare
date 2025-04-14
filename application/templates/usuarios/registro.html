@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro</title>
+    <link rel="stylesheet" href="{% static 'application/css/estilo.css' %}">
+</head>
+<body>
+    <div class="pagina-cadastro">
+        <form method="POST" class="formulario-cadastro">
+            {% csrf_token %}
+            <h2>Criar Conta</h2>
+            
+            {% if messages %}
+            <div class="alertas">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <div class="grupo-campo">
+                <label>Nome completo:</label>
+                <input type="text" name="nome" required>
+            </div>
+            
+            <div class="grupo-campo">
+                <label>CPF:</label>
+                <input type="text" name="cpf" required placeholder="000.000.000-00">
+            </div>
+            
+            <div class="grupo-campo">
+                <label>Email:</label>
+                <input type="email" name="email" required>
+            </div>
+            
+            <div class="grupo-campo">
+                <label>Senha:</label>
+                <input type="password" name="senha" required>
+            </div>
+            
+            <div class="grupo-campo">
+                <label>Tipo de usuário:</label>
+                <select name="tipo_usuario" required>
+                    <option value="">Selecione...</option>
+                    <option value="doador">Doador</option>
+                    <option value="gestor">Gestor</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="botao-principal">Cadastrar</button>
+        </form>
+    </div>
+</body>
+</html>
