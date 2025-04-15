@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% load humanize %}
-
 {% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'application/css/painel.css' %}">
+
 <div class="painel">
     <div class="cabecalho-painel">
         <h1>Minhas Doações</h1>
