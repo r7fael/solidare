@@ -1,0 +1,170 @@
+:root {
+    --primary-color: #4361ee;
+    --primary-dark: #3a56d4;
+    --secondary-color: #3f37c9;
+    --accent-color: #4895ef;
+    --text-color: #2b2d42;
+    --text-light: #8d99ae;
+    --light-gray: #f8f9fa;
+    --white: #ffffff;
+    --error-color: #ef233c;
+    --success-color: #4cc9f0;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: var(--light-gray);
+    color: var(--text-color);
+    line-height: 1.6;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.pagina-login {
+    width: 100%;
+    max-width: 450px;
+    padding: 2rem;
+    animation: fadeIn 0.5s ease-out;
+}
+
+
+.formulario-login {
+    background: var(--white);
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.formulario-login:hover {
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    transform: translateY(-5px);
+}
+
+.formulario-login h2 {
+    text-align: center;
+    margin-bottom: 1.8rem;
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+
+.grupo-campo {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.grupo-campo label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.grupo-campo input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: #f8f9fa;
+}
+
+.grupo-campo input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background-color: var(--white);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+}
+
+
+.botao-login {
+    width: 100%;
+    padding: 0.9rem;
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 0.5rem;
+}
+
+.botao-login:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.botao-login:active {
+    transform: translateY(0);
+}
+
+.mensagens-erro {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: #fff5f5;
+    border-left: 4px solid var(--error-color);
+    border-radius: 4px;
+    animation: slideIn 0.3s ease-out;
+}
+
+.mensagens-erro ul {
+    list-style: none;
+}
+
+.mensagens-erro li {
+    color: var(--error-color);
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+}
+
+.mensagens-erro li:last-child {
+    margin-bottom: 0;
+}
+
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@media (max-width: 576px) {
+    .pagina-login {
+        padding: 1rem;
+    }
+    
+    .formulario-login {
+        padding: 1.5rem;
+    }
+    
+    .formulario-login h2 {
+        font-size: 1.5rem;
+    }
+}
+
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 30px #f8f9fa inset !important;
+    -webkit-text-fill-color: var(--text-color) !important;
+}

@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
 
+
+{% block title %}
 {% block content %}
 <div class="form-container">
+<link rel="stylesheet" type="text/css" href="{% static 'css/nova_doacoao.css' %}">
     <h1>Nova Doação</h1>
     
     <form method="POST">
