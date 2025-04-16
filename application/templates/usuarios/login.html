@@ -28,7 +28,9 @@
             <div class="mensagens-erro">
                 <ul>
                     {% for message in messages %}
-                    <li>{{ message }}</li>
+                        {% if 'login' in message.tags %}
+                        <li>{{ message }}</li>
+                        {% endif %}
                     {% endfor %}
                 </ul>
             </div>
