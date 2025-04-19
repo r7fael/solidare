@@ -1,2 +1,45 @@
-<h1>Bem-vindo à Plataforma Solidare</h1>
-<a href="/usuarios/login/">Login</a> | <a href="/usuarios/registro/">Registrar</a>
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma Solidare - Conectando doadores e ONGs</title>
+    <link rel="stylesheet" href="{% static 'application/css/home.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header class="hero">
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <i class="fas fa-hands-helping"></i>
+                    <span>Solidare</span>
+                </div>
+                <div class="auth-links">
+                    <a href="/usuarios/login/" class="btn btn-outline">Login</a>
+                    <a href="/usuarios/registro/" class="btn btn-primary">Registrar</a>
+                </div>
+            </nav>
+            
+            <div class="hero-content">
+                <h1>Bem-vindo à Plataforma Solidare</h1>
+                <p class="subtitle">Conectando doadores a causas que transformam vidas</p>
+                
+                <div class="cta-buttons">
+                    <a href="/usuarios/registro/" class="btn btn-primary btn-large">
+                        <i class="fas fa-user-plus"></i> Quero Ajudar
+                    </a>
+                    <a href="/ong/cadastro/" class="btn btn-secondary btn-large">
+                        <i class="fas fa-hand-holding-heart"></i> Sou uma ONG
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="wave"></div>
+    </header>
+
+</body>    
+</html>

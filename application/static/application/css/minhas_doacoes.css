@@ -1,0 +1,242 @@
+.painel {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background-color: #f8fafc;
+    color: #1e1e2d;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+
+.cabecalho-painel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 2rem 0;
+    position: relative;
+}
+
+.cabecalho-painel::after {
+    content: '';
+    display: block;
+    width: 100px;
+    height: 4px;
+    background: linear-gradient(to right, #1e3a8a, #3b82f6);
+    margin: 1.5rem auto 0;
+    border-radius: 2px;
+}
+
+.cabecalho-painel h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #1e3a8a;
+    margin: 0 0 1rem 0;
+    letter-spacing: -0.5px;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.cabecalho-painel h1::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(to right, #3b82f6, #1e3a8a);
+    border-radius: 3px;
+}
+
+.botao-aceitar-todas {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: 0.85rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px rgba(16, 185, 129, 0.25);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    border: none;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.botao-aceitar-todas:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(16, 185, 129, 0.3);
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+.botao-aceitar-todas i {
+    font-size: 1.1rem;
+}
+
+.metricas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.cartao {
+    background-color: white;
+    border-radius: 12px;
+    padding: 1.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cartao:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+}
+
+.cartao h3 {
+    color: #64748b;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.cartao p {
+    color: #1e3a8a;
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.2;
+}
+
+
+.tabela-container {
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.tabela-doacoes {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.tabela-doacoes thead {
+    background-color: #f0f4ff;
+}
+
+.tabela-doacoes th {
+    padding: 1.25rem 1.5rem;
+    text-align: left;
+    color: #1e3a8a;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+.tabela-doacoes td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+    vertical-align: middle;
+}
+
+.tabela-doacoes tr:last-child td {
+    border-bottom: none;
+}
+
+.tabela-doacoes tr:hover td {
+    background-color: #f8fafc;
+}
+
+
+.status-pendente {
+    color: #92400e;
+    background-color: #fef3c7;
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    display: inline-block;
+    text-transform: uppercase;
+}
+
+.status-concluido {
+    color: #065f46;
+    background-color: #d1fae5;
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    display: inline-block;
+    text-transform: uppercase;
+}
+
+
+.botao-acao {
+    background-color: #3b82f6;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+}
+
+.botao-acao:hover {
+    background-color: #2563eb;
+    transform: translateY(-1px);
+}
+
+
+.sem-registros {
+    text-align: center;
+    padding: 3rem;
+    color: #64748b;
+    font-size: 0.95rem;
+}
+
+
+@media (max-width: 768px) {
+    .cabecalho-painel {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .metricas {
+        grid-template-columns: 1fr;
+    }
+    
+    .tabela-doacoes {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.tabela-container {
+    animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}

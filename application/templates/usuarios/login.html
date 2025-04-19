@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Login - Plataforma ONG</title>
-    <link rel="stylesheet" href="{% static 'application/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'application/css/login.css' %}">
 </head>
 <body>
     <div class="pagina-login">
@@ -28,7 +28,9 @@
             <div class="mensagens-erro">
                 <ul>
                     {% for message in messages %}
-                    <li>{{ message }}</li>
+                        {% if 'login' in message.tags %}
+                        <li>{{ message }}</li>
+                        {% endif %}
                     {% endfor %}
                 </ul>
             </div>
