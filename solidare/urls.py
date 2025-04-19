@@ -25,4 +25,5 @@ urlpatterns = [
     path('doacoes/', include('doacoes.urls')),
     path('beneficiarios/', include('beneficiarios.urls')),
     path('relatorios/', include('relatorios.urls')),
+    path('mensagens/', include('mensagens.urls', namespace='mensagens')),
 ]

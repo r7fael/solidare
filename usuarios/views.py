@@ -6,7 +6,7 @@ from django.db.models import Sum, Count
 from .models import Usuario, Doador, Gestor
 from doacoes.models import Doacao
 from django.shortcuts import render
-from relatorios.models import Relatorio
+from mensagens.models import Mensagem
 from beneficiarios.models import Beneficiario
 from django.db.models.functions import TruncMonth
 
@@ -68,9 +68,7 @@ def login_usuario(request):
 @login_required
 def painel_doador(request):
     doacoes = Doacao.objects.filter(doador=request.user).order_by('-id')
-    
     doacoes_concluidas = doacoes.filter(status='CONCLUIDO')
-    
     total_doacoes = doacoes_concluidas.aggregate(Sum('valor'))['valor__sum'] or 0
     
     metodo_mais_usado = doacoes.values('metodo').annotate(
@@ -85,6 +83,31 @@ def painel_doador(request):
     destino_mais_frequente = dict(Doacao.DESTINO_CHOICES).get(
         destino_mais_frequente['destino']) if destino_mais_frequente else 'Nenhum'
     
+    mensagens_usuario = Mensagem.objects.filter(remetente=request.user).order_by('-id')
+    beneficiarios_disponiveis = Beneficiario.objects.filter(ativo=True)
+    
+    if request.method == 'POST' and 'nova_mensagem' in request.POST:
+        destinatario_id = request.POST.get('destinatario')
+        assunto = request.POST.get('assunto')
+        conteudo = request.POST.get('conteudo')
+        
+        try:
+            destinatario = Beneficiario.objects.get(id=destinatario_id, ativo=True)
+            Mensagem.objects.create(
+                remetente=request.user,
+                destinatario=destinatario,
+                assunto=assunto,
+                conteudo=conteudo,
+                status=Mensagem.STATUS_AGUARDANDO
+            )
+            messages.success(request, 'Mensagem enviada com sucesso! Aguarde aprovação.')
+        except Beneficiario.DoesNotExist:
+            messages.error(request, 'Beneficiário selecionado não encontrado.')
+        except Exception as e:
+            messages.error(request, f'Erro ao enviar mensagem: {str(e)}')
+        
+        return redirect('usuarios:painel-doador')
+    
     context = {
         'doacoes': doacoes,
         'ultimas_doacoes': doacoes[:5],
@@ -95,7 +118,13 @@ def painel_doador(request):
         'metodo_mais_usado': metodo_mais_usado,
         'destino_mais_frequente': destino_mais_frequente,
         'destinos_disponiveis': Doacao.DESTINO_CHOICES,
-        'doacoes_pendentes': doacoes.filter(status='PENDENTE').exists()
+        'doacoes_pendentes': doacoes.filter(status='PENDENTE').exists(),
+        
+        'mensagens': mensagens_usuario,
+        'beneficiarios_disponiveis': beneficiarios_disponiveis,
+        'total_mensagens': mensagens_usuario.count(),
+        'mensagens_aprovadas': mensagens_usuario.filter(status=Mensagem.STATUS_APROVADO).count(),
+        'mensagens_pendentes': mensagens_usuario.filter(status=Mensagem.STATUS_AGUARDANDO).count()
     }
     
     return render(request, 'doadores/painel.html', context)

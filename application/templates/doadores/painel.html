@@ -35,6 +35,7 @@
                 <li><a href="#" data-secao="metricas">Métricas</a></li>
                 <li><a href="#" data-secao="doacoes">Minhas Doações</a></li>
                 <li><a href="#" data-secao="nova-doacao">Nova Doação</a></li>
+                <li><a href="#" data-secao="mensagens">Mensagens</a></li>
             </ul>
         </nav>
     </div>
@@ -224,6 +225,92 @@
                 </form>
             </div>
         </div>
+
+        <div id="mensagens" class="secao-conteudo">
+            <div class="cabecalho-secao">
+                <h1>Minhas Mensagens</h1>
+                <button class="botao-primario" onclick="mostrarFormularioMensagem()">Nova Mensagem</button>
+            </div>
+            
+            <div class="filtros-mensagens">
+                <div class="grupo-filtro">
+                    <label for="filtro-status-mensagem">Status:</label>
+                    <select id="filtro-status-mensagem">
+                        <option value="TODAS">Todas</option>
+                        <option value="AGUARDANDO">Aguardando Aprovação</option>
+                        <option value="APROVADO">Aprovadas</option>
+                        <option value="REJEITADO">Rejeitadas</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="lista-mensagens">
+                {% for mensagem in mensagens %}
+                <div class="cartao-mensagem" data-status="{{ mensagem.status|lower }}">
+                    <div class="cabecalho-mensagem">
+                        <h3>Para: {{ mensagem.destinatario.nome }}</h3>
+                        <span class="status-mensagem status-{{ mensagem.status|lower }}">
+                            {{ mensagem.get_status_display }}
+                        </span>
+                    </div>
+                    <div class="corpo-mensagem">
+                        <h4>{{ mensagem.assunto }}</h4>
+                        <p>{{ mensagem.conteudo }}</p>
+                    </div>
+                    <div class="rodape-mensagem">
+                        <span class="data-mensagem">
+                            {% if mensagem.data_envio %}
+                                Enviada em {{ mensagem.data_envio|date:"d/m/Y" }}
+                            {% else %}
+                                Data não disponível
+                            {% endif %}
+                        </span>
+                        {% if mensagem.status == 'REJEITADO' and mensagem.motivo_rejeicao %}
+                        <div class="motivo-rejeicao">
+                            <strong>Motivo da rejeição:</strong> {{ mensagem.motivo_rejeicao }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <div class="sem-mensagens">
+                    <p>Nenhuma mensagem enviada ainda</p>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div id="formulario-mensagem" class="formulario-mensagem" style="display: none;">
+                <h2>Enviar Mensagem</h2>
+                <form method="POST" action="{% url 'mensagens:nova_mensagem' %}">
+                    {% csrf_token %}
+                    
+                    <div class="campo-formulario">
+                        <label for="destinatario-mensagem">Beneficiário</label>
+                        <select id="destinatario-mensagem" name="destinatario" required>
+                            <option value="">Selecione o beneficiário</option>
+                            {% for beneficiario in beneficiarios_disponiveis %}
+                            <option value="{{ beneficiario.id }}">{{ beneficiario.nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="campo-formulario">
+                        <label for="assunto-mensagem">Assunto</label>
+                        <input type="text" id="assunto-mensagem" name="assunto" required placeholder="Ex: Doação de roupas">
+                    </div>
+                    
+                    <div class="campo-formulario">
+                        <label for="conteudo-mensagem">Mensagem</label>
+                        <textarea id="conteudo-mensagem" name="conteudo" rows="5" required placeholder="Escreva sua mensagem aqui..."></textarea>
+                    </div>
+                    
+                    <div class="acoes-formulario">
+                        <button type="submit" class="botao-primario">Enviar Mensagem</button>
+                        <button type="button" class="botao-secundario" onclick="ocultarFormularioMensagem()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -253,6 +340,23 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    const filtroStatusMensagem = document.getElementById('filtro-status-mensagem');
+    if (filtroStatusMensagem) {
+        filtroStatusMensagem.addEventListener('change', function() {
+            const status = this.value.toLowerCase();
+            
+            document.querySelectorAll('.lista-mensagens .cartao-mensagem').forEach(cartao => {
+                const cartaoStatus = cartao.getAttribute('data-status');
+                
+                if (status === 'todas') {
+                    cartao.style.display = '';
+                } else {
+                    cartao.style.display = cartaoStatus === status ? '' : 'none';
+                }
+            });
+        });
+    }
+
     const valorInput = document.getElementById('valor');
     if (valorInput) {
         valorInput.addEventListener('blur', function() {
@@ -276,6 +380,18 @@ function mostrarSecao(secaoId) {
         secao.classList.remove('ativo');
     });
     document.getElementById(secaoId).classList.add('ativo');
+}
+
+function mostrarFormularioMensagem() {
+    document.getElementById('formulario-mensagem').style.display = 'block';
+    window.scrollTo({
+        top: document.getElementById('formulario-mensagem').offsetTop,
+        behavior: 'smooth'
+    });
+}
+
+function ocultarFormularioMensagem() {
+    document.getElementById('formulario-mensagem').style.display = 'none';
 }
 </script>
 {% endblock %}
