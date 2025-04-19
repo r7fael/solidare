@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'relatorios',
     'usuarios',
     'django.contrib.humanize',
+    'beneficiarios'
 ]
 
 

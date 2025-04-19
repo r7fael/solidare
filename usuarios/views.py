@@ -5,6 +5,10 @@ from django.contrib import messages
 from django.db.models import Sum, Count
 from .models import Usuario, Doador, Gestor
 from doacoes.models import Doacao
+from django.shortcuts import render
+from relatorios.models import Relatorio
+from beneficiarios.models import Beneficiario
+from django.db.models.functions import TruncMonth
 
 def registrar_usuario(request):
     if request.method == 'POST':
@@ -102,7 +106,56 @@ def metricas_doador(request):
 
 @login_required
 def painel_gestor(request):
-    return render(request, 'gestores/painel.html')
+
+    doacoes = Doacao.objects.select_related('doador').order_by('-id')
+    ultimas_doacoes = doacoes[:5] 
+    
+    doacoes_concluidas = doacoes.filter(status='CONCLUIDO')
+    total_doacoes = doacoes_concluidas.aggregate(
+        total=Sum('valor'),
+        count=Count('id')
+    )
+    
+    beneficiarios_ativos = Beneficiario.objects.filter(ativo=True)
+
+    
+    metodo_mais_usado = (
+        doacoes.values('metodo')
+        .annotate(count=Count('metodo'))
+        .order_by('-count')
+        .first()
+    )
+    
+    destino_mais_frequente = (
+        doacoes.values('destino')
+        .annotate(count=Count('destino'))
+        .order_by('-count')
+        .first()
+    )
+
+    context = {
+        'doacoes': doacoes,
+        'ultimas_doacoes': ultimas_doacoes,
+        'beneficiarios': Beneficiario.objects.all(),
+        
+        'total_doacoes': total_doacoes['total'] or 0,
+        'quantidade_doacoes': total_doacoes['count'],
+        'media_doacoes': (total_doacoes['total'] / total_doacoes['count']) if total_doacoes['count'] > 0 else 0,
+        
+        'pessoas_impactadas': total_doacoes['count'] * 3, 
+        'doacoes_concluidas': total_doacoes['count'],
+        'total_beneficiarios': beneficiarios_ativos.count(),
+        
+        'destinos_disponiveis': Doacao.DESTINO_CHOICES,
+        'metodos_disponiveis': Doacao.METODO_PAGAMENTO,
+        
+        'metodo_mais_usado': metodo_mais_usado,
+        'destino_mais_frequente': destino_mais_frequente,
+        
+        'relatorios': [],
+    }
+    
+    return render(request, 'gestores/painel.html', context)
 
 def logout_usuario(request):
     logout(request)
