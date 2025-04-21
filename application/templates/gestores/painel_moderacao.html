@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Painel de Moderação</h2>
+    
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Remetente</th>
+                    <th>Destinatário</th>
+                    <th>Assunto</th>
+                    <th>Data</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mensagem in mensagens_pendentes %}
+                <tr>
+                    <td>{{ mensagem.remetente.get_full_name }}</td>
+                    <td>{{ mensagem.destinatario.usuario.get_full_name }}</td>
+                    <td>
+                        <a href="{% url 'mensagens:detalhes_mensagem' mensagem.id %}">
+                            {{ mensagem.assunto|truncatechars:50 }}
+                        </a>
+                    </td>
+                    <td>{{ mensagem.data_criacao|date:"d/m/Y H:i" }}</td>
+                    <td>
+                        <button class="btn btn-success btn-sm aprovar-btn" 
+                                data-id="{{ mensagem.id }}">
+                            Aprovar
+                        </button>
+                        <button class="btn btn-danger btn-sm rejeitar-btn" 
+                                data-id="{{ mensagem.id }}">
+                            Rejeitar
+                        </button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">Nenhuma mensagem pendente</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="rejeitarModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Motivo da Rejeição</h5>
+            </div>
+            <div class="modal-body">
+                <textarea id="motivoRejeicao" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="confirmarRejeicao">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(document).ready(function() {
+    let mensagemId;
+    
+    $('.aprovar-btn').click(function() {
+        const id = $(this).data('id');
+        aprovarMensagem(id);
+    });
+    
+    $('.rejeitar-btn').click(function() {
+        mensagemId = $(this).data('id');
+        $('#rejeitarModal').modal('show');
+    });
+    
+    $('#confirmarRejeicao').click(function() {
+        const motivo = $('#motivoRejeicao').val();
+        if (motivo.trim() === '') {
+            alert('Informe o motivo da rejeição');
+            return;
+        }
+        rejeitarMensagem(mensagemId, motivo);
+    });
+    
+    function aprovarMensagem(id) {
+        $.ajax({
+            url: `/mensagens/aprovar/${id}/`,
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(response) {
+                location.reload();
+            },
+            error: function(xhr) {
+                alert('Erro: ' + xhr.responseJSON.message);
+            }
+        });
+    }
+    
+    function rejeitarMensagem(id, motivo) {
+        $.ajax({
+            url: `/mensagens/rejeitar/${id}/`,
+            method: 'POST',
+            data: {
+                motivo: motivo,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(response) {
+                $('#rejeitarModal').modal('hide');
+                location.reload();
+            },
+            error: function(xhr) {
+                alert('Erro: ' + xhr.responseJSON.message);
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

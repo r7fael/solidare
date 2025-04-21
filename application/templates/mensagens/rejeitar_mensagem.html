@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Rejeitar Mensagem</h2>
+    
+    <div class="card mt-4">
+        <div class="card-header">
+            <h4>{{ mensagem.assunto }}</h4>
+            <small>De: {{ mensagem.remetente.get_full_name }}</small>
+        </div>
+        <div class="card-body">
+            <p>{{ mensagem.conteudo }}</p>
+        </div>
+    </div>
+
+    <form method="post" class="mt-4">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="motivo">Motivo da Rejeição:</label>
+            <textarea class="form-control" id="motivo" name="motivo" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-danger">Confirmar Rejeição</button>
+        <a href="{% url 'mensagens:painel_moderacao' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

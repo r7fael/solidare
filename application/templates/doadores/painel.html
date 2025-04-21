@@ -41,191 +41,8 @@
     </div>
 
     <div class="conteudo-principal">
-        <div id="inicio" class="secao-conteudo ativo">
-            <div class="cartao-boasvindas">
-                <h1>Bem-vindo, {{ user.nome }}!</h1>
-                <p>Seu apoio está transformando vidas. Veja abaixo seu impacto:</p>
-                
-                <div class="estatisticas-impacto">
-                    <div class="cartao-estatistica">
-                        <h3>R$ {{ total_doacoes|intcomma }}</h3>
-                        <p>Total Doado</p>
-                    </div>
-                    <div class="cartao-estatistica">
-                        <h3>{{ pessoas_impactadas }}</h3>
-                        <p>Pessoas impactadas</p>
-                    </div>
-                    <div class="cartao-estatistica">
-                        <h3>{{ doacoes_concluidas }}</h3>
-                        <p>Doações concluídas</p>
-                    </div>
-                </div>
-                
-                <div class="ultimas-acoes">
-                    <h3>Suas últimas doações</h3>
-                    
-                    <div class="lista-doacoes">
-                        {% for doacao in ultimas_doacoes %}
-                        <div class="item-doacao">
-                            <div class="info-doacao">
-                                <span class="valor">R$ {{ doacao.valor|intcomma }}</span>
-                                <span class="destino">{{ doacao.get_destino_display }}</span>
-                            </div>
-                            <span class="status status-{{ doacao.status|lower }}">
-                                {{ doacao.get_status_display }}
-                            </span>
-                        </div>
-                        {% empty %}
-                        <div class="sem-doacoes">
-                            <p>Nenhuma doação registrada ainda</p>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="metricas" class="secao-conteudo">
-            <div class="container-metricas">
-                <h1>Seu Impacto em Números</h1>
-                
-                <div class="metricas-simples">
-                    <div class="metrica-item">
-                        <h3>Método mais usado</h3>
-                        <p>{{ metodo_mais_usado }}</p>
-                    </div>
-                    <div class="metrica-item">
-                        <h3>Destino preferido</h3>
-                        <p>{{ destino_mais_frequente }}</p>
-                    </div>
-                    <div class="metrica-item">
-                        <h3>Média por doação</h3>
-                        <p>R$ {{ media_doacoes|intcomma }}</p>
-                    </div>
-                </div>
-                
-                <div class="tabela-metricas">
-                    <h3>Histórico de Doações</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Mês</th>
-                                <th>Valor Doado</th>
-                                <th>Doações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for mes in historico_mensal %}
-                            <tr>
-                                <td>{{ mes.mes }}</td>
-                                <td>R$ {{ mes.total|intcomma }}</td>
-                                <td>{{ mes.quantidade }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div id="doacoes" class="secao-conteudo">
-            <div class="cabecalho-secao">
-                <h1>Minhas Doações</h1>
-            </div>
-            
-            <div class="filtros">
-                <div class="grupo-filtro">
-                    <label for="filtro-status">Status:</label>
-                    <select id="filtro-status">
-                        <option value="TODOS">Todos</option>
-                        <option value="CONCLUIDO">Concluídas</option>
-                        <option value="PENDENTE">Pendentes</option>
-                    </select>
-                </div>
-                <div class="grupo-filtro">
-                    <label for="filtro-destino">Destino:</label>
-                    <select id="filtro-destino">
-                        <option value="TODOS">Todos</option>
-                        {% for destino in destinos_disponiveis %}
-                        <option value="{{ destino.0 }}">{{ destino.1 }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-            
-            <div class="tabela-container">
-                <table class="tabela-doacoes">
-                    <thead>
-                        <tr>
-                            <th>Valor</th>
-                            <th>Método</th>
-                            <th>Destino</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for doacao in doacoes %}
-                        <tr data-status="{{ doacao.status }}" data-destino="{{ doacao.destino }}">
-                            <td>R$ {{ doacao.valor|intcomma }}</td>
-                            <td>{{ doacao.get_metodo_display }}</td>
-                            <td>{{ doacao.get_destino_display }}</td>
-                            <td>
-                                <span class="status status-{{ doacao.status|lower }}">
-                                    {{ doacao.get_status_display }}
-                                </span>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="4" class="sem-registros">
-                                <p>Nenhuma doação registrada ainda</p>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div id="nova-doacao" class="secao-conteudo">
-            <div class="formulario-doacao">
-                <h1>Nova Doação</h1>
-                <form method="POST" action="{% url 'doacoes:nova_doacao' %}">
-                    {% csrf_token %}
-                    
-                    <div class="campo-formulario">
-                        <label for="valor">Valor (R$)</label>
-                        <input type="text" id="valor" name="valor" required placeholder="Ex: 100,00">
-                    </div>
-                    
-                    <div class="campo-formulario">
-                        <label for="metodo">Método de Pagamento</label>
-                        <select id="metodo" name="metodo" required>
-                            <option value="">Selecione</option>
-                            <option value="PIX">PIX</option>
-                            <option value="BOLETO">Boleto</option>
-                            <option value="CARTAO">Cartão de Crédito</option>
-                        </select>
-                    </div>
-                    
-                    <div class="campo-formulario">
-                        <label for="destino">Destino</label>
-                        <select id="destino" name="destino" required>
-                            <option value="">Selecione</option>
-                            <option value="EDUCACAO">Educação</option>
-                            <option value="SAUDE">Saúde</option>
-                            <option value="ALIMENTOS">Alimentação</option>
-                        </select>
-                    </div>
-                    
-                    <div class="acoes-formulario">
-                        <button type="submit" class="botao-primario">Confirmar Doação</button>
-                        <button type="button" class="botao-secundario" onclick="mostrarSecao('inicio')">Cancelar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
+        
+        
         <div id="mensagens" class="secao-conteudo">
             <div class="cabecalho-secao">
                 <h1>Minhas Mensagens</h1>
@@ -281,7 +98,7 @@
             
             <div id="formulario-mensagem" class="formulario-mensagem" style="display: none;">
                 <h2>Enviar Mensagem</h2>
-                <form method="POST" action="{% url 'mensagens:nova_mensagem' %}">
+                <form id="form-mensagem" method="POST" action="{% url 'mensagens:nova_mensagem' %}">
                     {% csrf_token %}
                     
                     <div class="campo-formulario">
@@ -305,93 +122,257 @@
                     </div>
                     
                     <div class="acoes-formulario">
-                        <button type="submit" class="botao-primario">Enviar Mensagem</button>
+                        <button type="submit" class="botao-primario" id="btn-enviar-mensagem">Enviar Mensagem</button>
                         <button type="button" class="botao-secundario" onclick="ocultarFormularioMensagem()">Cancelar</button>
                     </div>
                 </form>
+            </div>
+            
+         
+            <div id="modal-confirmacao" class="modal" style="display: none;">
+                <div class="modal-conteudo">
+                    <span class="fechar-modal" onclick="fecharModal()">&times;</span>
+                    <h3>Mensagem Enviada com Sucesso!</h3>
+                    <p>Sua mensagem foi enviada e está aguardando aprovação.</p>
+                    <p>Você receberá uma notificação quando ela for aprovada.</p>
+                    <button class="botao-primario" onclick="fecharModal()">OK</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.navegacao-lateral a[data-secao]').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            mostrarSecao(this.getAttribute('data-secao'));
-        });
-    });
-
-    document.querySelectorAll('.filtros select').forEach(select => {
-        select.addEventListener('change', function() {
-            const status = document.getElementById('filtro-status').value;
-            const destino = document.getElementById('filtro-destino').value;
-            
-            document.querySelectorAll('.tabela-doacoes tbody tr').forEach(linha => {
-                const linhaStatus = linha.getAttribute('data-status');
-                const linhaDestino = linha.getAttribute('data-destino');
-                
-                const mostraStatus = status === 'TODOS' || linhaStatus === status;
-                const mostraDestino = destino === 'TODOS' || linhaDestino === destino;
-                
-                linha.style.display = (mostraStatus && mostraDestino) ? '' : 'none';
+    document.addEventListener('DOMContentLoaded', function() {
+      
+        document.querySelectorAll('.navegacao-lateral a[data-secao]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                mostrarSecao(this.getAttribute('data-secao'));
             });
         });
-    });
-
-    const filtroStatusMensagem = document.getElementById('filtro-status-mensagem');
-    if (filtroStatusMensagem) {
-        filtroStatusMensagem.addEventListener('change', function() {
-            const status = this.value.toLowerCase();
-            
-            document.querySelectorAll('.lista-mensagens .cartao-mensagem').forEach(cartao => {
-                const cartaoStatus = cartao.getAttribute('data-status');
-                
-                if (status === 'todas') {
-                    cartao.style.display = '';
-                } else {
-                    cartao.style.display = cartaoStatus === status ? '' : 'none';
-                }
-            });
-        });
-    }
-
-    const valorInput = document.getElementById('valor');
-    if (valorInput) {
-        valorInput.addEventListener('blur', function() {
-            let value = this.value.replace(/\D/g, '');
-            value = (value / 100).toFixed(2) + '';
-            value = value.replace(".", ",");
-            value = value.replace(/(\d)(\d{3})(\d{3}),/g, "$1.$2.$3,");
-            value = value.replace(/(\d)(\d{3}),/g, "$1.$2,");
-            this.value = value;
-        });
-    }
-});
-
-function mostrarSecao(secaoId) {
-    document.querySelectorAll('.navegacao-lateral a').forEach(link => {
-        link.classList.remove('ativo');
-    });
-    document.querySelector(`.navegacao-lateral a[data-secao="${secaoId}"]`).classList.add('ativo');
     
-    document.querySelectorAll('.secao-conteudo').forEach(secao => {
-        secao.classList.remove('ativo');
+     
+        document.querySelectorAll('.filtros select').forEach(select => {
+            select.addEventListener('change', function() {
+                const status = document.getElementById('filtro-status').value;
+                const destino = document.getElementById('filtro-destino').value;
+                
+                document.querySelectorAll('.tabela-doacoes tbody tr').forEach(linha => {
+                    const linhaStatus = linha.getAttribute('data-status');
+                    const linhaDestino = linha.getAttribute('data-destino');
+                    
+                    const mostraStatus = status === 'TODOS' || linhaStatus === status;
+                    const mostraDestino = destino === 'TODOS' || linhaDestino === destino;
+                    
+                    linha.style.display = (mostraStatus && mostraDestino) ? '' : 'none';
+                });
+            });
+        });
+    
+        
+        const filtroStatusMensagem = document.getElementById('filtro-status-mensagem');
+        if (filtroStatusMensagem) {
+            filtroStatusMensagem.addEventListener('change', function() {
+                const status = this.value.toLowerCase();
+                
+                document.querySelectorAll('.lista-mensagens .cartao-mensagem').forEach(cartao => {
+                    const cartaoStatus = cartao.getAttribute('data-status');
+                    
+                    if (status === 'todas') {
+                        cartao.style.display = '';
+                    } else {
+                        cartao.style.display = cartaoStatus === status ? '' : 'none';
+                    }
+                });
+            });
+        }
+    
+   
+        const valorInput = document.getElementById('valor');
+        if (valorInput) {
+            valorInput.addEventListener('blur', function() {
+                let value = this.value.replace(/\D/g, '');
+                value = (value / 100).toFixed(2) + '';
+                value = value.replace(".", ",");
+                value = value.replace(/(\d)(\d{3})(\d{3}),/g, "$1.$2.$3,");
+                value = value.replace(/(\d)(\d{3}),/g, "$1.$2,");
+                this.value = value;
+            });
+        }
+    
+        // Configuração do formulário de mensagens
+        const formMensagem = document.getElementById('form-mensagem');
+        if (formMensagem) {
+            formMensagem.addEventListener('submit', function(e) {
+                enviarMensagem(e, this);
+            });
+        }
     });
-    document.getElementById(secaoId).classList.add('ativo');
-}
+    
+    
+    function mostrarSecao(secaoId) {
+        document.querySelectorAll('.navegacao-lateral a').forEach(link => {
+            link.classList.remove('ativo');
+        });
+        document.querySelector(`.navegacao-lateral a[data-secao="${secaoId}"]`).classList.add('ativo');
+        
+        document.querySelectorAll('.secao-conteudo').forEach(secao => {
+            secao.classList.remove('ativo');
+        });
+        document.getElementById(secaoId).classList.add('ativo');
+    }
+    
+    function mostrarFormularioMensagem() {
+        document.getElementById('formulario-mensagem').style.display = 'block';
+        window.scrollTo({
+            top: document.getElementById('formulario-mensagem').offsetTop,
+            behavior: 'smooth'
+        });
+    }
+    
+    function ocultarFormularioMensagem() {
+        document.getElementById('formulario-mensagem').style.display = 'none';
+    }
+    
+    function mostrarModalConfirmacao() {
+        document.getElementById('modal-confirmacao').style.display = 'block';
+    }
+    
+    function fecharModal() {
+        document.getElementById('modal-confirmacao').style.display = 'none';
+    }
+    
+    function mostrarModalErro(mensagem) {
+        const erroElement = document.getElementById('mensagem-erro');
+        if (erroElement) {
+            erroElement.textContent = mensagem;
+            document.getElementById('modal-erro').style.display = 'block';
+        } else {
+            alert(mensagem);
+        }
+    }
+    
+    function fecharModalErro() {
+        document.getElementById('modal-erro').style.display = 'none';
+    }
+    
+   
+    function enviarMensagem(event, form) {
+        event.preventDefault();
+        
+        const submitButton = form.querySelector('#btn-enviar-mensagem');
+        const originalText = submitButton.textContent;
+        
+       
+        const destinatario = form.querySelector('#destinatario-mensagem').value;
+        const assunto = form.querySelector('#assunto-mensagem').value.trim();
+        const conteudo = form.querySelector('#conteudo-mensagem').value.trim();
+        
+        if (!destinatario || !assunto || !conteudo) {
+            mostrarModalErro('Por favor, preencha todos os campos obrigatórios.');
+            return;
+        }
+    
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<span class="loading"></span> Enviando...';
+        
+        
+        const formData = new FormData();
+        formData.append('destinatario', destinatario);
+        formData.append('assunto', assunto);
+        formData.append('conteudo', conteudo);
+        formData.append('csrfmiddlewaretoken', form.querySelector('[name=csrfmiddlewaretoken]').value);
+    
+        // Configurar timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+    
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+            },
+            signal: controller.signal
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Erro HTTP: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                mostrarModalConfirmacao();
+                form.reset();
+                ocultarFormularioMensagem();
+                
+                if (data.mensagem) {
+                    adicionarMensagemNaLista(data.mensagem);
+                }
+            } else {
+                mostrarModalErro(data.error || 'Erro ao processar sua mensagem. Tente novamente.');
+            }
+        })
+        .catch(error => {
+            console.error('Erro no envio:', error);
+            if (error.name === 'AbortError') {
+                mostrarModalErro('Tempo de conexão esgotado. Verifique sua internet e tente novamente.');
+            } else {
+                mostrarModalErro('Sua mensagem pode ter sido enviada, mas houve um problema na resposta. Verifique sua caixa de mensagens.');
+            }
+        })
+        .finally(() => {
+            clearTimeout(timeoutId);
+            submitButton.textContent = originalText;
+            submitButton.disabled = false;
+        });
+    }
+    
 
-function mostrarFormularioMensagem() {
-    document.getElementById('formulario-mensagem').style.display = 'block';
-    window.scrollTo({
-        top: document.getElementById('formulario-mensagem').offsetTop,
-        behavior: 'smooth'
-    });
-}
-
-function ocultarFormularioMensagem() {
-    document.getElementById('formulario-mensagem').style.display = 'none';
-}
+    function adicionarMensagemNaLista(mensagem) {
+        const listaMensagens = document.querySelector('.lista-mensagens');
+        const semMensagens = listaMensagens.querySelector('.sem-mensagens');
+        
+        if (semMensagens) {
+            semMensagens.remove();
+        }
+        
+        const dataEnvio = mensagem.data_envio ? 
+            new Date(mensagem.data_envio).toLocaleDateString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            }) : 
+            new Date().toLocaleDateString('pt-BR');
+        
+        const novaMensagemHTML = `
+            <div class="cartao-mensagem" data-status="${mensagem.status.toLowerCase()}">
+                <div class="cabecalho-mensagem">
+                    <h3>Para: ${mensagem.destinatario_nome}</h3>
+                    <span class="status-mensagem status-${mensagem.status.toLowerCase()}">
+                        ${mensagem.status_display}
+                    </span>
+                </div>
+                <div class="corpo-mensagem">
+                    <h4>${mensagem.assunto}</h4>
+                    <p>${mensagem.conteudo}</p>
+                </div>
+                <div class="rodape-mensagem">
+                    <span class="data-mensagem">
+                        ${dataEnvio}
+                    </span>
+                    ${mensagem.motivo_rejeicao ? `<div class="motivo-rejeicao"><strong>Motivo:</strong> ${mensagem.motivo_rejeicao}</div>` : ''}
+                </div>
+            </div>
+        `;
+        
+        listaMensagens.insertAdjacentHTML('afterbegin', novaMensagemHTML);
+    }
 </script>
 {% endblock %}

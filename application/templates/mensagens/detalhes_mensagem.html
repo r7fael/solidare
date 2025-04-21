@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h4>{{ mensagem.assunto }}</h4>
+            <small class="text-muted">
+                De: {{ mensagem.remetente.get_full_name }} | 
+                Para: {{ mensagem.destinatario.usuario.get_full_name }} | 
+                {{ mensagem.data_envio|date:"d/m/Y H:i" }}
+            </small>
+        </div>
+        <div class="card-body">
+            <p class="card-text">{{ mensagem.conteudo|linebreaks }}</p>
+        </div>
+        {% if mensagem.motivo_rejeicao %}
+        <div class="card-footer bg-light">
+            <h5>Motivo da Rejeição:</h5>
+            <p>{{ mensagem.motivo_rejeicao }}</p>
+        </div>
+        {% endif %}
+    </div>
+    
+    <a href="{% url 'mensagens:painel_moderacao' %}" class="btn btn-secondary mt-3">
+        Voltar
+    </a>
+</div>
+{% endblock %}
