@@ -98,7 +98,7 @@
             
             <div id="formulario-mensagem" class="formulario-mensagem" style="display: none;">
                 <h2>Enviar Mensagem</h2>
-                <form id="form-mensagem" method="POST" action="{% url 'mensagens:nova_mensagem' %}">
+                <form id="form-mensagem" method="POST" action="{% url 'mensagens:criar_mensagem' %}">
                     {% csrf_token %}
                     
                     <div class="campo-formulario">
@@ -202,7 +202,6 @@
             });
         }
     
-        // Configuração do formulário de mensagens
         const formMensagem = document.getElementById('form-mensagem');
         if (formMensagem) {
             formMensagem.addEventListener('submit', function(e) {

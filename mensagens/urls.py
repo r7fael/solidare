@@ -8,4 +8,5 @@ urlpatterns = [
     path('aprovar/<int:mensagem_id>/', views.aprovar_mensagem, name='aprovar_mensagem'),
     path('rejeitar/<int:mensagem_id>/', views.rejeitar_mensagem, name='rejeitar_mensagem'),
     path('detalhes/<int:mensagem_id>/', views.detalhes_mensagem, name='detalhes_mensagem'),
+    path('nova/', views.criar_mensagem, name='criar_mensagem'),
 ]
