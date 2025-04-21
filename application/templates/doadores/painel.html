@@ -32,10 +32,10 @@
         <nav class="navegacao-lateral">
             <ul>
                 <li><a href="#" class="ativo" data-secao="inicio">Início</a></li>
-                <li><a href="#" data-secao="metricas">Métricas</a></li>
-                <li><a href="#" data-secao="doacoes">Minhas Doações</a></li>
-                <li><a href="#" data-secao="nova-doacao">Nova Doação</a></li>
-                <li><a href="#" data-secao="mensagens">Mensagens</a></li>
+                <li><a href="{% url 'metricas' %}" data-secao="metricas">Métricas</a></li>
+                <li><a href="{% url 'minhas_doacoes' %}" data-secao="doacoes">Minhas Doações</a></li>
+                <li><a href="{% url 'nova_doacao' %}" data-secao="nova-doacao">Nova Doação</a></li>
+                <li><a href="{% url 'detalhes_' %}" data-secao="mensagens">Mensagens</a></li>
             </ul>
         </nav>
     </div>
