@@ -32,6 +32,7 @@
                 <li><a href="#" data-secao="doacoes">Doações</a></li>
                 <li><a href="#" data-secao="beneficiarios">Beneficiários</a></li>
                 <li><a href="#" data-secao="cadastrar-beneficiario">Cadastrar Beneficiário</a></li>
+                <li><a href="#" data-secao="mensagens">Mensagens</a></li>
                 <li><a href="#" data-secao="relatorios">Relatórios</a></li>
             </ul>
         </nav>
@@ -166,131 +167,230 @@
             </div>
         </div>
 
-            <div id="beneficiarios" class="secao-conteudo">
-                <div class="cabecalho-secao">
-                    <h1>Gerenciamento de Beneficiários</h1>
+        <div id="beneficiarios" class="secao-conteudo">
+            <div class="cabecalho-secao">
+                <h1>Gerenciamento de Beneficiários</h1>
+            </div>
+            
+            <div class="filtros">
+                <div class="grupo-filtro">
+                    <label for="filtro-status-benef">Status:</label>
+                    <select id="filtro-status-benef">
+                        <option value="TODOS">Todos</option>
+                        <option value="ATIVO">Ativos</option>
+                        <option value="INATIVO">Inativos</option>
+                    </select>
                 </div>
-                
-                <div class="filtros">
-                    <div class="grupo-filtro">
-                        <label for="filtro-status-benef">Status:</label>
-                        <select id="filtro-status-benef">
-                            <option value="TODOS">Todos</option>
-                            <option value="ATIVO">Ativos</option>
-                            <option value="INATIVO">Inativos</option>
-                        </select>
-                    </div>
-                    <div class="grupo-filtro">
-                        <label for="filtro-idade">Idade:</label>
-                        <select id="filtro-idade">
-                            <option value="TODOS">Todas</option>
-                            <option value="0-12">0-12 anos</option>
-                            <option value="13-18">13-18 anos</option>
-                            <option value="19+">19+ anos</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="tabela-container">
-                    <table class="tabela-beneficiarios">
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Idade</th>
-                                <th>Responsável</th>
-                                <th>Contato</th>
-                                <th>Status</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for beneficiario in beneficiarios %}
-                            <tr data-status="{% if beneficiario.ativo %}ATIVO{% else %}INATIVO{% endif %}" data-idade="{{ beneficiario.idade }}">
-                                <td>{{ beneficiario.nome }}</td>
-                                <td>{{ beneficiario.idade }} anos</td>
-                                <td>{{ beneficiario.nome_responsavel|default:"-" }}</td>
-                                <td>
-                                    {% if beneficiario.telefone_responsavel %}
-                                    {{ beneficiario.telefone_responsavel }}
-                                    {% else %}
-                                    {{ beneficiario.email_responsavel|default:"-" }}
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    <span class="status status-{% if beneficiario.ativo %}ativo{% else %}inativo{% endif %}">
-                                        {% if beneficiario.ativo %}Ativo{% else %}Inativo{% endif %}
-                                    </span>
-                                </td>
-                                <td>
-                                    <td>
-                                        <a href="#" class="botao-acao editar-beneficiario" 
-                                           data-id="{{ beneficiario.id }}"
-                                           data-nome="{{ beneficiario.nome }}"
-                                           data-idade="{{ beneficiario.idade }}"
-                                           data-nome_responsavel="{{ beneficiario.nome_responsavel|default:'' }}"
-                                           data-telefone_responsavel="{{ beneficiario.telefone_responsavel|default:'' }}"
-                                           data-email_responsavel="{{ beneficiario.email_responsavel|default:'' }}"
-                                           data-observacoes="{{ beneficiario.observacoes|default:'' }}"
-                                           data-ativo="{{ beneficiario.ativo }}">Editar</a>
-                                    </td>
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="6" class="sem-registros">
-                                    <p>Nenhum beneficiário cadastrado</p>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                <div class="grupo-filtro">
+                    <label for="filtro-idade">Idade:</label>
+                    <select id="filtro-idade">
+                        <option value="TODOS">Todas</option>
+                        <option value="0-12">0-12 anos</option>
+                        <option value="13-18">13-18 anos</option>
+                        <option value="19+">19+ anos</option>
+                    </select>
                 </div>
             </div>
+            
+            <div class="tabela-container">
+                <table class="tabela-beneficiarios">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Idade</th>
+                            <th>Responsável</th>
+                            <th>Contato</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for beneficiario in beneficiarios %}
+                        <tr data-status="{% if beneficiario.ativo %}ATIVO{% else %}INATIVO{% endif %}" data-idade="{{ beneficiario.idade }}">
+                            <td>{{ beneficiario.nome }}</td>
+                            <td>{{ beneficiario.idade }} anos</td>
+                            <td>{{ beneficiario.nome_responsavel|default:"-" }}</td>
+                            <td>
+                                {% if beneficiario.telefone_responsavel %}
+                                {{ beneficiario.telefone_responsavel }}
+                                {% else %}
+                                {{ beneficiario.email_responsavel|default:"-" }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="status status-{% if beneficiario.ativo %}ativo{% else %}inativo{% endif %}">
+                                    {% if beneficiario.ativo %}Ativo{% else %}Inativo{% endif %}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="#" class="botao-acao editar-beneficiario" 
+                                   data-id="{{ beneficiario.id }}"
+                                   data-nome="{{ beneficiario.nome }}"
+                                   data-idade="{{ beneficiario.idade }}"
+                                   data-nome_responsavel="{{ beneficiario.nome_responsavel|default:'' }}"
+                                   data-telefone_responsavel="{{ beneficiario.telefone_responsavel|default:'' }}"
+                                   data-email_responsavel="{{ beneficiario.email_responsavel|default:'' }}"
+                                   data-observacoes="{{ beneficiario.observacoes|default:'' }}"
+                                   data-ativo="{{ beneficiario.ativo }}">Editar</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="sem-registros">
+                                <p>Nenhum beneficiário cadastrado</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-            <div id="cadastrar-beneficiario" class="secao-conteudo">
-                <div class="cabecalho-secao">
-                    <h1>Cadastrar Novo Beneficiário</h1>
-                </div>
-                
-                <div class="formulario-container">
-                    <form method="POST" action="{% url 'cadastrar_beneficiario' %}">
-                        {% csrf_token %}
-                        <div class="form-coluna">
-                            <div class="campo-formulario">
-                                <label for="nome">Nome*</label>
-                                <input type="text" id="nome" name="nome" required>
-                            </div>
-                            <div class="campo-formulario">
-                                <label for="idade">Idade*</label>
-                                <input type="number" id="idade" name="idade" min="0" required>
-                            </div>
-                            <div class="campo-formulario">
-                                <label for="nome_responsavel">Nome do Responsável</label>
-                                <input type="text" id="nome_responsavel" name="nome_responsavel">
-                            </div>
+        <div id="cadastrar-beneficiario" class="secao-conteudo">
+            <div class="cabecalho-secao">
+                <h1>Cadastrar Novo Beneficiário</h1>
+            </div>
+            
+            <div class="formulario-container">
+                <form method="POST" action="{% url 'cadastrar_beneficiario' %}">
+                    {% csrf_token %}
+                    <div class="form-coluna">
+                        <div class="campo-formulario">
+                            <label for="nome">Nome*</label>
+                            <input type="text" id="nome" name="nome" required>
                         </div>
-                        
-                        <div class="form-coluna">
-                            <div class="campo-formulario">
-                                <label for="telefone_responsavel">Telefone do Responsável</label>
-                                <input type="tel" id="telefone_responsavel" name="telefone_responsavel">
-                            </div>
-                            <div class="campo-formulario">
-                                <label for="email_responsavel">Email do Responsável</label>
-                                <input type="email" id="email_responsavel" name="email_responsavel">
-                            </div>
-                            <div class="campo-formulario">
-                                <label for="observacoes">Observações</label>
-                                <textarea id="observacoes" name="observacoes" rows="3"></textarea>
-                            </div>
+                        <div class="campo-formulario">
+                            <label for="idade">Idade*</label>
+                            <input type="number" id="idade" name="idade" min="0" required>
                         </div>
-                        
-                        <div class="acoes-formulario">
-                            <button type="submit" class="botao-primario">Cadastrar</button>
+                        <div class="campo-formulario">
+                            <label for="nome_responsavel">Nome do Responsável</label>
+                            <input type="text" id="nome_responsavel" name="nome_responsavel">
                         </div>
-                    </form>
+                    </div>
+                    
+                    <div class="form-coluna">
+                        <div class="campo-formulario">
+                            <label for="telefone_responsavel">Telefone do Responsável</label>
+                            <input type="tel" id="telefone_responsavel" name="telefone_responsavel">
+                        </div>
+                        <div class="campo-formulario">
+                            <label for="email_responsavel">Email do Responsável</label>
+                            <input type="email" id="email_responsavel" name="email_responsavel">
+                        </div>
+                        <div class="campo-formulario">
+                            <label for="observacoes">Observações</label>
+                            <textarea id="observacoes" name="observacoes" rows="3"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="acoes-formulario">
+                        <button type="submit" class="botao-primario">Cadastrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="mensagens" class="secao-conteudo">
+            <div class="cabecalho-secao">
+                <h1>Mensagens dos Doadores</h1>
+            </div>
+            
+            <div class="filtros-mensagens">
+                <div class="grupo-filtro">
+                    <label for="filtro-status-mensagem">Status:</label>
+                    <select id="filtro-status-mensagem">
+                        <option value="TODAS">Todas</option>
+                        <option value="AGUARDANDO">Aguardando Aprovação</option>
+                        <option value="APROVADO">Aprovadas</option>
+                        <option value="REJEITADO">Rejeitadas</option>
+                    </select>
                 </div>
             </div>
+            
+            <div class="lista-mensagens">
+                {% for mensagem in mensagens %}
+                <div class="cartao-mensagem" data-status="{{ mensagem.status|lower }}" data-id="{{ mensagem.id }}">
+                    <div class="cabecalho-mensagem">
+                        <div class="info-basica">
+                            <div class="remetente">
+                                <strong>De:</strong> {{ mensagem.remetente.nome }}
+                            </div>
+                            {% if mensagem.destinatario %}
+                            <div class="destinatario">
+                                <strong>Para:</strong> {% if mensagem.destinatario %}{{ mensagem.destinatario.nome }}{% else %}Todos{% endif %}
+                            </div>
+                            {% endif %}
+                            <div class="assunto">
+                                <strong>Assunto:</strong> {{ mensagem.assunto }}
+                            </div>
+                        </div>
+                        <div class="status-acoes">
+                            <span class="status status-{{ mensagem.status|lower }}">
+                                {{ mensagem.get_status_display }}
+                            </span>
+                            <button class="botao-ver-mais" data-id="{{ mensagem.id }}">Ver mais</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-mensagem" id="modal-{{ mensagem.id }}">
+                    <div class="modal-conteudo">
+                        <div class="cabecalho-modal">
+                            <h3>Detalhes da Mensagem</h3>
+                            <button class="fechar-modal">&times;</button>
+                        </div>
+                        <div class="corpo-modal">
+                            <div class="info-mensagem">
+                                <p><strong>De:</strong> {{ mensagem.remetente.nome }}</p>
+                                {% if mensagem.destinatario %}
+                                <p><strong>Para:</strong> {% if mensagem.destinatario %}{{ mensagem.destinatario.nome }}{% else %}Todos{% endif %}</p>
+                                {% endif %}
+                                <p><strong>Assunto:</strong> {{ mensagem.assunto }}</p>
+                                <p><strong>Status:</strong> 
+                                    <span class="status status-{{ mensagem.status|lower }}">
+                                        {{ mensagem.get_status_display }}
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="conteudo-mensagem">
+                                <h4>Mensagem:</h4>
+                                <p>{{ mensagem.conteudo }}</p>
+                            </div>
+                            
+                            {% if mensagem.status == 'REJEITADO' and mensagem.motivo_rejeicao %}
+                            <div class="motivo-rejeicao">
+                                <strong>Motivo da rejeição:</strong> {{ mensagem.motivo_rejeicao }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="rodape-modal">
+                            {% if mensagem.status == 'AGUARDANDO' %}
+                            <div class="acoes-modal">
+                                <form method="POST" action="{% url 'mensagens:aprovar_mensagem' mensagem.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="botao-primario">Aprovar</button>
+                                </form>
+                                
+                                <form method="POST" action="{% url 'mensagens:rejeitar_mensagem' mensagem.id %}" id="form-rejeicao-{{ mensagem.id }}" style="display: none;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="motivo_rejeicao" id="motivo-rejeicao-{{ mensagem.id }}">
+                                </form>
+                                
+                                <button onclick="mostrarCampoRejeicao({{ mensagem.id }})" class="botao-secundario">Rejeitar</button>
+                            </div>
+                            {% endif %}
+                            <button class="botao-voltar">Voltar</button>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="sem-mensagens">
+                    <p>Nenhuma mensagem recebida</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
 
         <div id="relatorios" class="secao-conteudo">
             <div class="cabecalho-secao">
@@ -378,6 +478,24 @@
     </div>
 </div>
 
+<div id="modal-rejeicao" class="modal">
+    <div class="modal-conteudo">
+        <span class="fechar-modal">&times;</span>
+        <h2>Rejeitar Mensagem</h2>
+        <form id="form-rejeicao" method="POST" action="">
+            {% csrf_token %}
+            <div class="campo-formulario">
+                <label for="motivo-rejeicao">Motivo da rejeição:</label>
+                <textarea id="motivo-rejeicao" name="motivo_rejeicao" rows="4" required></textarea>
+            </div>
+            <div class="acoes-formulario">
+                <button type="submit" class="botao-primario">Confirmar Rejeição</button>
+                <button type="button" class="botao-secundario" onclick="fecharModalRejeicao()">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div id="modal-relatorio" class="modal">
     <div class="modal-conteudo">
         <span class="fechar-modal">&times;</span>
@@ -453,6 +571,41 @@
                 });
             });
         });
+
+        document.getElementById('filtro-status-mensagem').addEventListener('change', function() {
+            const status = this.value.toLowerCase();
+            document.querySelectorAll('.lista-mensagens .cartao-mensagem').forEach(cartao => {
+                const cartaoStatus = cartao.getAttribute('data-status');
+                if (status === 'todas') {
+                    cartao.style.display = '';
+                } else {
+                    cartao.style.display = cartaoStatus === status ? '' : 'none';
+                }
+            });
+        });
+
+        document.querySelectorAll('.botao-ver-mais').forEach(botao => {
+            botao.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const id = this.getAttribute('data-id');
+                document.getElementById(`modal-${id}`).style.display = 'flex';
+            });
+        });
+
+        document.querySelectorAll('.fechar-modal, .botao-voltar').forEach(botao => {
+            botao.addEventListener('click', function() {
+                this.closest('.modal-mensagem').style.display = 'none';
+            });
+        });
+
+        document.querySelectorAll('.modal-mensagem').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.style.display = 'none';
+                }
+            });
+        });
     
         var modalRelatorio = document.getElementById('modal-relatorio');
         var btnAbrirRelatorio = document.getElementById('abrir-modal-relatorio');
@@ -495,6 +648,16 @@
                 modalEdicao.style.display = 'none';
             }
         }
+
+        function mostrarCampoRejeicao(mensagemId) {
+            const motivo = prompt("Digite o motivo da rejeição:");
+            if (motivo !== null && motivo.trim() !== "") {
+                document.getElementById(`motivo-rejeicao-${mensagemId}`).value = motivo;
+                document.getElementById(`form-rejeicao-${mensagemId}`).submit();
+            }
+        }
+
+        window.mostrarCampoRejeicao = mostrarCampoRejeicao;
     });
     
     function mostrarSecao(secaoId) {

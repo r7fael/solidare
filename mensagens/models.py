@@ -21,7 +21,8 @@ class Mensagem(models.Model):
         null=True,
         blank=True,
         related_name='mensagens_enviadas',
-        limit_choices_to={'tipo_usuario': 'doador'}
+        limit_choices_to={'tipo_usuario': 'doador'},
+        verbose_name="Remetente"
     )
     
     destinatario = models.ForeignKey(
@@ -29,11 +30,12 @@ class Mensagem(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='mensagens_recebidas'
+        related_name='mensagens_recebidas',
+        verbose_name="Destinatário"
     )
     
-    assunto = models.CharField(max_length=200)
-    conteudo = models.TextField()
+    assunto = models.CharField(max_length=200, verbose_name="Assunto")
+    conteudo = models.TextField(verbose_name="Conteúdo")
     
     aprovador = models.ForeignKey(
         Usuario,
@@ -41,32 +43,46 @@ class Mensagem(models.Model):
         null=True,
         blank=True,
         related_name='mensagens_aprovadas',
-        limit_choices_to={'tipo_usuario': 'gestor'}
+        limit_choices_to={'tipo_usuario': 'gestor'},
+        verbose_name="Aprovador"
     )
     
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
-        default=STATUS_AGUARDANDO
+        default=STATUS_AGUARDANDO,
+        verbose_name="Status"
     )
-
     
-    motivo_rejeicao = models.TextField(null=True, blank=True)
+    motivo_rejeicao = models.TextField(
+        null=True, 
+        blank=True,
+        verbose_name="Motivo da Rejeição"
+    )
     data_envio = models.DateTimeField(default=timezone.now, verbose_name="Data de Envio")
-    data_aprovacao = models.DateTimeField(null=True, blank=True)
-    lida = models.BooleanField(default=False)
-    data_leitura = models.DateTimeField(null=True, blank=True)
+    data_aprovacao = models.DateTimeField(null=True, blank=True, verbose_name="Data de Aprovação")
+    lida = models.BooleanField(default=False, verbose_name="Lida?")
+    data_leitura = models.DateTimeField(null=True, blank=True, verbose_name="Data de Leitura")
 
     def clean(self):
+        """Validações adicionais para o modelo"""
+        errors = {}
+
         if self.remetente and self.remetente.tipo_usuario != 'doador':
-            raise ValidationError("O remetente deve ser um doador.")
+            errors['remetente'] = "O remetente deve ser um doador."
         
         if self.aprovador and self.aprovador.tipo_usuario != 'gestor':
-            raise ValidationError("O aprovador deve ser um gestor.")
+            errors['aprovador'] = "O aprovador deve ser um gestor."
+
+        if self.status == self.STATUS_REJEITADO and not self.motivo_rejeicao:
+            errors['motivo_rejeicao'] = "É necessário informar o motivo da rejeição."
+        
+        if errors:
+            raise ValidationError(errors)
 
     def aprovar(self, aprovador):
         if aprovador.tipo_usuario != 'gestor':
-            raise ValidationError("Apenas gestores podem aprovar mensagens.")
+            raise ValidationError({"aprovador": "Apenas gestores podem aprovar mensagens."})
         
         self.status = self.STATUS_APROVADO
         self.aprovador = aprovador
@@ -75,9 +91,9 @@ class Mensagem(models.Model):
     
     def rejeitar(self, aprovador, motivo):
         if aprovador.tipo_usuario != 'gestor':
-            raise ValidationError("Apenas gestores podem rejeitar mensagens.")
+            raise ValidationError({"aprovador": "Apenas gestores podem rejeitar mensagens."})
         if not motivo:
-            raise ValidationError("Informe o motivo da rejeição.")
+            raise ValidationError({"motivo_rejeicao": "Informe o motivo da rejeição."})
             
         self.status = self.STATUS_REJEITADO
         self.aprovador = aprovador
@@ -91,19 +107,26 @@ class Mensagem(models.Model):
             self.data_leitura = timezone.now()
             self.save()
     
+    @property
     def esta_aprovada(self):
         return self.status == self.STATUS_APROVADO
     
+    @property
     def esta_pendente(self):
         return self.status == self.STATUS_AGUARDANDO
     
+    @property
     def foi_lida(self):
         return self.lida
 
+    def get_nome_destinatario(self):
+        if self.destinatario:
+            return self.destinatario.nome
+        return "Todos"
+
     def __str__(self):
         remetente_nome = self.remetente.nome if self.remetente else "Remetente Anônimo"
-        destinatario_nome = self.destinatario.usuario.nome if self.destinatario else "Destinatário Anônimo"
-        return f"{self.assunto} (De: {remetente_nome}, Para: {destinatario_nome})"
+        return f"{self.assunto} (De: {remetente_nome}, Para: {self.get_nome_destinatario()})"
 
     class Meta:
         verbose_name = 'Mensagem'

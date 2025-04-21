@@ -8,7 +8,7 @@ from doacoes.models import Doacao
 from django.shortcuts import render
 from mensagens.models import Mensagem
 from beneficiarios.models import Beneficiario
-from django.db.models.functions import TruncMonth
+from mensagens.models import Mensagem
 
 def registrar_usuario(request):
     if request.method == 'POST':
@@ -136,6 +136,7 @@ def metricas_doador(request):
 @login_required
 def painel_gestor(request):
 
+    mensagens = Mensagem.objects.select_related('remetente').order_by('-id')
     doacoes = Doacao.objects.select_related('doador').order_by('-id')
     ultimas_doacoes = doacoes[:5] 
     
@@ -182,6 +183,8 @@ def painel_gestor(request):
         'destino_mais_frequente': destino_mais_frequente,
         
         'relatorios': [],
+        
+        'mensagens': mensagens,
     }
     
     return render(request, 'gestores/painel.html', context)

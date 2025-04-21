@@ -40,43 +40,22 @@ def painel_moderacao(request):
 
 @login_required
 def aprovar_mensagem(request, mensagem_id):
-    if not request.user.is_gestor:
-        messages.error(request, "Acesso restrito a gestores")
-        return redirect('home')
-
-    mensagem = get_object_or_404(Mensagem, id=mensagem_id)
-    mensagem.status = Mensagem.STATUS_APROVADO
-    mensagem.aprovador = request.user
-    mensagem.data_aprovacao = timezone.now()
-    mensagem.save()
-
-    messages.success(request, "Mensagem aprovada com sucesso!")
-    return redirect('mensagens:painel_moderacao')
+    if request.method == 'POST':
+        mensagem = get_object_or_404(Mensagem, id=mensagem_id, destinatario=request.user)
+        mensagem.status = 'APROVADO'
+        mensagem.save()
+        messages.success(request, 'Mensagem aprovada com sucesso!')
+    return redirect('mensagens:listar')
 
 @login_required
 def rejeitar_mensagem(request, mensagem_id):
-    if not request.user.is_gestor:
-        messages.error(request, "Acesso restrito a gestores")
-        return redirect('home')
-
-    mensagem = get_object_or_404(Mensagem, id=mensagem_id)
-
     if request.method == 'POST':
-        motivo = request.POST.get('motivo', '').strip()
-        if motivo:
-            mensagem.status = Mensagem.STATUS_REJEITADO
-            mensagem.motivo_rejeicao = motivo
-            mensagem.aprovador = request.user
-            mensagem.data_aprovacao = timezone.now()
-            mensagem.save()
-            messages.success(request, "Mensagem rejeitada com sucesso!")
-            return redirect('mensagens:painel_moderacao')
-        else:
-            messages.error(request, "Informe o motivo da rejeição")
-
-    return render(request, 'mensagens/rejeitar_mensagem.html', {
-        'mensagem': mensagem
-    })
+        mensagem = get_object_or_404(Mensagem, id=mensagem_id, destinatario=request.user)
+        mensagem.status = 'REJEITADO'
+        mensagem.motivo_rejeicao = request.POST.get('motivo_rejeicao', '')
+        mensagem.save()
+        messages.success(request, 'Mensagem rejeitada com sucesso!')
+    return redirect('mensagens:listar')
 
 @login_required
 def listar_mensagens(request):
@@ -151,7 +130,7 @@ def criar_mensagem(request):
             return JsonResponse({'success': False, 'error': error_msg}, status=500)
         messages.error(request, error_msg)
 
-    return redirect('mensagens:listar')
+    return redirect('mensagens:painel')
 
 @login_required
 def visualizar_mensagem(request, pk):
