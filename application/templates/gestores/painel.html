@@ -5,7 +5,7 @@
 {% block title %}Painel do Gestor | SOLIDARE{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'application/css/painel_gestor.css' %}">
+<link rel="stylesheet" href="{% static 'application/css/painel_gestor.css' %}?v={% now 'U' %}">
 
 <div class="painel-container">
     <div class="barra-lateral">
@@ -365,22 +365,21 @@
                             {% endif %}
                         </div>
                         <div class="rodape-modal">
-                            {% if mensagem.status == 'AGUARDANDO' %}
+                            {% if mensagem.status == 'aguardando' %}
                             <div class="acoes-modal">
                                 <form method="POST" action="{% url 'mensagens:aprovar_mensagem' mensagem.id %}">
                                     {% csrf_token %}
                                     <button type="submit" class="botao-primario">Aprovar</button>
                                 </form>
                                 
-                                <form method="POST" action="{% url 'mensagens:rejeitar_mensagem' mensagem.id %}" id="form-rejeicao-{{ mensagem.id }}" style="display: none;">
+                                <form method="POST" action="{% url 'mensagens:rejeitar_mensagem' mensagem.id %}" id="form-rejeicao-{{ mensagem.id }}">
                                     {% csrf_token %}
-                                    <input type="hidden" name="motivo_rejeicao" id="motivo-rejeicao-{{ mensagem.id }}">
+                                    <input type="hidden" id="motivo-rejeicao-{{ mensagem.id }}" name="motivo_rejeicao">
+                                    <button type="button" onclick="mostrarCampoRejeicao({{ mensagem.id }})" class="botao-secundario">Rejeitar</button>
                                 </form>
-                                
-                                <button onclick="mostrarCampoRejeicao({{ mensagem.id }})" class="botao-secundario">Rejeitar</button>
                             </div>
                             {% endif %}
-                            <button class="botao-voltar">Voltar</button>
+                            <button class="botao-voltar botao-modal-voltar">Voltar</button>
                         </div>
                     </div>
                 </div>

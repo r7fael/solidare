@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.http import require_http_methods
@@ -40,22 +40,37 @@ def painel_moderacao(request):
 
 @login_required
 def aprovar_mensagem(request, mensagem_id):
+    if not request.user.tipo_usuario == 'gestor':
+        messages.error(request, "Apenas gestores podem aprovar mensagens")
+        return redirect('painel_gestor')
+
     if request.method == 'POST':
-        mensagem = get_object_or_404(Mensagem, id=mensagem_id, destinatario=request.user)
-        mensagem.status = 'APROVADO'
-        mensagem.save()
-        messages.success(request, 'Mensagem aprovada com sucesso!')
-    return redirect('mensagens:listar')
+        mensagem = get_object_or_404(Mensagem, id=mensagem_id)
+        try:
+            mensagem.aprovar(request.user)
+            messages.success(request, 'Mensagem aprovada com sucesso!')
+        except ValidationError as e:
+            messages.error(request, str(e))
+    
+    return redirect('painel_gestor')
 
 @login_required
 def rejeitar_mensagem(request, mensagem_id):
+    if not request.user.tipo_usuario == 'gestor':
+        messages.error(request, "Apenas gestores podem rejeitar mensagens")
+        return redirect('painel_gestor')
+
     if request.method == 'POST':
-        mensagem = get_object_or_404(Mensagem, id=mensagem_id, destinatario=request.user)
-        mensagem.status = 'REJEITADO'
-        mensagem.motivo_rejeicao = request.POST.get('motivo_rejeicao', '')
-        mensagem.save()
-        messages.success(request, 'Mensagem rejeitada com sucesso!')
-    return redirect('mensagens:listar')
+        mensagem = get_object_or_404(Mensagem, id=mensagem_id)
+        motivo_rejeicao = request.POST.get('motivo_rejeicao', '')
+        
+        try:
+            mensagem.rejeitar(request.user, motivo_rejeicao)
+            messages.success(request, 'Mensagem rejeitada com sucesso!')
+        except ValidationError as e:
+            messages.error(request, str(e))
+    
+    return redirect('painel_gestor')
 
 @login_required
 def listar_mensagens(request):
