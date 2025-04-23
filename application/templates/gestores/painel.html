@@ -16,7 +16,7 @@
             
             <div class="resumo-perfil">
                 <div class="item-resumo">
-                    <span class="numero">R$ {{ total_doacoes|intcomma }}</span>
+                    <span class="numero">R$ {{ total_doacoes|floatformat:2|intcomma  }}</span>
                     <span class="rotulo">Total Arrecadado</span>
                 </div>
                 <div class="item-resumo">
@@ -46,7 +46,7 @@
                 
                 <div class="estatisticas-impacto">
                     <div class="cartao-estatistica">
-                        <h3>R$ {{ total_doacoes|intcomma }}</h3>
+                        <h3>R$ {{ total_doacoes|floatformat:2|intcomma  }}</h3>
                         <p>Total Arrecadado</p>
                     </div>
                     <div class="cartao-estatistica">
