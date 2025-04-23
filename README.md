@@ -68,6 +68,9 @@ Foram definidas cinco histórias de usuário para aprimorar a compreensão do fu
 
 As histórias e seus respectivos cenários podem ser acessados e revisados no seguinte documento: [Histórias de Usuário](https://docs.google.com/document/d/15lNQA87yBFTOUeHxDLRP9XGcK0BDhXuryyQLcdqMKJI/edit?usp=sharing).
 
+**Programação em Par**
+Durante o desenvolvimento do projeto Solidare, a equipe adotou, em determinados momentos, a técnica de programação em par como estratégia para potencializar a qualidade do código e promover a colaboração ativa entre os integrantes. Essa abordagem permitiu a troca contínua de conhecimento, revisão imediata das implementações e maior eficiência na resolução de problemas mais complexos. No entanto, a programação em par não foi empregada em todas as etapas do desenvolvimento. Em diversas ocasiões, optamos por uma divisão de tarefas mais individualizada, permitindo que cada membro da equipe focasse em demandas específicas de forma paralela, otimizando o tempo e a produtividade do grupo como um todo. A escolha entre trabalhar em par ou individualmente foi feita de forma estratégica, considerando o tipo de tarefa, o nível de complexidade envolvido e a necessidade de colaboração naquele momento do projeto.
+
 **Backlog**
 ![Solidare_Backlog](https://github.com/user-attachments/assets/6c8d6668-4d45-4752-bbce-749dff8d17f8)
 )
