@@ -11,7 +11,6 @@
     --success-color: #4cc9f0;
 }
 
-
 * {
     margin: 0;
     padding: 0;
@@ -29,14 +28,12 @@ body {
     align-items: center;
 }
 
-
 .pagina-login {
     width: 100%;
     max-width: 450px;
     padding: 2rem;
     animation: fadeIn 0.5s ease-out;
 }
-
 
 .formulario-login {
     background: var(--white);
@@ -59,7 +56,6 @@ body {
     font-weight: 600;
 }
 
-
 .grupo-campo {
     margin-bottom: 1.5rem;
     position: relative;
@@ -78,7 +74,7 @@ body {
     border: 2px solid #e9ecef;
     border-radius: 8px;
     font-size: 1rem;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease, box-shadow 0.1s ease;
     background-color: #f8f9fa;
 }
 
@@ -89,6 +85,29 @@ body {
     box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
 }
 
+.grupo-campo input:invalid {
+    border-color: #e9ecef !important;
+    box-shadow: none !important;
+}
+
+.grupo-campo input:focus:invalid {
+    border-color: var(--primary-color) !important;
+}
+
+.grupo-campo.invalido label {
+    color: var(--error-color);
+}
+
+.grupo-campo.invalido input {
+    border-color: var(--error-color) !important;
+}
+
+.grupo-campo.invalido .mensagem-erro {
+    display: block;
+    color: var(--error-color);
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+}
 
 .botao-login {
     width: 100%;
@@ -111,6 +130,45 @@ body {
 
 .botao-login:active {
     transform: translateY(0);
+}
+
+.botao-login:disabled {
+    background-color: var(--text-light);
+    cursor: not-allowed;
+    transform: none;
+}
+
+.botao-login:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+.link-acesso {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: block;
+    text-align: right;
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;
+    transition: color 0.2s ease;
+}
+
+.link-acesso:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+.lembrar-me {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.lembrar-me input {
+    margin-right: 0.5rem;
+    width: auto;
 }
 
 .mensagens-erro {
@@ -136,15 +194,25 @@ body {
     margin-bottom: 0;
 }
 
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+::placeholder {
+    color: var(--text-light);
+    opacity: 0.7;
 }
 
-@keyframes slideIn {
-    from { opacity: 0; transform: translateX(-20px); }
-    to { opacity: 1; transform: translateX(0); }
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 30px #f8f9fa inset !important;
+    -webkit-text-fill-color: var(--text-color) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus {
+        -webkit-box-shadow: 0 0 0 30px #2b2d42 inset !important;
+        -webkit-text-fill-color: var(--white) !important;
+    }
 }
 
 @media (max-width: 576px) {
@@ -159,12 +227,22 @@ body {
     .formulario-login h2 {
         font-size: 1.5rem;
     }
+    
+    .grupo-campo input {
+        padding: 0.7rem 0.9rem;
+    }
+    
+    .botao-login {
+        padding: 0.8rem;
+    }
 }
 
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
-input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0 30px #f8f9fa inset !important;
-    -webkit-text-fill-color: var(--text-color) !important;
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
 }
