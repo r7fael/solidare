@@ -25,16 +25,16 @@
             <button type="submit" class="botao-login">Entrar</button>
             
             {% if messages %}
-            <div class="mensagens-erro">
-                <ul>
-                    {% for message in messages %}
-                        {% if 'login' in message.tags %}
-                        <li>{{ message }}</li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            </div>
-            {% endif %}
+                <div class="mensagens-erro">
+                    <ul>
+                        {% for message in messages %}
+                            {% if 'login' in message.tags %}
+                            <li>{{ message }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
         </form>
     </div>
 </body>

@@ -45,24 +45,24 @@ def login_usuario(request):
     if request.method == 'POST':
         email = request.POST.get('email', '').strip()
         senha = request.POST.get('senha', '')
-        
-        if not email or not senha:
-            messages.error(request, "Preencha todos os campos")
-            return render(request, 'usuarios/login.html')
-        
-        try:
-            usuario = Usuario.objects.get(email=email)
-        except Usuario.DoesNotExist:
-            usuario = None
 
-        usuario = authenticate(request, username=email, password=senha)
-        
-        if usuario is not None:
-            login(request, usuario)
-            return redirect('painel_doador' if usuario.tipo_usuario == 'doador' else 'painel_gestor')
-        else:
-            messages.error(request, "Credenciais inválidas")
     
+        if not email or not senha:
+            messages.error(request, "Preencha todos os campos", extra_tags='login')
+            return render(request, 'usuarios/login.html')
+
+        
+        usuario_autenticado = authenticate(request, username=email, password=senha)
+
+        if usuario_autenticado is not None:
+            login(request, usuario_autenticado)
+            if usuario_autenticado.tipo_usuario == 'doador':
+                return redirect('painel_doador')
+            else:
+                return redirect('painel_gestor')
+        else:
+            messages.error(request, "Credenciais inválidas", extra_tags='login')
+
     return render(request, 'usuarios/login.html')
 
 @login_required

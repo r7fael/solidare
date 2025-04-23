@@ -9,8 +9,9 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Mensagem
 from beneficiarios.models import Beneficiario
 from usuarios.models import Usuario
+from django.contrib import messages
 
-@login_required
+
 def detalhes_mensagem(request, mensagem_id):
     mensagem = get_object_or_404(Mensagem, id=mensagem_id)
     

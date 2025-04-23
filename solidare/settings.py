@@ -66,6 +66,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'solidare.wsgi.application'
 
 # Database
@@ -107,3 +108,4 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'application/static')]
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
