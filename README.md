@@ -45,7 +45,7 @@ A ONG tem o intuito de promover o desenvolvimento social, político e pedagógic
     <a href="https://github.com/PabloJPCintra">Pablo Cintra</a> pjpc@cesar.school
     </li>
   <li>
-    <a href="https://github.com/">João Manoel</a> jmpm@cesar.school
+    <a href="https://github.com/JoaoManoelP">João Manoel</a> jmpm@cesar.school
     </li>
 </ul>
 
