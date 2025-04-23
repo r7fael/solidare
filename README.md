@@ -44,6 +44,9 @@ A ONG tem o intuito de promover o desenvolvimento social, político e pedagógic
   <li>
     <a href="https://github.com/PabloJPCintra">Pablo Cintra</a> pjpc@cesar.school
     </li>
+  <li>
+    <a href="https://github.com/">João Manoel</a> 
+    </li>
 </ul>
 
 # Links 🔗
@@ -75,7 +78,7 @@ As histórias e seus respectivos cenários podem ser acessados e revisados no se
 
 **Sketches do Protótipo Lo-Fi**
 <br>
-Disponível através do [Figma](inserir link).
+Disponível através do [Figma](https://www.figma.com/design/G0Yuk7esIEczckooTxzw0p/Untitled?node-id=0-1&p=f&t=eD65mHvQijluzZiP-0).
 <br>
 
 **ScreenCast**
@@ -83,4 +86,4 @@ Disponível através do [Figma](inserir link).
 Disponível no [YouTube](Inserir link)
 </details>
 
-[Link do deployment](inserir link)
+[Link do deployment](https://solidare.azurewebsites.net/)
