@@ -71,6 +71,10 @@ As histórias e seus respectivos cenários podem ser acessados e revisados no se
 **Painel**
 ![Solidare_Painel](https://github.com/user-attachments/assets/9deec23c-3de8-4c50-b5ff-962469c9e963)
 
+**Bug Tracker**
+![Bug Tracker](https://github.com/user-attachments/assets/4040674b-ae5e-48c1-9506-35569200f4d3)
+
+
 
 **Sketches do Protótipo Lo-Fi**
 <br>
