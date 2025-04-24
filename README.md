@@ -86,7 +86,7 @@ Disponível através do [Figma](https://www.figma.com/design/G0Yuk7esIEczckooTxz
 
 **ScreenCast**
 <br>
-Disponível no [YouTube](Inserir link)
+Disponível no [YouTube](https://youtu.be/PYPbtUBx-JU)
 </details>
 
 [Link do deployment](https://solidare.azurewebsites.net/)
