@@ -66,11 +66,11 @@ As histórias e seus respectivos cenários podem ser acessados e revisados no se
 
 **Backlog**
 ![Solidare_Backlog](https://github.com/user-attachments/assets/6c8d6668-4d45-4752-bbce-749dff8d17f8)
-)
+
 
 **Painel**
 ![Solidare_Painel](https://github.com/user-attachments/assets/9deec23c-3de8-4c50-b5ff-962469c9e963)
-)
+
 
 **Sketches do Protótipo Lo-Fi**
 <br>
