@@ -87,9 +87,12 @@ Disponível através do [PDF](https://cdn.discordapp.com/attachments/12765959229
 Disponível através do [Figma](https://www.figma.com/design/G0Yuk7esIEczckooTxzw0p/Untitled?node-id=0-1&p=f&t=eD65mHvQijluzZiP-0).
 <br>
 
-**ScreenCast**
+**ScreenCasts**
 <br>
 Disponível no [YouTube](https://youtu.be/PYPbtUBx-JU)
+</details>
+<br>
+Disponível no [YouTube](https://www.youtube.com/watch?v=0893hq8dsfI)
 </details>
 
 [Link do deployment](https://solidare.azurewebsites.net/)
