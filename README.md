@@ -74,7 +74,13 @@ As histórias e seus respectivos cenários podem ser acessados e revisados no se
 **Bug Tracker**
 ![Bug Tracker](https://github.com/user-attachments/assets/4040674b-ae5e-48c1-9506-35569200f4d3)
 
+**Diagrama de Atividades**
+![Diagrama de Atividades](https://cdn.discordapp.com/attachments/1276595922998132801/1365087358428643450/Diagrama_em_branco.png?ex=680c082c&is=680ab6ac&hm=74bcc0110094090ac0bd1b5c3280fdc68d449b89bf9c2b0eaba5f2d35abc01ba&)
 
+**Diagrama de Atividades**
+<br>
+Disponível através do [PDF](https://cdn.discordapp.com/attachments/1276595922998132801/1365086470746013716/Diagrama_em_branco.pdf?ex=680c0758&is=680ab5d8&hm=2d978a7b50aad6c481e8e6e75b162258179ba1e87324a17b954e56dfd9e39a1a&).
+<br>
 
 **Sketches do Protótipo Lo-Fi**
 <br>
