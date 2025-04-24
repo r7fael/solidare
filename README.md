@@ -49,13 +49,6 @@ A ONG tem o intuito de promover o desenvolvimento social, político e pedagógic
     </li>
 </ul>
 
-# Links 🔗
-
-[Jira](https://cesarschoolg08.atlassian.net/jira/software/projects/SLD/boards/2?atlOrigin=eyJpIjoiYWI3ODI5ZDYwZjUyNGY5Y2EwNDc4ZTJhOTBiZjY5Y2QiLCJwIjoiaiJ9)
-
-[Protótipo LoFi Figma](insertlink)
-
-
 # Entregas 📃
 
 <details>
