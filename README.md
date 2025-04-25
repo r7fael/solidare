@@ -90,7 +90,7 @@ Disponível através do [Figma](https://www.figma.com/design/G0Yuk7esIEczckooTxz
 
 **ScreenCasts**
 <br>
-Disponíveis no [YouTube | Deploy](https://youtu.be/PYPbtUBx-JU), 
+Disponíveis nos links: [YouTube | Deploy](https://youtu.be/PYPbtUBx-JU), 
 [YouTube | Protótipo](https://www.youtube.com/watch?v=0893hq8dsfI)
 <br>
 
