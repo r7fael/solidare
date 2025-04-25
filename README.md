@@ -65,11 +65,11 @@ Foram definidas cinco histórias de usuário para aprimorar a compreensão do fu
 As histórias e seus respectivos cenários podem ser acessados e revisados no seguinte documento: [Histórias de Usuário](https://docs.google.com/document/d/15lNQA87yBFTOUeHxDLRP9XGcK0BDhXuryyQLcdqMKJI/edit?usp=sharing).
 
 **Backlog**
-![Solidare_Backlog](https://imgur.com/a/7t0fW2Y)
+![Solidare_Backlog](https://i.imgur.com/GWa6ROG.png)
 
 
 **Painel**
-![Solidare_Painel](https://imgur.com/a/pCC2wpM)
+![Solidare_Painel](https://i.imgur.com/jKeptMl.png)
 
 **Bug Tracker**
 ![Bug Tracker](https://github.com/user-attachments/assets/4040674b-ae5e-48c1-9506-35569200f4d3)
