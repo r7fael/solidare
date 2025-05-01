@@ -1,7 +1,7 @@
 
 # Solidare 🏫
 O que é o Solidare ? O Instituto Solidare é uma organização da sociedade civil de direito privado do segmento da assistência social, sendo criado no ano de 2006 por iniciativa da Igreja Batista em Coqueiral(PE) e por lideranças comunitárias.
-A ONG tem o intuito de promover o desenvolvimento social, político e pedagógico de crianças e adolescentes, a partir de suas famílias, sem distinção de etnia e credo
+A ONG tem o intuito de promover o desenvolvimento social, político e pedagógico de crianças e adolescentes, a partir de suas famílias, sem distinção de etnia e credo.
 
 # Tecnologias presentes 💻
 
