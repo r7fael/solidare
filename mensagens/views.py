@@ -107,7 +107,7 @@ def criar_mensagem(request):
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return JsonResponse({'success': False, 'error': 'Todos os campos são obrigatórios'}, status=400)
         messages.error(request, 'Todos os campos são obrigatórios')
-        return redirect('mensagens:listar')
+        return redirect('application:painel')
 
     try:
         destinatario = Beneficiario.objects.get(id=destinatario_id, ativo=True)
@@ -146,7 +146,7 @@ def criar_mensagem(request):
             return JsonResponse({'success': False, 'error': error_msg}, status=500)
         messages.error(request, error_msg)
 
-    return redirect('mensagens:painel')
+    return redirect('painel_doador')
 
 @login_required
 def visualizar_mensagem(request, pk):
