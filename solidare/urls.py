@@ -26,4 +26,5 @@ urlpatterns = [
     path('beneficiarios/', include('beneficiarios.urls')),
     path('relatorios/', include('relatorios.urls')),
     path('mensagens/', include('mensagens.urls', namespace='mensagens')),
+    path('visitacao/', include('visitacao.urls', namespace='visitacao')),
 ]

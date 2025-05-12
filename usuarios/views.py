@@ -9,6 +9,7 @@ from django.shortcuts import render
 from mensagens.models import Mensagem
 from beneficiarios.models import Beneficiario
 from mensagens.models import Mensagem
+from visitacao.models import DataVisitacao
 
 def registrar_usuario(request):
     if request.method == 'POST':
@@ -148,6 +149,7 @@ def painel_gestor(request):
     
     beneficiarios_ativos = Beneficiario.objects.filter(ativo=True)
 
+    visitas = DataVisitacao.objects.all().order_by('data')
     
     metodo_mais_usado = (
         doacoes.values('metodo')
@@ -185,6 +187,8 @@ def painel_gestor(request):
         'relatorios': [],
         
         'mensagens': mensagens,
+
+        'visitas': visitas,
     }
     
     return render(request, 'gestores/painel.html', context)

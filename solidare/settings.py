@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'mensagens.apps.MensagensConfig',
     'relatorios.apps.RelatoriosConfig',
     'usuarios.apps.UsuariosConfig',
+    'visitacao.apps.VisitacaoConfig',
 ]
 
 MIDDLEWARE = [

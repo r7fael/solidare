@@ -34,6 +34,7 @@
                 <li><a href="#" data-secao="cadastrar-beneficiario">Cadastrar Beneficiário</a></li>
                 <li><a href="#" data-secao="mensagens">Mensagens</a></li>
                 <li><a href="#" data-secao="relatorios">Relatórios</a></li>
+                <li><a href="#" data-secao="visitacao">Visitações</a></li>
             </ul>
         </nav>
     </div>
@@ -418,6 +419,88 @@
                 {% endfor %}
             </div>
         </div>
+        <div id="visitacao" class="secao-conteudo">
+            <div class="cabecalho-secao">
+                <h1>Gerenciamento de Visitações</h1>
+                <div class="acoes-superiores">
+                    <button id="abrir-modal-visitacao" class="botao-primario">Nova Data</button>
+                </div>
+            </div>
+            
+            <div class="filtros">
+                <div class="grupo-filtro">
+                    <label for="filtro-status-visitacao">Status:</label>
+                    <select id="filtro-status-visitacao">
+                        <option value="TODOS">Todos</option>
+                        <option value="disponivel">Disponível</option>
+                        <option value="esgotado">Esgotado</option>
+                    </select>
+                </div>
+                <div class="grupo-filtro">
+                    <label for="filtro-data-visitacao">Período:</label>
+                    <select id="filtro-data-visitacao">
+                        <option value="TODOS">Todos</option>
+                        <option value="HOJE">Hoje</option>
+                        <option value="SEMANA">Esta semana</option>
+                        <option value="MES">Este mês</option>
+                        <option value="FUTURO">Futuras</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="tabela-container">
+                <table class="tabela-visitacao">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Capacidade</th>
+                            <th>Doadores Agendados</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for visita in visitas %}
+                        <tr data-status="{{ visita.status }}" data-data="{{ visita.data|date:'Y-m-d' }}">
+                            <td>{{ visita.data|date:"d/m/Y" }}</td>
+                            <td>{{ visita.capacidade_maxima }} pessoas</td>
+                            <td>
+                                {{ visita.doadores_agendados.count }}/{{ visita.capacidade_maxima }}
+                                {% if visita.doadores_agendados.count > 0 %}
+                                    <div class="doadores-lista">
+                                        {% for doador in visita.doadores_agendados.all|slice:":3" %}
+                                            <span class="doador-nome">{{ doador.nome }}</span>{% if not forloop.last %}, {% endif %}
+                                        {% endfor %}
+                                        {% if visita.doadores_agendados.count > 3 %}
+                                            <span class="mais-doadores">+{{ visita.doadores_agendados.count|add:"-3" }} mais</span>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="status status-{{ visita.status }}">
+                                    {{ visita.get_status_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="#" class="botao-acao editar-visita" 
+                                   data-id="{{ visita.id }}"
+                                   data-data="{{ visita.data|date:'Y-m-d' }}"
+                                   data-capacidade="{{ visita.capacidade_maxima }}">Editar</a>
+                                <a href="{% url 'visitacao:excluir_visita' visita.id %}" class="botao-acao excluir">Excluir</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="sem-registros">
+                                <p>Nenhuma data de visitação cadastrada</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -509,6 +592,32 @@
             <div class="acoes-formulario">
                 <button type="submit" class="botao-primario">Enviar Relatório</button>
                 <button type="button" class="botao-secundario fechar-modal">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="modal-visitacao" class="modal">
+    <div class="modal-conteudo">
+        <span class="fechar-modal">&times;</span>
+        <h2 id="modal-visitacao-titulo">Nova Data de Visitação</h2>
+        <form id="form-visitacao" method="POST" action="">
+            {% csrf_token %}
+            <input type="hidden" id="visita-id" name="visita_id" value="">
+            
+            <div class="campo-formulario">
+                <label for="data-visita">Data*</label>
+                <input type="date" id="data-visita" name="data" required>
+            </div>
+            
+            <div class="campo-formulario">
+                <label for="capacidade-visita">Capacidade Máxima*</label>
+                <input type="number" id="capacidade-visita" name="capacidade_maxima" min="1" required>
+            </div>
+            
+            <div class="acoes-formulario">
+                <button type="submit" class="botao-primario">Salvar</button>
+                <button type="button" class="botao-secundario fechar-modal-visitacao">Cancelar</button>
             </div>
         </form>
     </div>
@@ -667,5 +776,69 @@
         });
         document.getElementById(secaoId).classList.add('ativo');
     }
+
+    document.getElementById('abrir-modal-visitacao')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    const form = document.getElementById('form-visitacao');
+    form.action = "{% url 'visitacao:nova_visita' %}";
+    form.reset();
+    document.getElementById('visita-id').value = '';
+    document.getElementById('modal-visitacao-titulo').textContent = 'Nova Data de Visitação';
+    
+    document.getElementById('modal-visitacao').style.display = 'block';
+});
+
+document.querySelectorAll('.editar-visita').forEach(botao => {
+    botao.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const visitaId = this.getAttribute('data-id');
+        const form = document.getElementById('form-visitacao');
+        form.action = "{% url 'visitacao:editar_visita' 0 %}".replace('0', visitaId);
+        
+        document.getElementById('visita-id').value = visitaId;
+        document.getElementById('data-visita').value = this.getAttribute('data-data');
+        document.getElementById('capacidade-visita').value = this.getAttribute('data-capacidade');
+        document.getElementById('modal-visitacao-titulo').textContent = 'Editar Data de Visitação';
+        
+        document.getElementById('modal-visitacao').style.display = 'block';
+    });
+});
+
+document.querySelectorAll('#visitacao .filtros select').forEach(select => {
+    select.addEventListener('change', function() {
+        const status = document.getElementById('filtro-status-visitacao').value;
+        const periodo = document.getElementById('filtro-data-visitacao').value;
+        const hoje = new Date();
+        
+        document.querySelectorAll('.tabela-visitacao tbody tr').forEach(linha => {
+            const linhaStatus = linha.getAttribute('data-status');
+            const linhaDataStr = linha.getAttribute('data-data');
+            const linhaData = new Date(linhaDataStr + 'T00:00:00'); // Garante o fuso horário correto
+            
+            const mostraStatus = status === 'TODOS' || linhaStatus === status;
+
+            let mostraPeriodo = true;
+            if (periodo !== 'TODOS') {
+                const diffTempo = linhaData - hoje;
+                const diffDias = Math.floor(diffTempo / (1000 * 60 * 60 * 24));
+                
+                if (periodo === 'HOJE' && !(diffDias === 0)) mostraPeriodo = false;
+                if (periodo === 'SEMANA' && !(diffDias >= 0 && diffDias <= 7)) mostraPeriodo = false;
+                if (periodo === 'MES' && !(linhaData.getMonth() === hoje.getMonth() && linhaData.getFullYear() === hoje.getFullYear())) mostraPeriodo = false;
+                if (periodo === 'FUTURO' && !(linhaData > hoje)) mostraPeriodo = false;
+            }
+            
+            linha.style.display = (mostraStatus && mostraPeriodo) ? '' : 'none';
+        });
+    });
+});
+
+document.querySelectorAll('.fechar-modal-visitacao, #modal-visitacao .fechar-modal').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.getElementById('modal-visitacao').style.display = 'none';
+    });
+});
 </script>
 {% endblock %}
