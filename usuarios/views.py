@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
+from django.db.models import Sum, Count, F
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Sum, Count
 from .models import Usuario, Doador, Gestor
 from doacoes.models import Doacao
+from datetime import date
 from django.shortcuts import render
 from mensagens.models import Mensagem
 from beneficiarios.models import Beneficiario
@@ -71,7 +73,7 @@ def painel_doador(request):
     doacoes = Doacao.objects.filter(doador=request.user).order_by('-id')
     doacoes_concluidas = doacoes.filter(status='CONCLUIDO')
     total_doacoes = doacoes_concluidas.aggregate(Sum('valor'))['valor__sum'] or 0
-    
+
     metodo_mais_usado = doacoes.values('metodo').annotate(
         count=Count('metodo')
     ).order_by('-count').first()
@@ -83,10 +85,21 @@ def painel_doador(request):
     ).order_by('-count').first()
     destino_mais_frequente = dict(Doacao.DESTINO_CHOICES).get(
         destino_mais_frequente['destino']) if destino_mais_frequente else 'Nenhum'
-    
+
     mensagens_usuario = Mensagem.objects.filter(remetente=request.user).order_by('-id')
     beneficiarios_disponiveis = Beneficiario.objects.filter(ativo=True)
-    
+
+    visitas_disponiveis = DataVisitacao.objects.filter(
+        data__gte=date.today()
+    ).annotate(
+        vagas_restantes=F('capacidade_maxima') - Count('doadores_presentes')
+    ).order_by('data')
+
+    visitas_agendadas = DataVisitacao.objects.filter(
+        doadores_presentes=request.user.doador,
+        data__gte=date.today()
+    ).order_by('data')
+
     if request.method == 'POST' and 'nova_mensagem' in request.POST:
         destinatario_id = request.POST.get('destinatario')
         assunto = request.POST.get('assunto')
@@ -108,6 +121,27 @@ def painel_doador(request):
             messages.error(request, f'Erro ao enviar mensagem: {str(e)}')
         
         return redirect('usuarios:painel-doador')
+
+    if request.method == 'POST' and 'agendar_visita' in request.POST:
+        visita_id = request.POST.get('visita_id')
+        try:
+            visita = DataVisitacao.objects.get(id=visita_id, data__gte=date.today())
+            
+            if visita.doadores_presentes.count() >= visita.capacidade_maxima:
+                messages.error(request, 'Esta visita já está com todas as vagas preenchidas.')
+            elif request.user.doador in visita.doadores_presentes.all():
+                messages.warning(request, 'Você já está agendado para esta visita.')
+            else:
+                visita.doadores_presentes.add(request.user.doador)
+                visita.atualizar_status()
+                visita.save()
+                messages.success(request, f'Visita agendada com sucesso para {visita.data.strftime("%d/%m/%Y")}!')
+        except DataVisitacao.DoesNotExist:
+            messages.error(request, 'Visita não encontrada ou data já passou.')
+        except Exception as e:
+            messages.error(request, f'Erro ao agendar visita: {str(e)}')
+        
+        return redirect('usuarios:painel-doador')
     
     context = {
         'doacoes': doacoes,
@@ -120,12 +154,16 @@ def painel_doador(request):
         'destino_mais_frequente': destino_mais_frequente,
         'destinos_disponiveis': Doacao.DESTINO_CHOICES,
         'doacoes_pendentes': doacoes.filter(status='PENDENTE').exists(),
-        
+
         'mensagens': mensagens_usuario,
         'beneficiarios_disponiveis': beneficiarios_disponiveis,
         'total_mensagens': mensagens_usuario.count(),
         'mensagens_aprovadas': mensagens_usuario.filter(status=Mensagem.STATUS_APROVADO).count(),
-        'mensagens_pendentes': mensagens_usuario.filter(status=Mensagem.STATUS_AGUARDANDO).count()
+        'mensagens_pendentes': mensagens_usuario.filter(status=Mensagem.STATUS_AGUARDANDO).count(),
+
+        'visitas_disponiveis': visitas_disponiveis,
+        'visitas_agendadas': visitas_agendadas,
+        'total_visitas_agendadas': visitas_agendadas.count()
     }
     
     return render(request, 'doadores/painel.html', context)

@@ -36,6 +36,7 @@
                 <li><a href="#" data-secao="doacoes">Minhas Doações</a></li>
                 <li><a href="#" data-secao="nova-doacao">Nova Doação</a></li>
                 <li><a href="#" data-secao="mensagens">Mensagens</a></li>
+                <li><a href="#" data-secao="visitas">Visitas à ONG</a></li>
             </ul>
         </nav>
     </div>
@@ -321,6 +322,86 @@
                 </form>
             </div>
         </div>
+
+        <div id="visitas" class="secao-conteudo">
+            <div class="cabecalho-secao">
+                <h1>Visitas à ONG</h1>
+                <button class="botao-primario" id="btn-nova-visita">Agendar Visita</button>
+            </div>
+            
+            <div class="calendario-visitas">
+                <div class="filtros-visitas">
+                    <div class="grupo-filtro">
+                        <label for="filtro-mes">Mês:</label>
+                        <select id="filtro-mes">
+                            <option value="0">Todos</option>
+                            <option value="1">Janeiro</option>
+                            <option value="2">Fevereiro</option>
+                            <option value="3">Março</option>
+                            <option value="4">Abril</option>
+                            <option value="5">Maio</option>
+                            <option value="6">Junho</option>
+                            <option value="7">Julho</option>
+                            <option value="8">Agosto</option>
+                            <option value="9">Setembro</option>
+                            <option value="10">Outubro</option>
+                            <option value="11">Novembro</option>
+                            <option value="12">Dezembro</option>
+                        </select>
+                    </div>
+                    <div class="grupo-filtro">
+                        <label for="filtro-status-visita">Status:</label>
+                        <select id="filtro-status-visita">
+                            <option value="TODOS">Todos</option>
+                            <option value="disponivel">Disponíveis</option>
+                            <option value="esgotado">Esgotados</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="lista-visitas">
+                    {% for visita in visitas_disponiveis %}
+                    <div class="cartao-visita" data-status="{{ visita.status }}" data-mes="{{ visita.data.month }}">
+                        <div class="cabecalho-visita">
+                            <h3>{{ visita.data|date:"d/m/Y" }}</h3>
+                            <span class="status-visita status-{{ visita.status }}">
+                                {{ visita.get_status_display }}
+                            </span>
+                        </div>
+                        <div class="corpo-visita">
+                            <p><strong>Vagas disponíveis:</strong> {{ visita.vagas_restantes }} de {{ visita.capacidade_maxima }}</p>
+                            <p><strong>Horário:</strong> 09:00 - 16:00</p>
+                        </div>
+                        <div class="rodape-visita">
+                            {% if request.user.doador in visita.doadores_presentes.all %}
+                            <span class="visita-agendada">Você já está agendado</span>
+                            {% elif visita.status == 'disponivel' %}
+                            <button class="botao-primario btn-agendar" data-visita-id="{{ visita.id }}">Agendar</button>
+                            {% else %}
+                            <button class="botao-secundario" disabled>Esgotado</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="sem-visitas">
+                        <p>Não há visitas disponíveis no momento</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div id="modal-visita" class="modal" style="display: none;">
+                <div class="modal-conteudo">
+                    <span class="fechar-modal">&times;</span>
+                    <h2>Confirmar Agendamento</h2>
+                    <p id="modal-texto">Deseja confirmar seu agendamento para a visita em <span id="modal-data"></span>?</p>
+                    <div class="modal-botoes">
+                        <button id="btn-confirmar-visita" class="botao-primario">Confirmar</button>
+                        <button id="btn-cancelar-visita" class="botao-secundario">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -378,6 +459,39 @@ document.addEventListener('DOMContentLoaded', function() {
             this.value = value;
         });
     }
+
+    document.querySelectorAll('.filtros-visitas select').forEach(select => {
+        select.addEventListener('change', filtrarVisitas);
+    });
+
+    document.getElementById('modal-visita').style.display = 'none';
+
+    document.querySelectorAll('.btn-agendar').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const visitaId = this.getAttribute('data-visita-id');
+            const cartaoVisita = this.closest('.cartao-visita');
+            const dataVisita = cartaoVisita.querySelector('h3').textContent;
+            
+            document.getElementById('modal-data').textContent = dataVisita;
+            document.getElementById('modal-visita').style.display = 'block';
+
+            const confirmarBtn = document.getElementById('btn-confirmar-visita');
+            confirmarBtn.replaceWith(confirmarBtn.cloneNode(true));
+            
+            document.getElementById('btn-confirmar-visita').onclick = function() {
+                agendarVisita(visitaId);
+            };
+        });
+    });
+
+    document.querySelector('.fechar-modal').addEventListener('click', function() {
+        document.getElementById('modal-visita').style.display = 'none';
+    });
+
+    document.getElementById('btn-cancelar-visita').addEventListener('click', function() {
+        document.getElementById('modal-visita').style.display = 'none';
+    });
 });
 
 function mostrarSecao(secaoId) {
@@ -390,6 +504,51 @@ function mostrarSecao(secaoId) {
         secao.classList.remove('ativo');
     });
     document.getElementById(secaoId).classList.add('ativo');
+}
+
+
+
+function filtrarVisitas() {
+    const mes = document.getElementById('filtro-mes').value;
+    const status = document.getElementById('filtro-status-visita').value;
+    
+    document.querySelectorAll('.lista-visitas .cartao-visita').forEach(cartao => {
+        const cartaoMes = cartao.getAttribute('data-mes');
+        const cartaoStatus = cartao.getAttribute('data-status');
+        
+        const mostraMes = mes === '0' || cartaoMes === mes;
+        const mostraStatus = status === 'TODOS' || cartaoStatus === status;
+        
+        cartao.style.display = (mostraMes && mostraStatus) ? '' : 'none';
+    });
+}
+
+function agendarVisita(visitaId) {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = `/visitacao/agendar/${visitaId}/{{ request.user.doador.id }}/`;
+    form.style.display = 'none';
+
+    const csrfInput = document.createElement('input');
+    csrfInput.type = 'hidden';
+    csrfInput.name = 'csrfmiddlewaretoken';
+    csrfInput.value = '{{ csrf_token }}';
+    form.appendChild(csrfInput);
+
+    const visitaInput = document.createElement('input');
+    visitaInput.type = 'hidden';
+    visitaInput.name = 'visita_id';
+    visitaInput.value = visitaId;
+    form.appendChild(visitaInput);
+
+    const doadorInput = document.createElement('input');
+    doadorInput.type = 'hidden';
+    doadorInput.name = 'doador_id';
+    doadorInput.value = '{{ request.user.doador.id }}';
+    form.appendChild(doadorInput);
+
+    document.body.appendChild(form);
+    form.submit();
 }
 
 function mostrarFormularioMensagem() {

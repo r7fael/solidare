@@ -7,7 +7,7 @@ from usuarios.models import Doador
 from django.core.exceptions import ValidationError
 
 def lista_visitas(request):
-    visitas = DataVisitacao.objects.all().prefetch_related('doadores_agendados').order_by('data')  
+    visitas = DataVisitacao.objects.all().prefetch_related('doadores_presentes').order_by('data')
     return render(request, 'gestores/painel.html', {'visitas': visitas})
 
 
@@ -54,7 +54,7 @@ def agendar_visita(request, data_id, doador_id):
     if visita.status == 'esgotado':
         messages.error(request, 'Esta visita já está com todas as vagas preenchidas.')
     elif visita.doadores_presentes.filter(id=doador.id).exists():
-        messages.warning(request, 'Este doador já está agendado para esta visita.')
+        messages.warning(request, 'Você já está agendado para esta visita.')
     else:
         visita.doadores_presentes.add(doador)
         
@@ -64,7 +64,7 @@ def agendar_visita(request, data_id, doador_id):
         
         messages.success(request, f'Doador {doador.nome} agendado com sucesso para {visita.data}!')
     
-    return redirect('painel_gestor')
+    return redirect('painel_doador')
 
 def editar_visita(request, visita_id):
     visita = get_object_or_404(DataVisitacao, pk=visita_id)

@@ -448,59 +448,57 @@
                 </div>
             </div>
             
-            <div class="tabela-container">
-                <table class="tabela-visitacao">
-                    <thead>
-                        <tr>
-                            <th>Data</th>
-                            <th>Capacidade</th>
-                            <th>Doadores Agendados</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for visita in visitas %}
-                        <tr data-status="{{ visita.status }}" data-data="{{ visita.data|date:'Y-m-d' }}">
-                            <td>{{ visita.data|date:"d/m/Y" }}</td>
-                            <td>{{ visita.capacidade_maxima }} pessoas</td>
-                            <td>
-                                {{ visita.doadores_agendados.count }}/{{ visita.capacidade_maxima }}
-                                {% if visita.doadores_agendados.count > 0 %}
-                                    <div class="doadores-lista">
-                                        {% for doador in visita.doadores_agendados.all|slice:":3" %}
-                                            <span class="doador-nome">{{ doador.nome }}</span>{% if not forloop.last %}, {% endif %}
-                                        {% endfor %}
-                                        {% if visita.doadores_agendados.count > 3 %}
-                                            <span class="mais-doadores">+{{ visita.doadores_agendados.count|add:"-3" }} mais</span>
-                                        {% endif %}
-                                    </div>
+<div class="tabela-container">
+        <table class="tabela-visitacao">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Capacidade</th>
+                    <th>Doadores Agendados</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for visita in visitas %}
+                <tr data-status="{{ visita.status }}" data-data="{{ visita.data|date:'Y-m-d' }}">
+                    <td>{{ visita.data|date:"d/m/Y" }}</td>
+                    <td>{{ visita.capacidade_maxima }} pessoas</td>
+                    <td>
+                        {{ visita.doadores_presentes.count }}/{{ visita.capacidade_maxima }}
+                        {% if visita.doadores_presentes.count > 0 %}
+                            <div class="doadores-lista">
+                                {% for doador in visita.doadores_presentes.all|slice:":3" %}
+                                    <span class="doador-nome">{{ doador.nome }}</span>{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                                {% if visita.doadores_presentes.count > 3 %}
+                                    <span class="mais-doadores">+{{ visita.doadores_presentes.count|add:"-3" }} mais</span>
                                 {% endif %}
-                            </td>
-                            <td>
-                                <span class="status status-{{ visita.status }}">
-                                    {{ visita.get_status_display }}
-                                </span>
-                            </td>
-                            <td>
-                                <a href="#" class="botao-acao editar-visita" 
-                                   data-id="{{ visita.id }}"
-                                   data-data="{{ visita.data|date:'Y-m-d' }}"
-                                   data-capacidade="{{ visita.capacidade_maxima }}">Editar</a>
-                                <a href="{% url 'visitacao:excluir_visita' visita.id %}" class="botao-acao excluir">Excluir</a>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="5" class="sem-registros">
-                                <p>Nenhuma data de visitação cadastrada</p>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                            </div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="status status-{{ visita.status }}">
+                            {{ visita.get_status_display }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="#" class="botao-acao editar-visita" 
+                           data-id="{{ visita.id }}"
+                           data-data="{{ visita.data|date:'Y-m-d' }}"
+                           data-capacidade="{{ visita.capacidade_maxima }}">Editar</a>
+                        <a href="{% url 'visitacao:excluir_visita' visita.id %}" class="botao-acao excluir">Excluir</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="sem-registros">
+                        <p>Nenhuma data de visitação cadastrada</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 
