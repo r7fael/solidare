@@ -19,7 +19,7 @@ def nova_visita(request):
 
             if not data_str or capacidade <= 0:
                 messages.error(request, 'Preencha todos os campos corretamente!')
-                return redirect('painel_gestor')
+                return redirect('usuarios:painel_gestor')
 
             data_obj = datetime.strptime(data_str, '%Y-%m-%d').date()
 
@@ -33,19 +33,19 @@ def nova_visita(request):
             visita.save()
             
             messages.success(request, 'Visitação agendada com sucesso!')
-            return redirect('painel_gestor')
+            return redirect('usuarios:painel_gestor')
             
         except ValueError:
             messages.error(request, 'Valores inválidos fornecidos.')
-            return redirect('painel_gestor')
+            return redirect('usuarios:painel_gestor')
         except ValidationError as e:
             messages.error(request, f'Dados inválidos: {", ".join(e.messages)}')
-            return redirect('painel_gestor')
+            return redirect('usuarios:painel_gestor')
         except Exception as e:
             messages.error(request, f'Erro ao agendar visita: {str(e)}')
-            return redirect('painel_gestor')
+            return redirect('usuarios:painel_gestor')
     
-    return redirect('painel_gestor')
+    return redirect('usuarios:painel_gestor')
 
 def agendar_visita(request, data_id, doador_id):
     visita = get_object_or_404(DataVisitacao, pk=data_id)
@@ -64,7 +64,7 @@ def agendar_visita(request, data_id, doador_id):
         
         messages.success(request, f'Doador {doador.nome} agendado com sucesso para {visita.data}!')
     
-    return redirect('painel_doador')
+    return redirect('usuarios:painel_doador')
 
 def editar_visita(request, visita_id):
     visita = get_object_or_404(DataVisitacao, pk=visita_id)
@@ -78,11 +78,11 @@ def editar_visita(request, visita_id):
 
             if data_obj < timezone.now().date():
                 messages.error(request, 'Não é possível agendar visitas para datas passadas.')
-                return redirect('painel_gestor')
+                return redirect('usuarios:painel_gestor')
 
             if DataVisitacao.objects.filter(data=data_obj).exclude(id=visita.id).exists():
                 messages.error(request, 'Já existe outra visita agendada para esta data.')
-                return redirect('painel_gestor')
+                return redirect('usuarios:painel_gestor')
                 
             visita.data = data_obj
             visita.capacidade_maxima = capacidade
@@ -95,13 +95,13 @@ def editar_visita(request, visita_id):
             visita.save()
             
             messages.success(request, 'Visitação atualizada com sucesso!')
-            return redirect('painel_gestor')
+            return redirect('usuarios:painel_gestor')
             
         except ValueError as e:
             messages.error(request, f'Erro ao processar os dados: {str(e)}')
-            return redirect('painel_gestor')
+            return redirect('usuarios:painel_gestor')
     
-    return redirect('painel_gestor')
+    return redirect('usuarios:painel_gestor')
 
 def excluir_visita(request, visita_id):
     visita = get_object_or_404(DataVisitacao, pk=visita_id)
@@ -110,7 +110,7 @@ def excluir_visita(request, visita_id):
         visita.delete()
         messages.success(request, 'Visitação excluída com sucesso!')
     
-    return redirect('painel_gestor')
+    return redirect('usuarios:painel_gestor')
 
 def agendar_doador(request, visita_id, doador_id):
     visita = get_object_or_404(DataVisitacao, pk=visita_id)
@@ -129,4 +129,4 @@ def agendar_doador(request, visita_id, doador_id):
         
         messages.success(request, 'Doador agendado com sucesso!')
     
-    return redirect('painel_gestor')
+    return redirect('usuarios:painel_gestor')

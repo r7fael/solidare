@@ -1,0 +1,64 @@
+{% load humanize %}
+{% load l10n %}
+
+<div class="cabecalho-secao">
+    <h1>Gerenciamento de Campanhas</h1>
+    <div class="acoes-superiores">
+        <button id="abrir-modal-criar-campanha" class="botao-primario">Nova Campanha</button>
+    </div>
+</div>
+
+{% if todas_as_campanhas %}
+<div class="tabela-container">
+    <table class="tabela-padrao">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Meta (R$)</th>
+                <th>Arrecadado (R$)</th>
+                <th>Progresso</th>
+                <th>Status</th>
+                <th>Data Fim</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for campanha in todas_as_campanhas %}
+            <tr>
+                <td>{{ campanha.nome }}</td>
+                <td>{{ campanha.meta_arrecadacao|floatformat:2|intcomma }}</td>
+                <td>{{ campanha.valor_arrecadado|floatformat:2|intcomma }}</td>
+                <td>
+                    <div class="progress" style="height: 20px; background-color: #e9ecef;">
+                        <div class="progress-bar {% if campanha.progresso >= 100 %}bg-success{% else %}bg-info{% endif %}" role="progressbar" style="width: {{ campanha.progresso|floatformat:2 }}%;" aria-valuenow="{{ campanha.progresso|floatformat:2 }}" aria-valuemin="0" aria-valuemax="100">
+                            {{ campanha.progresso|floatformat:0 }}%
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <span class="status status-{% if campanha.ativa %}ativo{% else %}inativo{% endif %}">
+                        {% if campanha.ativa %}Ativa{% else %}Inativa{% endif %}
+                    </span>
+                </td>
+                <td>{{ campanha.data_fim|date:"d/m/Y"|default:"Não definida" }}</td>
+                <td>
+                    <button class="botao-acao editar-campanha"
+                            data-id="{{ campanha.id }}"
+                            data-nome="{{ campanha.nome }}"
+                            data-descricao="{{ campanha.descricao }}"
+                            data-meta="{{ campanha.meta_arrecadacao|stringformat:'.2f'|unlocalize }}"
+                            data-data_fim="{{ campanha.data_fim|date:'Y-m-d'|default:'' }}"
+                            data-ativa="{{ campanha.ativa|yesno:'true,false' }}">
+                        Editar
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="sem-registros">
+    <p>Nenhuma campanha cadastrada ainda.</p>
+</div>
+{% endif %}

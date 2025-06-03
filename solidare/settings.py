@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'relatorios.apps.RelatoriosConfig',
     'usuarios.apps.UsuariosConfig',
     'visitacao.apps.VisitacaoConfig',
+    'campanhas.apps.CampanhasConfig',
 ]
 
 MIDDLEWARE = [

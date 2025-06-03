@@ -43,7 +43,7 @@ def painel_moderacao(request):
 def aprovar_mensagem(request, mensagem_id):
     if not request.user.tipo_usuario == 'gestor':
         messages.error(request, "Apenas gestores podem aprovar mensagens")
-        return redirect('painel_gestor')
+        return redirect('usuarios:painel_gestor')
 
     if request.method == 'POST':
         mensagem = get_object_or_404(Mensagem, id=mensagem_id)
@@ -53,13 +53,13 @@ def aprovar_mensagem(request, mensagem_id):
         except ValidationError as e:
             messages.error(request, str(e))
     
-    return redirect('painel_gestor')
+    return redirect('usuarios:painel_gestor')
 
 @login_required
 def rejeitar_mensagem(request, mensagem_id):
     if not request.user.tipo_usuario == 'gestor':
         messages.error(request, "Apenas gestores podem rejeitar mensagens")
-        return redirect('painel_gestor')
+        return redirect('usuarios:painel_gestor')
 
     if request.method == 'POST':
         mensagem = get_object_or_404(Mensagem, id=mensagem_id)
@@ -71,7 +71,7 @@ def rejeitar_mensagem(request, mensagem_id):
         except ValidationError as e:
             messages.error(request, str(e))
     
-    return redirect('painel_gestor')
+    return redirect('usuarios:painel_gestor')
 
 @login_required
 def listar_mensagens(request):
@@ -146,7 +146,7 @@ def criar_mensagem(request):
             return JsonResponse({'success': False, 'error': error_msg}, status=500)
         messages.error(request, error_msg)
 
-    return redirect('painel_doador')
+    return redirect('usuarios:painel_doador')
 
 @login_required
 def visualizar_mensagem(request, pk):

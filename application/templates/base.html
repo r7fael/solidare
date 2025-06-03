@@ -12,7 +12,7 @@
         <div class="area-usuario">
             {% if user.is_authenticated %}
                 <span class="saudacao">Olá, {{ user.nome }}!</span>
-                <a href="{% url 'logout' %}" class="botao-sair">Sair</a>
+                <a href="{% url 'usuarios:logout' %}" class="botao-sair">Sair</a>
             {% endif %}
         </div>
     </div>

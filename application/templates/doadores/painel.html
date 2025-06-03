@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load humanize %}
+{% load l10n %}
 
 {% block title %}Painel do Doador | SOLIDARE{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'application/css/painel.css' %}">
+<link rel="stylesheet" href="{% static 'application/css/painel.css' %}?v={% now 'U' %}">
 
 <div class="painel-container">
     <div class="barra-lateral">
@@ -19,7 +20,7 @@
             
             <div class="resumo-perfil">
                 <div class="item-resumo">
-                    <span class="numero">R$ {{ total_doacoes|floatformat:2|intcomma  }}</span>
+                    <span class="numero">R$ {{ total_doacoes|floatformat:2|intcomma }}</span>
                     <span class="rotulo">Total Doado</span>
                 </div>
                 <div class="item-resumo">
@@ -31,22 +32,23 @@
         
         <nav class="navegacao-lateral">
             <ul>
-                <li><a href="#" class="ativo" data-secao="inicio">Início</a></li>
-                <li><a href="#" data-secao="metricas">Métricas</a></li>
-                <li><a href="#" data-secao="doacoes">Minhas Doações</a></li>
-                <li><a href="#" data-secao="nova-doacao">Nova Doação</a></li>
-                <li><a href="#" data-secao="mensagens">Mensagens</a></li>
-                <li><a href="#" data-secao="visitas">Visitas à ONG</a></li>
+                <li><a href="#" data-secao="inicio" class="{% if secao_ativa == 'inicio' %}ativo{% endif %}">Início</a></li>
+                <li><a href="#" data-secao="campanhas-doador" class="{% if secao_ativa == 'campanhas-doador' %}ativo{% endif %}">Campanhas</a></li>
+                <li><a href="#" data-secao="metricas" class="{% if secao_ativa == 'metricas' %}ativo{% endif %}">Métricas</a></li>
+                <li><a href="#" data-secao="doacoes" class="{% if secao_ativa == 'doacoes' %}ativo{% endif %}">Minhas Doações</a></li>
+                <li><a href="#" data-secao="nova-doacao" class="{% if secao_ativa == 'nova-doacao' %}ativo{% endif %}">Nova Doação (Geral)</a></li>
+                <li><a href="#" data-secao="mensagens" class="{% if secao_ativa == 'mensagens' %}ativo{% endif %}">Mensagens</a></li>
+                <li><a href="#" data-secao="visitas" class="{% if secao_ativa == 'visitas' %}ativo{% endif %}">Visitas à ONG</a></li>
+                 <li><a href="{% url 'usuarios:logout' %}">Sair</a></li>
             </ul>
         </nav>
     </div>
 
     <div class="conteudo-principal">
-        <div id="inicio" class="secao-conteudo ativo">
+        <div id="inicio" class="secao-conteudo {% if secao_ativa == 'inicio' %}ativo{% endif %}">
             <div class="cartao-boasvindas">
                 <h1>Bem-vindo, {{ user.nome }}!</h1>
                 <p>Seu apoio está transformando vidas. Veja abaixo seu impacto:</p>
-                
                 <div class="estatisticas-impacto">
                     <div class="cartao-estatistica">
                         <h3>R$ {{ total_doacoes|floatformat:2|intcomma }}</h3>
@@ -61,16 +63,20 @@
                         <p>Doações concluídas</p>
                     </div>
                 </div>
-                
                 <div class="ultimas-acoes">
                     <h3>Suas últimas doações</h3>
-                    
                     <div class="lista-doacoes">
                         {% for doacao in ultimas_doacoes %}
                         <div class="item-doacao">
                             <div class="info-doacao">
                                 <span class="valor">R$ {{ doacao.valor|intcomma }}</span>
-                                <span class="destino">{{ doacao.get_destino_display }}</span>
+                                <span class="destino">
+                                    {% if doacao.campanha %}
+                                        Campanha: {{ doacao.campanha.nome }}
+                                    {% else %}
+                                        {{ doacao.get_destino_display }}
+                                    {% endif %}
+                                </span>
                             </div>
                             <span class="status status-{{ doacao.status|lower }}">
                                 {{ doacao.get_status_display }}
@@ -86,10 +92,20 @@
             </div>
         </div>
 
-        <div id="metricas" class="secao-conteudo">
+        <div id="campanhas-doador" class="secao-conteudo {% if secao_ativa == 'campanhas-doador' %}ativo{% endif %}">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}" role="alert" style="margin-bottom: 15px; padding: 10px; border-radius: 4px; color: #fff; background-color: {% if message.tags == 'success' %}#28a745{% elif message.tags == 'error' %}#dc3545{% else %}#17a2b8{% endif %};">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% include 'campanhas/_secao_campanhas_doador.html' %}
+        </div>
+
+        <div id="metricas" class="secao-conteudo {% if secao_ativa == 'metricas' %}ativo{% endif %}">
             <div class="container-metricas">
                 <h1>Seu Impacto em Números</h1>
-                
                 <div class="metricas-simples">
                     <div class="metrica-item">
                         <h3>Método mais usado</h3>
@@ -101,124 +117,122 @@
                     </div>
                     <div class="metrica-item">
                         <h3>Média por doação</h3>
-                        <p>R$ {{ media_doacoes|intcomma }}</p>
+                        <p>R$ {{ media_doacoes|floatformat:2|intcomma }}</p>
                     </div>
-                </div>
-                
-                <div class="tabela-metricas">
-                    <h3>Histórico de Doações</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Mês</th>
-                                <th>Valor Doado</th>
-                                <th>Doações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for mes in historico_mensal %}
-                            <tr>
-                                <td>{{ mes.mes }}</td>
-                                <td>R$ {{ mes.total|intcomma }}</td>
-                                <td>{{ mes.quantidade }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
 
-        <div id="doacoes" class="secao-conteudo">
+        <div id="doacoes" class="secao-conteudo {% if secao_ativa == 'doacoes' %}ativo{% endif %}">
             <div class="cabecalho-secao">
                 <h1>Minhas Doações</h1>
             </div>
-            
             <div class="filtros">
                 <div class="grupo-filtro">
-                    <label for="filtro-status">Status:</label>
-                    <select id="filtro-status">
+                    <label for="filtro-status-doacoes">Status:</label>
+                    <select id="filtro-status-doacoes">
                         <option value="TODOS">Todos</option>
                         <option value="CONCLUIDO">Concluídas</option>
                         <option value="PENDENTE">Pendentes</option>
                     </select>
                 </div>
                 <div class="grupo-filtro">
-                    <label for="filtro-destino">Destino:</label>
-                    <select id="filtro-destino">
+                    <label for="filtro-destino-doacoes">Destino/Campanha:</label>
+                    <select id="filtro-destino-doacoes">
                         <option value="TODOS">Todos</option>
-                        {% for destino in destinos_disponiveis %}
-                        <option value="{{ destino.0 }}">{{ destino.1 }}</option>
+                        {% for destino_cod, destino_nome in destinos_disponiveis %}
+                        <option value="destino_{{ destino_cod }}">{{ destino_nome }} (Geral)</option>
+                        {% endfor %}
+                        {% for camp in campanhas_ativas %}
+                        <option value="campanha_{{ camp.id }}">{{ camp.nome }} (Campanha)</option>
                         {% endfor %}
                     </select>
                 </div>
             </div>
-            
             <div class="tabela-container">
                 <table class="tabela-doacoes">
                     <thead>
                         <tr>
+                            <th>Data</th>
                             <th>Valor</th>
                             <th>Método</th>
-                            <th>Destino</th>
+                            <th>Destino/Campanha</th>
                             <th>Status</th>
+                            <th>Ação</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for doacao in doacoes %}
-                        <tr data-status="{{ doacao.status }}" data-destino="{{ doacao.destino }}">
+                        <tr data-status="{{ doacao.status }}" data-destino="{% if doacao.campanha %}campanha_{{ doacao.campanha.id }}{% elif doacao.destino %}destino_{{ doacao.destino }}{% else %}TODOS{% endif %}">
+                            <td>{{ doacao.data_doacao|date:"d/m/Y H:i" }}</td>
                             <td>R$ {{ doacao.valor|intcomma }}</td>
                             <td>{{ doacao.get_metodo_display }}</td>
-                            <td>{{ doacao.get_destino_display }}</td>
+                            <td>
+                                {% if doacao.campanha %}
+                                    Campanha: {{ doacao.campanha.nome }}
+                                {% elif doacao.destino %}
+                                    {{ doacao.get_destino_display }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </td>
                             <td>
                                 <span class="status status-{{ doacao.status|lower }}">
                                     {{ doacao.get_status_display }}
                                 </span>
                             </td>
+                            <td>
+                                {% if doacao.status == 'PENDENTE' %}
+                                <a href="{% url 'doacoes:aceitar_doacao' doacao.id %}" class="botao-acao">Confirmar</a>
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="4" class="sem-registros">
+                            <td colspan="6" class="sem-registros">
                                 <p>Nenhuma doação registrada ainda</p>
                             </td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
+                {% if doacoes_pendentes %}
+                <div style="margin-top: 15px;">
+                    <a href="{% url 'doacoes:minhas_doacoes' %}?aceitar_todas=1" class="botao-primario">Confirmar Todas Pendentes</a>
+                </div>
+                {% endif %}
             </div>
         </div>
 
-        <div id="nova-doacao" class="secao-conteudo">
+        <div id="nova-doacao" class="secao-conteudo {% if secao_ativa == 'nova-doacao' %}ativo{% endif %}">
             <div class="formulario-doacao">
-                <h1>Nova Doação</h1>
+                <h1>Nova Doação (Geral)</h1>
                 <form method="POST" action="{% url 'doacoes:nova_doacao' %}">
                     {% csrf_token %}
-                    
                     <div class="campo-formulario">
-                        <label for="valor">Valor (R$)</label>
-                        <input type="text" id="valor" name="valor" required placeholder="Ex: 100,00">
+                        <label for="valor-geral">Valor (R$)</label>
+                        <input type="text" id="valor-geral" name="valor" required placeholder="Ex: 100,00">
                     </div>
-                    
                     <div class="campo-formulario">
-                        <label for="metodo">Método de Pagamento</label>
-                        <select id="metodo" name="metodo" required>
+                        <label for="metodo-geral">Método de Pagamento</label>
+                        <select id="metodo-geral" name="metodo" required>
                             <option value="">Selecione</option>
-                            <option value="PIX">PIX</option>
-                            <option value="BOLETO">Boleto</option>
-                            <option value="CARTAO">Cartão de Crédito</option>
+                            {% for codigo, nome_metodo in metodos_pagamento_doacao %}
+                            <option value="{{ codigo }}">{{ nome_metodo }}</option>
+                            {% endfor %}
                         </select>
                     </div>
-                    
                     <div class="campo-formulario">
-                        <label for="destino">Destino</label>
-                        <select id="destino" name="destino" required>
+                        <label for="destino-geral">Destino</label>
+                        <select id="destino-geral" name="destino" required>
                             <option value="">Selecione</option>
-                            <option value="EDUCACAO">Educação</option>
-                            <option value="SAUDE">Saúde</option>
-                            <option value="ALIMENTOS">Alimentação</option>
+                            {% for codigo, nome_destino in destinos_disponiveis %}
+                            <option value="{{ codigo }}">{{ nome_destino }}</option>
+                            {% endfor %}
                         </select>
                     </div>
-                    
                     <div class="acoes-formulario">
                         <button type="submit" class="botao-primario">Confirmar Doação</button>
                         <button type="button" class="botao-secundario" onclick="mostrarSecao('inicio')">Cancelar</button>
@@ -227,26 +241,26 @@
             </div>
         </div>
 
-        <div id="mensagens" class="secao-conteudo">
+        <div id="mensagens" class="secao-conteudo {% if secao_ativa == 'mensagens' %}ativo{% endif %}">
             <div class="cabecalho-secao">
                 <h1>Minhas Mensagens</h1>
-                <button class="botao-primario" onclick="mostrarFormularioMensagem()">Nova Mensagem</button>
+                <button class="botao-primario" id="btn-nova-mensagem-form">Nova Mensagem</button>
             </div>
-            
             {% if messages %}
             <div class="mensagens-feedback">
                 {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
+                {% if "mensagem_" in message.tags %}
+                <div class="alert alert-{{ message.tags|cut:"mensagem_" }}">
                     {{ message }}
                 </div>
+                {% endif %}
                 {% endfor %}
             </div>
             {% endif %}
-            
             <div class="filtros-mensagens">
                 <div class="grupo-filtro">
-                    <label for="filtro-status-mensagem">Status:</label>
-                    <select id="filtro-status-mensagem">
+                    <label for="filtro-status-minhas-mensagens">Status:</label>
+                    <select id="filtro-status-minhas-mensagens">
                         <option value="TODAS">Todas</option>
                         <option value="AGUARDANDO">Aguardando Aprovação</option>
                         <option value="APROVADO">Aprovadas</option>
@@ -254,31 +268,26 @@
                     </select>
                 </div>
             </div>
-            
             <div class="lista-mensagens">
-                {% for mensagem in mensagens %}
-                <div class="cartao-mensagem" data-status="{{ mensagem.status|lower }}">
+                {% for mensagem_item in mensagens %}
+                <div class="cartao-mensagem" data-status="{{ mensagem_item.status|lower }}">
                     <div class="cabecalho-mensagem">
-                        <h3>Para: {{ mensagem.destinatario.nome }}</h3>
-                        <span class="status-mensagem status-{{ mensagem.status|lower }}">
-                            {{ mensagem.get_status_display }}
+                        <h3>Para: {{ mensagem_item.destinatario.nome }}</h3>
+                        <span class="status-mensagem status-{{ mensagem_item.status|lower }}">
+                            {{ mensagem_item.get_status_display }}
                         </span>
                     </div>
                     <div class="corpo-mensagem">
-                        <h4>{{ mensagem.assunto }}</h4>
-                        <p>{{ mensagem.conteudo }}</p>
+                        <h4>{{ mensagem_item.assunto }}</h4>
+                        <p>{{ mensagem_item.conteudo|truncatewords:20 }}</p>
                     </div>
                     <div class="rodape-mensagem">
                         <span class="data-mensagem">
-                            {% if mensagem.data_envio %}
-                                Enviada em {{ mensagem.data_envio|date:"d/m/Y" }}
-                            {% else %}
-                                Data não disponível
-                            {% endif %}
+                            Enviada em {{ mensagem_item.data_envio|date:"d/m/Y H:i" }}
                         </span>
-                        {% if mensagem.status == 'REJEITADO' and mensagem.motivo_rejeicao %}
+                        {% if mensagem_item.status == 'REJEITADO' and mensagem_item.motivo_rejeicao %}
                         <div class="motivo-rejeicao">
-                            <strong>Motivo da rejeição:</strong> {{ mensagem.motivo_rejeicao }}
+                            <strong>Motivo da rejeição:</strong> {{ mensagem_item.motivo_rejeicao }}
                         </div>
                         {% endif %}
                     </div>
@@ -289,12 +298,11 @@
                 </div>
                 {% endfor %}
             </div>
-            
-            <div id="formulario-mensagem" class="formulario-mensagem" style="display: none;">
-                <h2>Enviar Mensagem</h2>
-                <form method="POST" action="{% url 'mensagens:criar_mensagem' %}">
+            <div id="formulario-nova-mensagem" class="formulario-container" style="display: none; margin-top: 20px;">
+                <h2>Enviar Nova Mensagem</h2>
+                <form method="POST" action="{% url 'usuarios:painel_doador' %}">
                     {% csrf_token %}
-                    
+                    <input type="hidden" name="action" value="nova_mensagem_painel">
                     <div class="campo-formulario">
                         <label for="destinatario-mensagem">Beneficiário</label>
                         <select id="destinatario-mensagem" name="destinatario" required>
@@ -304,263 +312,266 @@
                             {% endfor %}
                         </select>
                     </div>
-                    
                     <div class="campo-formulario">
                         <label for="assunto-mensagem">Assunto</label>
                         <input type="text" id="assunto-mensagem" name="assunto" required placeholder="Ex: Doação de roupas">
                     </div>
-                    
                     <div class="campo-formulario">
                         <label for="conteudo-mensagem">Mensagem</label>
                         <textarea id="conteudo-mensagem" name="conteudo" rows="5" required placeholder="Escreva sua mensagem aqui..."></textarea>
                     </div>
-                    
                     <div class="acoes-formulario">
                         <button type="submit" class="botao-primario">Enviar Mensagem</button>
-                        <button type="button" class="botao-secundario" onclick="ocultarFormularioMensagem()">Cancelar</button>
+                        <button type="button" class="botao-secundario" id="btn-cancelar-nova-mensagem">Cancelar</button>
                     </div>
                 </form>
             </div>
         </div>
 
-        <div id="visitas" class="secao-conteudo">
+        <div id="visitas" class="secao-conteudo {% if secao_ativa == 'visitas' %}ativo{% endif %}">
             <div class="cabecalho-secao">
                 <h1>Visitas à ONG</h1>
-                <button class="botao-primario" id="btn-nova-visita">Agendar Visita</button>
             </div>
-            
-            <div class="calendario-visitas">
-                <div class="filtros-visitas">
-                    <div class="grupo-filtro">
-                        <label for="filtro-mes">Mês:</label>
-                        <select id="filtro-mes">
-                            <option value="0">Todos</option>
-                            <option value="1">Janeiro</option>
-                            <option value="2">Fevereiro</option>
-                            <option value="3">Março</option>
-                            <option value="4">Abril</option>
-                            <option value="5">Maio</option>
-                            <option value="6">Junho</option>
-                            <option value="7">Julho</option>
-                            <option value="8">Agosto</option>
-                            <option value="9">Setembro</option>
-                            <option value="10">Outubro</option>
-                            <option value="11">Novembro</option>
-                            <option value="12">Dezembro</option>
-                        </select>
-                    </div>
-                    <div class="grupo-filtro">
-                        <label for="filtro-status-visita">Status:</label>
-                        <select id="filtro-status-visita">
-                            <option value="TODOS">Todos</option>
-                            <option value="disponivel">Disponíveis</option>
-                            <option value="esgotado">Esgotados</option>
-                        </select>
-                    </div>
+            <div class="container-visitas">
+                <div class="visitas-disponiveis">
+                    <h2>Próximas Datas Disponíveis</h2>
+                    {% if visitas_disponiveis %}
+                        <div class="lista-visitas-cards">
+                        {% for visita in visitas_disponiveis %}
+                            <div class="cartao-visita" data-mes="{{ visita.data.month }}" data-status-vaga="{% if visita.vagas_restantes > 0 %}disponivel{% else %}esgotado{% endif %}">
+                                <div class="cabecalho-visita">
+                                    <h3>{{ visita.data|date:"d/m/Y" }}</h3>
+                                    <span class="status-visita status-{{ visita.status|lower }}">
+                                        {{ visita.get_status_display }}
+                                    </span>
+                                </div>
+                                <div class="corpo-visita">
+                                    <p><strong>Vagas:</strong> {{ visita.vagas_restantes }} de {{ visita.capacidade_maxima }}</p>
+                                </div>
+                                <div class="rodape-visita">
+                                    {% if request.user.doador in visita.doadores_presentes.all %}
+                                        <button class="botao-secundario" disabled>Agendado</button>
+                                    {% elif visita.vagas_restantes > 0 %}
+                                        <button class="botao-primario btn-abrir-modal-agendar-visita" data-visita-id="{{ visita.id }}" data-visita-data="{{ visita.data|date:'d/m/Y' }}">Agendar</button>
+                                    {% else %}
+                                        <button class="botao-secundario" disabled>Esgotado</button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                        </div>
+                    {% else %}
+                        <p>Nenhuma data de visitação disponível no momento.</p>
+                    {% endif %}
                 </div>
-                
-                <div class="lista-visitas">
-                    {% for visita in visitas_disponiveis %}
-                    <div class="cartao-visita" data-status="{{ visita.status }}" data-mes="{{ visita.data.month }}">
-                        <div class="cabecalho-visita">
-                            <h3>{{ visita.data|date:"d/m/Y" }}</h3>
-                            <span class="status-visita status-{{ visita.status }}">
-                                {{ visita.get_status_display }}
-                            </span>
-                        </div>
-                        <div class="corpo-visita">
-                            <p><strong>Vagas disponíveis:</strong> {{ visita.vagas_restantes }} de {{ visita.capacidade_maxima }}</p>
-                            <p><strong>Horário:</strong> 09:00 - 16:00</p>
-                        </div>
-                        <div class="rodape-visita">
-                            {% if request.user.doador in visita.doadores_presentes.all %}
-                            <span class="visita-agendada">Você já está agendado</span>
-                            {% elif visita.status == 'disponivel' %}
-                            <button class="botao-primario btn-agendar" data-visita-id="{{ visita.id }}">Agendar</button>
-                            {% else %}
-                            <button class="botao-secundario" disabled>Esgotado</button>
-                            {% endif %}
-                        </div>
-                    </div>
-                    {% empty %}
-                    <div class="sem-visitas">
-                        <p>Não há visitas disponíveis no momento</p>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-            
-            <div id="modal-visita" class="modal" style="display: none;">
-                <div class="modal-conteudo">
-                    <span class="fechar-modal">&times;</span>
-                    <h2>Confirmar Agendamento</h2>
-                    <p id="modal-texto">Deseja confirmar seu agendamento para a visita em <span id="modal-data"></span>?</p>
-                    <div class="modal-botoes">
-                        <button id="btn-confirmar-visita" class="botao-primario">Confirmar</button>
-                        <button id="btn-cancelar-visita" class="botao-secundario">Cancelar</button>
-                    </div>
+                <div class="visitas-agendadas-usuario">
+                    <h2>Suas Visitas Agendadas</h2>
+                    {% if visitas_agendadas %}
+                        <ul class="lista-minhas-visitas">
+                        {% for visita_agendada in visitas_agendadas %}
+                            <li>{{ visita_agendada.data|date:"d/m/Y" }} - {{ visita_agendada.get_status_display }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>Você não possui visitas agendadas.</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+{% include 'campanhas/_modal_doar_campanha_painel.html' %}
+
+<div id="modal-confirmar-visita" class="modal" style="display: none;">
+    <div class="modal-conteudo">
+        <span class="fechar-modal fechar-modal-confirmar-visita">&times;</span>
+        <h2>Confirmar Agendamento</h2>
+        <p>Deseja confirmar seu agendamento para a visita em <strong id="modal-confirmar-visita-data"></strong>?</p>
+        <form id="form-agendar-visita" method="POST" action="{% url 'usuarios:painel_doador' %}">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="agendar_visita_painel">
+            <input type="hidden" name="visita_id_form" id="modal-confirmar-visita-id">
+            <div class="acoes-formulario">
+                <button type="submit" class="botao-primario">Confirmar</button>
+                <button type="button" class="botao-secundario fechar-modal-confirmar-visita">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    function mostrarSecao(secaoId) {
+        document.querySelectorAll('.navegacao-lateral a').forEach(link => {
+            link.classList.remove('ativo');
+        });
+        const activeLink = document.querySelector(`.navegacao-lateral a[data-secao="${secaoId}"]`);
+        if (activeLink) {
+            activeLink.classList.add('ativo');
+        }
+        
+        document.querySelectorAll('.secao-conteudo').forEach(secao => {
+            secao.classList.remove('ativo');
+        });
+        const activeSecao = document.getElementById(secaoId);
+        if (activeSecao) {
+            activeSecao.classList.add('ativo');
+        }
+        if (secaoId !== 'inicio' && secaoId) {
+             history.pushState(null, '', `/usuarios/painel-doador/secao/${secaoId}/`);
+        } else if (secaoId === 'inicio') {
+             history.pushState(null, '', `/usuarios/painel-doador/`);
+        }
+    }
+
+    const initialSecao = '{{ secao_ativa|default:"inicio" }}';
+    mostrarSecao(initialSecao);
+
     document.querySelectorAll('.navegacao-lateral a[data-secao]').forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
-            mostrarSecao(this.getAttribute('data-secao'));
+            const secaoId = this.getAttribute('data-secao');
+            mostrarSecao(secaoId);
         });
     });
 
-    document.querySelectorAll('.filtros select').forEach(select => {
-        select.addEventListener('change', function() {
-            const status = document.getElementById('filtro-status').value;
-            const destino = document.getElementById('filtro-destino').value;
+    const filtroStatusDoacoes = document.getElementById('filtro-status-doacoes');
+    const filtroDestinoDoacoes = document.getElementById('filtro-destino-doacoes');
+
+    function aplicarFiltrosDoacoes() {
+        const status = filtroStatusDoacoes ? filtroStatusDoacoes.value : 'TODOS';
+        const destino = filtroDestinoDoacoes ? filtroDestinoDoacoes.value : 'TODOS';
+        
+        document.querySelectorAll('#doacoes .tabela-doacoes tbody tr').forEach(linha => {
+            const linhaStatus = linha.getAttribute('data-status');
+            const linhaDestinoFull = linha.getAttribute('data-destino');
             
-            document.querySelectorAll('.tabela-doacoes tbody tr').forEach(linha => {
-                const linhaStatus = linha.getAttribute('data-status');
-                const linhaDestino = linha.getAttribute('data-destino');
-                
-                const mostraStatus = status === 'TODOS' || linhaStatus === status;
-                const mostraDestino = destino === 'TODOS' || linhaDestino === destino;
-                
-                linha.style.display = (mostraStatus && mostraDestino) ? '' : 'none';
-            });
+            const mostraStatus = status === 'TODOS' || linhaStatus === status;
+            const mostraDestino = destino === 'TODOS' || linhaDestinoFull === destino;
+            
+            linha.style.display = (mostraStatus && mostraDestino) ? '' : 'none';
         });
-    });
+    }
+    if(filtroStatusDoacoes) filtroStatusDoacoes.addEventListener('change', aplicarFiltrosDoacoes);
+    if(filtroDestinoDoacoes) filtroDestinoDoacoes.addEventListener('change', aplicarFiltrosDoacoes);
 
-    const filtroStatusMensagem = document.getElementById('filtro-status-mensagem');
-    if (filtroStatusMensagem) {
-        filtroStatusMensagem.addEventListener('change', function() {
+
+    const filtroStatusMinhasMensagens = document.getElementById('filtro-status-minhas-mensagens');
+    if (filtroStatusMinhasMensagens) {
+        filtroStatusMinhasMensagens.addEventListener('change', function() {
             const status = this.value.toLowerCase();
-            
-            document.querySelectorAll('.lista-mensagens .cartao-mensagem').forEach(cartao => {
+            document.querySelectorAll('#mensagens .lista-mensagens .cartao-mensagem').forEach(cartao => {
                 const cartaoStatus = cartao.getAttribute('data-status');
-                
-                if (status === 'todas') {
-                    cartao.style.display = '';
-                } else {
-                    cartao.style.display = cartaoStatus === status ? '' : 'none';
-                }
+                cartao.style.display = (status === 'todas' || cartaoStatus === status) ? '' : 'none';
             });
         });
     }
+    
+    const btnNovaMensagemForm = document.getElementById('btn-nova-mensagem-form');
+    const formNovaMensagem = document.getElementById('formulario-nova-mensagem');
+    const btnCancelarNovaMensagem = document.getElementById('btn-cancelar-nova-mensagem');
 
-    const valorInput = document.getElementById('valor');
-    if (valorInput) {
-        valorInput.addEventListener('blur', function() {
-            let value = this.value.replace(/\D/g, '');
-            value = (value / 100).toFixed(2) + '';
-            value = value.replace(".", ",");
-            value = value.replace(/(\d)(\d{3})(\d{3}),/g, "$1.$2.$3,");
-            value = value.replace(/(\d)(\d{3}),/g, "$1.$2,");
-            this.value = value;
+    if(btnNovaMensagemForm) {
+        btnNovaMensagemForm.addEventListener('click', function() {
+            formNovaMensagem.style.display = formNovaMensagem.style.display === 'none' ? 'block' : 'none';
+        });
+    }
+    if(btnCancelarNovaMensagem) {
+        btnCancelarNovaMensagem.addEventListener('click', function() {
+            formNovaMensagem.style.display = 'none';
+            formNovaMensagem.querySelector('form').reset();
         });
     }
 
-    document.querySelectorAll('.filtros-visitas select').forEach(select => {
-        select.addEventListener('change', filtrarVisitas);
-    });
+    const valorGeralInput = document.getElementById('valor-geral');
+    if (valorGeralInput) {
+        valorGeralInput.addEventListener('input', function(e) {
+            formatarValorMonetario(e.target);
+        });
+         valorGeralInput.addEventListener('blur', function(e) {
+            formatarValorMonetarioFinal(e.target);
+        });
+    }
+    
+    const modalDoarCampanha = document.getElementById('modal-doar-campanha-painel');
+    const btnsFecharModalDoar = document.querySelectorAll('.fechar-modal-doar-campanha');
+    const formDoarCampanhaPainel = document.getElementById('form-doar-campanha-painel');
+    const valorModalInput = document.getElementById('doar-campanha-valor-modal');
 
-    document.getElementById('modal-visita').style.display = 'none';
-
-    document.querySelectorAll('.btn-agendar').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const visitaId = this.getAttribute('data-visita-id');
-            const cartaoVisita = this.closest('.cartao-visita');
-            const dataVisita = cartaoVisita.querySelector('h3').textContent;
-            
-            document.getElementById('modal-data').textContent = dataVisita;
-            document.getElementById('modal-visita').style.display = 'block';
-
-            const confirmarBtn = document.getElementById('btn-confirmar-visita');
-            confirmarBtn.replaceWith(confirmarBtn.cloneNode(true));
-            
-            document.getElementById('btn-confirmar-visita').onclick = function() {
-                agendarVisita(visitaId);
-            };
+    document.querySelectorAll('.abrir-modal-doar-campanha').forEach(botao => {
+        botao.addEventListener('click', function() {
+            const campanhaId = this.dataset.campanhaId;
+            const campanhaNome = this.dataset.campanhaNome;
+            document.getElementById('modal-doar-campanha-titulo').textContent = `Doar para: ${campanhaNome}`;
+            document.getElementById('doar-campanha-id-modal').value = campanhaId;
+            if(formDoarCampanhaPainel) formDoarCampanhaPainel.reset();
+            if(modalDoarCampanha) modalDoarCampanha.style.display = 'block';
         });
     });
 
-    document.querySelector('.fechar-modal').addEventListener('click', function() {
-        document.getElementById('modal-visita').style.display = 'none';
+    btnsFecharModalDoar.forEach(btn => {
+        btn.onclick = function() {
+            if(modalDoarCampanha) modalDoarCampanha.style.display = 'none';
+        }
     });
 
-    document.getElementById('btn-cancelar-visita').addEventListener('click', function() {
-        document.getElementById('modal-visita').style.display = 'none';
+    if (valorModalInput) {
+        valorModalInput.addEventListener('input', function(e) {
+            formatarValorMonetario(e.target);
+        });
+        valorModalInput.addEventListener('blur', function(e) {
+            formatarValorMonetarioFinal(e.target);
+        });
+    }
+
+    const modalConfirmarVisita = document.getElementById('modal-confirmar-visita');
+    const btnsFecharModalConfirmarVisita = document.querySelectorAll('.fechar-modal-confirmar-visita');
+
+    document.querySelectorAll('.btn-abrir-modal-agendar-visita').forEach(botao => {
+        botao.addEventListener('click', function() {
+            document.getElementById('modal-confirmar-visita-id').value = this.dataset.visitaId;
+            document.getElementById('modal-confirmar-visita-data').textContent = this.dataset.visitaData;
+            if(modalConfirmarVisita) modalConfirmarVisita.style.display = 'block';
+        });
     });
+    btnsFecharModalConfirmarVisita.forEach(btn => {
+        btn.onclick = function() {
+            if(modalConfirmarVisita) modalConfirmarVisita.style.display = 'none';
+        }
+    });
+
+
+    window.onclick = function(event) {
+        if (event.target == modalDoarCampanha) {
+            modalDoarCampanha.style.display = "none";
+        }
+        if (event.target == modalConfirmarVisita) {
+            modalConfirmarVisita.style.display = "none";
+        }
+    }
+
+    function formatarValorMonetario(inputElement) {
+        let value = inputElement.value.replace(/\D/g, '');
+        if (value) {
+            value = (parseInt(value) / 100).toFixed(2).replace('.', ',');
+        }
+        inputElement.value = value;
+    }
+    function formatarValorMonetarioFinal(inputElement) {
+        let value = inputElement.value.replace(/\D/g, '');
+        if (value) {
+            const numero = parseFloat(value) / 100;
+            if (!isNaN(numero)) {
+                inputElement.value = numero.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            } else {
+                inputElement.value = '';
+            }
+        } else {
+            inputElement.value = '';
+        }
+    }
 });
-
-function mostrarSecao(secaoId) {
-    document.querySelectorAll('.navegacao-lateral a').forEach(link => {
-        link.classList.remove('ativo');
-    });
-    document.querySelector(`.navegacao-lateral a[data-secao="${secaoId}"]`).classList.add('ativo');
-    
-    document.querySelectorAll('.secao-conteudo').forEach(secao => {
-        secao.classList.remove('ativo');
-    });
-    document.getElementById(secaoId).classList.add('ativo');
-}
-
-
-
-function filtrarVisitas() {
-    const mes = document.getElementById('filtro-mes').value;
-    const status = document.getElementById('filtro-status-visita').value;
-    
-    document.querySelectorAll('.lista-visitas .cartao-visita').forEach(cartao => {
-        const cartaoMes = cartao.getAttribute('data-mes');
-        const cartaoStatus = cartao.getAttribute('data-status');
-        
-        const mostraMes = mes === '0' || cartaoMes === mes;
-        const mostraStatus = status === 'TODOS' || cartaoStatus === status;
-        
-        cartao.style.display = (mostraMes && mostraStatus) ? '' : 'none';
-    });
-}
-
-function agendarVisita(visitaId) {
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = `/visitacao/agendar/${visitaId}/{{ request.user.doador.id }}/`;
-    form.style.display = 'none';
-
-    const csrfInput = document.createElement('input');
-    csrfInput.type = 'hidden';
-    csrfInput.name = 'csrfmiddlewaretoken';
-    csrfInput.value = '{{ csrf_token }}';
-    form.appendChild(csrfInput);
-
-    const visitaInput = document.createElement('input');
-    visitaInput.type = 'hidden';
-    visitaInput.name = 'visita_id';
-    visitaInput.value = visitaId;
-    form.appendChild(visitaInput);
-
-    const doadorInput = document.createElement('input');
-    doadorInput.type = 'hidden';
-    doadorInput.name = 'doador_id';
-    doadorInput.value = '{{ request.user.doador.id }}';
-    form.appendChild(doadorInput);
-
-    document.body.appendChild(form);
-    form.submit();
-}
-
-function mostrarFormularioMensagem() {
-    document.getElementById('formulario-mensagem').style.display = 'block';
-    window.scrollTo({
-        top: document.getElementById('formulario-mensagem').offsetTop,
-        behavior: 'smooth'
-    });
-}
-
-function ocultarFormularioMensagem() {
-    document.getElementById('formulario-mensagem').style.display = 'none';
-}
 </script>
 {% endblock %}
