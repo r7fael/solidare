@@ -57,7 +57,7 @@ A ONG tem o intuito de promover o desenvolvimento social, político e pedagógic
   
 **Historias**
 <br>
-Foram definidas cinco histórias de usuário para aprimorar a compreensão do futuro produto e garantir que ele atenda às devidas expectativas. Cada história foi detalhada com três cenários distintos, validados por meio da metodologia BDD, utilizando a estrutura Dado - Quando - Então. Esses cenários ajudam a explorar diferentes situações, desde fluxos ideais até possíveis falhas, garantindo uma cobertura abrangente dos requisitos.
+As cinco histórias de usuário definidas para aprimorar a compreensão do futuro produto e assegurar o atendimento às expectativas foram detalhadas com três cenários distintos cada. Estes cenários, validados pela metodologia BDD (Behavior-Driven Development) e estruturados no formato Dado - Quando - Então, exploram diversas situações, abrangendo desde fluxos ideais até potenciais falhas, garantindo uma cobertura abrangente dos requisitos.
 
 As histórias e seus respectivos cenários podem ser acessados e revisados no seguinte documento: [Histórias de Usuário](https://docs.google.com/document/d/15lNQA87yBFTOUeHxDLRP9XGcK0BDhXuryyQLcdqMKJI/edit?usp=sharing).
 
