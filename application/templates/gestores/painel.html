@@ -43,8 +43,9 @@
     <div class="conteudo-principal">
         {% if messages %}
             {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}" role="alert" style="margin-bottom: 15px; padding: 10px; border-radius: 4px; color: #fff; background-color: {% if message.tags == 'success' %}#28a745{% elif message.tags == 'error' %}#dc3545{% else %}#17a2b8{% endif %};">
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert" style="margin-bottom: 15px;">
                     {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             {% endfor %}
         {% endif %}
@@ -245,14 +246,14 @@
                             </td>
                             <td>
                                 <button class="botao-acao editar-beneficiario-btn" 
-                                   data-id="{{ beneficiario_item.id }}"
-                                   data-nome="{{ beneficiario_item.nome }}"
-                                   data-idade="{{ beneficiario_item.idade }}"
-                                   data-nome_responsavel="{{ beneficiario_item.nome_responsavel|default:'' }}"
-                                   data-telefone_responsavel="{{ beneficiario_item.telefone_responsavel|default:'' }}"
-                                   data-email_responsavel="{{ beneficiario_item.email_responsavel|default:'' }}"
-                                   data-observacoes="{{ beneficiario_item.observacoes|default:'' }}"
-                                   data-ativo="{{ beneficiario_item.ativo|yesno:'true,false' }}">Editar</button>
+                                    data-id="{{ beneficiario_item.id }}"
+                                    data-nome="{{ beneficiario_item.nome }}"
+                                    data-idade="{{ beneficiario_item.idade }}"
+                                    data-nome_responsavel="{{ beneficiario_item.nome_responsavel|default:'' }}"
+                                    data-telefone_responsavel="{{ beneficiario_item.telefone_responsavel|default:'' }}"
+                                    data-email_responsavel="{{ beneficiario_item.email_responsavel|default:'' }}"
+                                    data-observacoes="{{ beneficiario_item.observacoes|default:'' }}"
+                                    data-ativo="{{ beneficiario_item.ativo|yesno:'true,false' }}">Editar</button>
                             </td>
                         </tr>
                         {% empty %}
@@ -332,7 +333,7 @@
                             <div class="remetente">
                                 <strong>De:</strong> {{ mensagem_item.remetente.nome }}
                             </div>
-                             {% if mensagem_item.destinatario %}
+                            {% if mensagem_item.destinatario %}
                             <div class="destinatario">
                                 <strong>Para:</strong> {{ mensagem_item.destinatario.nome }}
                             </div>
@@ -391,19 +392,17 @@
         <div id="relatorios" class="secao-conteudo {% if secao_ativa == 'relatorios' %}ativo{% endif %}">
             <div class="cabecalho-secao">
                 <h1>Relatórios</h1>
-                <div class="acoes-superiores">
-                    <button id="abrir-modal-novo-relatorio" class="botao-primario">Novo Relatório</button>
-                </div>
             </div>
             <div class="lista-relatorios">
-                {% for relatorio_item in relatorios %}
-                <div class="cartao-relatorio">
-                    <h3>{{ relatorio_item.titulo }}</h3>
-                    <p>{{ relatorio_item.descricao|truncatechars:150 }}</p>
+                <div class="card mb-3 shadow-sm cartao-relatorio-link">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">Relatório de Impacto das Doações</h5>
+                        <p class="card-text">Gere um arquivo PDF com o resumo completo do impacto das doações concluídas, incluindo totais arrecadados, número de doadores, e distribuição por destino, campanha e método de pagamento.</p>
+                        <a href="{% url 'relatorios:exportar_relatorio_impacto_pdf' %}" class="btn btn-success" target="_blank">
+                            <i class="fas fa-file-pdf"></i> Gerar Relatório de Impacto em PDF
+                        </a>
+                    </div>
                 </div>
-                {% empty %}
-                <div class="sem-registros"><p>Nenhum relatório enviado</p></div>
-                {% endfor %}
             </div>
         </div>
 
@@ -415,13 +414,13 @@
                 </div>
             </div>
             <div class="filtros">
-                 <div class="grupo-filtro">
+                <div class="grupo-filtro">
                     <label for="filtro-status-visitacao-gestor">Status:</label>
                     <select id="filtro-status-visitacao-gestor">
                         <option value="TODOS">Todos</option>
                         <option value="DISPONIVEL">Disponível</option>
                         <option value="ESGOTADO">Esgotado</option>
-                         <option value="REALIZADA">Realizada</option>
+                        <option value="REALIZADA">Realizada</option>
                     </select>
                 </div>
             </div>
@@ -449,9 +448,9 @@
                             </td>
                             <td>
                                 <button class="botao-acao btn-editar-visitacao-gestor" 
-                                   data-id="{{ visita_item.id }}"
-                                   data-data="{{ visita_item.data|date:'Y-m-d' }}"
-                                   data-capacidade="{{ visita_item.capacidade_maxima }}">Editar</button>
+                                    data-id="{{ visita_item.id }}"
+                                    data-data="{{ visita_item.data|date:'Y-m-d' }}"
+                                    data-capacidade="{{ visita_item.capacidade_maxima }}">Editar</button>
                                 <a href="{% url 'visitacao:excluir_visita' visita_item.id %}" class="botao-acao excluir">Excluir</a>
                             </td>
                         </tr>
@@ -472,7 +471,7 @@
     <div class="modal-conteudo">
         <span class="fechar-modal fechar-modal-editar-beneficiario-gestor">&times;</span>
         <h2>Editar Beneficiário</h2>
-        <form id="form-editar-beneficiario-gestor" method="POST" action="">
+        <form id="form-editar-beneficiario-gestor" method="POST" action="{% url 'editar_beneficiario' %}">
             {% csrf_token %}
             <input type="hidden" id="edit-benef-id" name="beneficiario_id">
             <div class="form-coluna">
@@ -509,19 +508,6 @@
     </div>
 </div>
 
-<div id="modal-novo-relatorio-gestor" class="modal" style="display:none;">
-    <div class="modal-conteudo">
-        <span class="fechar-modal fechar-modal-novo-relatorio-gestor">&times;</span>
-        <h2>Criar Novo Relatório</h2>
-        <form method="POST" action="#"> {% comment %} Definir action para view de criar relatório {% endcomment %}
-            {% csrf_token %}
-            <div class="campo-formulario"><label for="titulo-relatorio-gestor">Título</label><input type="text" id="titulo-relatorio-gestor" name="titulo" required></div>
-            <div class="campo-formulario"><label for="descricao-relatorio-gestor">Descrição</label><textarea id="descricao-relatorio-gestor" name="descricao" rows="5" required></textarea></div>
-            <div class="acoes-formulario"><button type="submit" class="botao-primario">Enviar</button><button type="button" class="botao-secundario fechar-modal-novo-relatorio-gestor">Cancelar</button></div>
-        </form>
-    </div>
-</div>
-
 <div id="modal-visitacao-gestor" class="modal" style="display:none;">
     <div class="modal-conteudo">
         <span class="fechar-modal fechar-modal-visitacao-gestor">&times;</span>
@@ -548,9 +534,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (activeSecao) activeSecao.classList.add('ativo');
 
         if (secaoId !== 'inicio' && secaoId) {
-             history.pushState(null, '', `/usuarios/painel-gestor/secao/${secaoId}/`);
+            history.pushState(null, '', `/usuarios/painel-gestor/secao/${secaoId}/`);
         } else if (secaoId === 'inicio') {
-             history.pushState(null, '', `/usuarios/painel-gestor/`);
+            history.pushState(null, '', `/usuarios/painel-gestor/`);
         }
     }
 
@@ -569,13 +555,22 @@ document.addEventListener('DOMContentLoaded', function() {
         const abrirBtn = document.getElementById(abrirBtnId);
         const fecharBtns = document.querySelectorAll('.' + fecharClasse);
 
-        if (abrirBtn && modal) abrirBtn.onclick = () => modal.style.display = 'block';
+        if (abrirBtn && modal) abrirBtn.onclick = () => {
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
         fecharBtns.forEach(btn => {
-            if (modal) btn.onclick = () => modal.style.display = 'none';
+            if (modal) btn.onclick = () => {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
         });
         if (modal) {
             window.addEventListener('click', function(event) {
-                if (event.target == modal) modal.style.display = 'none';
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
             });
         }
     }
@@ -583,7 +578,6 @@ document.addEventListener('DOMContentLoaded', function() {
     setupModal('modal-criar-campanha', 'abrir-modal-criar-campanha', 'fechar-modal-criar-campanha');
     setupModal('modal-editar-beneficiario-gestor', null, 'fechar-modal-editar-beneficiario-gestor');
     setupModal('modal-rejeitar-mensagem-gestor', null, 'fechar-modal-rejeitar-mensagem-gestor');
-    setupModal('modal-novo-relatorio-gestor', 'abrir-modal-novo-relatorio', 'fechar-modal-novo-relatorio-gestor');
     setupModal('modal-visitacao-gestor', 'btn-abrir-modal-nova-visitacao', 'fechar-modal-visitacao-gestor');
     
     const modalEditarCampanha = document.getElementById('modal-editar-campanha');
@@ -598,13 +592,18 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('editar-campanha-meta').value = this.dataset.meta.replace('.', ',');
             document.getElementById('editar-campanha-data_fim').value = this.dataset.data_fim;
             document.getElementById('editar-campanha-ativa').checked = (this.dataset.ativa === 'true');
-            if(modalEditarCampanha) modalEditarCampanha.style.display = 'block';
+            if(modalEditarCampanha) {
+                modalEditarCampanha.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
         });
     });
     document.querySelectorAll('.fechar-modal-editar-campanha').forEach(btn => {
-        btn.onclick = () => { if(modalEditarCampanha) modalEditarCampanha.style.display = 'none'; };
+        btn.onclick = () => { 
+            if(modalEditarCampanha) modalEditarCampanha.style.display = 'none'; 
+            document.body.style.overflow = 'auto';
+        };
     });
-
 
     document.querySelectorAll('.editar-beneficiario-btn').forEach(botao => {
         botao.addEventListener('click', function(e) {
@@ -620,20 +619,29 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('edit-benef-email_responsavel').value = this.dataset.email_responsavel;
             document.getElementById('edit-benef-observacoes').value = this.dataset.observacoes;
             document.getElementById('edit-benef-ativo').checked = (this.dataset.ativo === 'true');
-            if(modal) modal.style.display = 'block';
+            if(modal) {
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
         });
     });
 
     document.querySelectorAll('.btn-ver-mais-mensagem-gestor').forEach(botao => {
         botao.addEventListener('click', function() {
             const modal = document.getElementById(`modal-mensagem-gestor-${this.dataset.id}`);
-            if(modal) modal.style.display = 'flex';
+            if(modal) {
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
         });
     });
     document.querySelectorAll('.fechar-modal-gestor-mensagem').forEach(botao => {
         botao.addEventListener('click', function() {
             const modal = document.getElementById(this.dataset.modalId);
-            if(modal) modal.style.display = 'none';
+            if(modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
         });
     });
     document.querySelectorAll('.btn-rejeitar-mensagem-gestor').forEach(botao => {
@@ -642,7 +650,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const modalRejeicao = document.getElementById('modal-rejeitar-mensagem-gestor');
             const formRejeicao = document.getElementById('form-rejeitar-mensagem-gestor');
             if(formRejeicao) formRejeicao.action = `{% url 'mensagens:rejeitar_mensagem' 0 %}`.replace('0', mensagemId);
-            if(modalRejeicao) modalRejeicao.style.display = 'block';
+            if(modalRejeicao) {
+                modalRejeicao.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
         });
     });
     
@@ -656,17 +667,23 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('gestor-data-visita').value = this.dataset.data;
             document.getElementById('gestor-capacidade-visita').value = this.dataset.capacidade;
             document.getElementById('modal-visitacao-gestor-titulo').textContent = 'Editar Data de Visitação';
-            if(modal) modal.style.display = 'block';
+            if(modal) {
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
         });
     });
-     document.getElementById('btn-abrir-modal-nova-visitacao')?.addEventListener('click', function() {
+    document.getElementById('btn-abrir-modal-nova-visitacao')?.addEventListener('click', function() {
         const modal = document.getElementById('modal-visitacao-gestor');
         const form = document.getElementById('form-visitacao-gestor');
         form.action = `{% url 'visitacao:nova_visita' %}`;
         form.reset();
         document.getElementById('gestor-visita-id').value = '';
         document.getElementById('modal-visitacao-gestor-titulo').textContent = 'Nova Data de Visitação';
-        if(modal) modal.style.display = 'block';
+        if(modal) {
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
     });
 
     function aplicarFiltrosTabela(tabelaSelector, filtrosConfig) {
@@ -713,7 +730,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }}
         ]))
     );
-     document.getElementById('filtro-status-gestor-mensagens')?.addEventListener('change', () => 
+    document.getElementById('filtro-status-gestor-mensagens')?.addEventListener('change', () => 
         aplicarFiltrosTabela('#mensagens .lista-mensagens', [{
             filtroId: 'filtro-status-gestor-mensagens', dataAtributo: 'data-status', comparador: (valLinha, valFiltro) => valFiltro.toLowerCase() === 'todas' || valLinha === valFiltro.toLowerCase()
         }], true) 
@@ -747,7 +764,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     formatarInputMeta('criar-campanha-meta');
     formatarInputMeta('editar-campanha-meta');
-
 });
 </script>
 {% endblock %}
