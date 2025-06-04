@@ -24,7 +24,7 @@ A ONG tem o intuito de promover o desenvolvimento social, político e pedagógic
     <a href="https://github.com/PedroGarcez13">Pedro Garcez</a> pastdcg@cesar.school 
   </li>
   <li>
-    <a href="https://github.com/fdaniel27">Daniel Alves</a> dfa2@cesar.school 
+    <a href="https://github.com/fdaniel27">Daniel Alves</a>  dfa2@cesar.school 
   </li>
   <li>
     <a href="https://github.com/joaovictorgcu">João Victor</a> jvgcu@cesar.school
