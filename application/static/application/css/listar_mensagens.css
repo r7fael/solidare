@@ -1,101 +1,273 @@
+:root {
+    /* Cores base */
+    --cor-fundo-geral: #f5f9ff; /* Azul muito claro para o fundo da página */
+    --cor-fundo-card: #ffffff; /* Branco para o fundo dos cartões */
+    --cor-texto-principal: #34495e; /* Azul escuro para texto principal */
+    --cor-texto-secundario: #6b7280; /* Cinza para texto secundário/metadados */
+    --cor-borda-padrao: #e0e7ff; /* Azul muito claro para bordas e separadores */
+    --cor-sombra-leve: rgba(0, 0, 0, 0.05); /* Sombra sutil */
+    --cor-sombra-media: rgba(0, 0, 0, 0.1); /* Sombra um pouco mais visível */
+
+    /* Tons de azul profissionais */
+    --azul-titulo: #1e40af; /* Azul forte para títulos */
+    --azul-destaque: #3b82f6; /* Azul vibrante para bordas e interatividade */
+    --azul-card-titulo: #1e40af; /* Azul para títulos de cartão */
+    --azul-fundo-filtro: #e0e7ff; /* Azul claro para o fundo do filtro */
+    
+    /* Cores de status aprimoradas */
+    --status-enviado-fundo: #e0f2fe; /* Azul claro */
+    --status-enviado-texto: #2563eb; /* Azul médio */
+    --status-entregue-aceita-fundo: #dcfce7; /* Verde claro */
+    --status-entregue-aceita-texto: #16a34a; /* Verde médio */
+    --status-lido-fundo: #fffbe6; /* Amarelo claro */
+    --status-lido-texto: #d97706; /* Laranja escuro */
+    --status-erro-fundo: #fee2e2; /* Vermelho claro */
+    --status-erro-texto: #dc2626; /* Vermelho escuro */
+}
+
+/* Container Geral */
 .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+    max-width: 900px; /* Aumentado um pouco a largura máxima */
+    margin: 20px auto; /* Adicionado margin-top/bottom */
+    padding: 30px; /* Aumentado o padding */
     font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background-color: #f5f9ff; 
+    background-color: var(--cor-fundo-geral);
+    border-radius: 12px; /* Adicionado borda arredondada ao container */
+    box-shadow: 0 4px 15px var(--cor-sombra-leve); /* Sombra suave para o container */
 }
 
+/* Título Principal */
 h1 {
-    color: #1a365d; 
-    margin-bottom: 20px;
-    font-size: 24px;
-    font-weight: 600;
-    border-bottom: 2px solid #4299e1;
-    padding-bottom: 10px;
+    color: var(--azul-titulo);
+    margin-bottom: 25px; /* Aumentado margin-bottom */
+    font-size: 28px; /* Aumentado o tamanho da fonte */
+    font-weight: 700; /* Mais negrito */
+    border-bottom: 3px solid var(--azul-destaque); /* Borda mais grossa e cor de destaque */
+    padding-bottom: 15px; /* Aumentado padding-bottom */
+    text-align: center; /* Centralizado para um visual mais clean */
 }
 
+/* Lista de Mensagens */
 .messages-list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px; /* Aumentado o espaçamento entre os cartões */
 }
 
+/* Cartão de Mensagem Individual */
 .message-card {
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(66, 153, 225, 0.15); 
-    padding: 20px;
-    border-left: 4px solid #4299e1; 
-    transition: transform 0.2s ease;
+    background-color: var(--cor-fundo-card);
+    border-radius: 10px; /* Borda mais arredondada */
+    box-shadow: 0 4px 12px var(--cor-sombra-media); /* Sombra mais visível e elegante */
+    padding: 25px; /* Aumentado o padding interno */
+    border-left: 5px solid var(--azul-destaque); /* Borda lateral mais pronunciada */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Transição para sombra também */
 }
 
 .message-card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-5px); /* Efeito de elevação mais perceptível */
+    box-shadow: 0 8px 20px rgba(66, 153, 225, 0.25); /* Sombra mais intensa no hover */
 }
 
 .message-card h3 {
-    color: #2b6cb0;
+    color: var(--azul-card-titulo);
     margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 18px;
-    font-weight: 500;
+    margin-bottom: 12px; /* Ajustado margin-bottom */
+    font-size: 20px; /* Aumentado o tamanho da fonte */
+    font-weight: 600; /* Mais negrito */
 }
 
 .message-card p {
-    color: #4a5568;
-    margin-bottom: 15px;
-    line-height: 1.5;
+    color: var(--cor-texto-principal);
+    margin-bottom: 18px; /* Aumentado margin-bottom */
+    line-height: 1.6; /* Aumentado line-height para melhor legibilidade */
+    font-size: 15px; /* Levemente aumentado o tamanho da fonte */
 }
 
+/* Metadados da Mensagem (data/status) */
 .message-meta {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 14px;
-    color: #718096; 
+    font-size: 13px; /* Levemente diminuído para ser mais discreto */
+    color: var(--cor-texto-secundario);
+    border-top: 1px solid var(--cor-borda-padrao); /* Adicionado um separador sutil */
+    padding-top: 15px; /* Padding acima do separador */
+    margin-top: 10px; /* Margem do separador */
 }
 
+/* Estilos dos Status Badges */
 .status {
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-weight: 500;
+    padding: 6px 10px; /* Aumentado padding para botões de status */
+    border-radius: 20px; /* Mais arredondado (pílula) */
+    font-weight: 600; /* Mais negrito */
+    font-size: 12px; /* Levemente aumentado */
+    text-transform: uppercase; /* Em maiúsculas para destaque */
+    letter-spacing: 0.5px; /* Espaçamento entre letras */
+    box-shadow: 0 1px 3px var(--cor-sombra-leve); /* Sombra sutil para badges */
 }
-
 
 .status.enviado {
-    background-color: #ebf8ff;
-    color: #3182ce;
+    background-color: var(--status-enviado-fundo);
+    color: var(--status-enviado-texto);
 }
 
 .status.entregue, .status.aceita {
-    background-color: #f0fff4; 
-    color: #38a169;
+    background-color: var(--status-entregue-aceita-fundo);
+    color: var(--status-entregue-aceita-texto);
 }
 
 .status.lido {
-    background-color: #fffaf0;
-    color: #dd6b20;
+    background-color: var(--status-lido-fundo);
+    color: var(--status-lido-texto);
 }
 
 .status.erro {
-    background-color: #fff5f5;
-    color: #e53e3e;
+    background-color: var(--status-erro-fundo);
+    color: var(--status-erro-texto);
 }
 
+/* Mensagem de Lista Vazia */
 .empty-message {
     text-align: center;
-    color: #718096;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    border: 1px dashed #cbd5e0;
+    color: var(--cor-texto-secundario);
+    padding: 30px; /* Aumentado padding */
+    background-color: var(--cor-fundo-card);
+    border-radius: 10px;
+    border: 2px dashed var(--cor-borda-padrao); /* Borda pontilhada mais visível */
+    font-style: italic; /* Texto em itálico */
+    font-size: 16px;
 }
 
-
+/* Filtro de Status */
 .status-filter {
-    margin-bottom: 20px;
-    padding: 10px;
-    background-color: #ebf8ff;
-    border-radius: 8px;
+    margin-bottom: 25px; /* Aumentado margin-bottom */
+    padding: 15px; /* Aumentado padding */
+    background-color: var(--azul-fundo-filtro);
+    border-radius: 10px; /* Borda mais arredondada */
+    display: flex; /* Usando flexbox para o layout interno */
+    justify-content: center; /* Centraliza os itens do filtro */
+    gap: 15px; /* Espaçamento entre os elementos do filtro */
+    box-shadow: 0 2px 8px var(--cor-sombra-leve); /* Sombra para o filtro */
+}
+
+.status-filter label {
+    color: var(--azul-card-titulo);
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.status-filter select {
+    padding: 8px 12px;
+    border: 1px solid var(--cor-borda-padrao);
+    border-radius: 6px;
+    background-color: var(--cor-fundo-card);
+    color: var(--cor-texto-principal);
+    font-size: 15px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.status-filter select:focus {
+    outline: none;
+    border-color: var(--azul-destaque);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+    }
+
+    .message-card {
+        padding: 20px;
+    }
+
+    .message-card h3 {
+        font-size: 18px;
+    }
+
+    .message-card p {
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+
+    .message-meta {
+        flex-direction: column; /* Empilha data e status */
+        align-items: flex-start; /* Alinha à esquerda */
+        gap: 8px; /* Espaçamento entre eles */
+        padding-top: 10px;
+        margin-top: 8px;
+    }
+
+    .status {
+        font-size: 11px;
+        padding: 5px 8px;
+    }
+
+    .status-filter {
+        flex-direction: column; /* Empilha os filtros */
+        gap: 10px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+        margin: 15px auto;
+    }
+
+    h1 {
+        font-size: 22px;
+        margin-bottom: 15px;
+    }
+
+    .messages-list {
+        gap: 15px;
+    }
+
+    .message-card {
+        padding: 15px;
+        border-left-width: 3px;
+    }
+
+    .message-card h3 {
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+
+    .message-card p {
+        font-size: 13px;
+        margin-bottom: 12px;
+    }
+
+    .message-meta {
+        font-size: 12px;
+    }
+
+    .status {
+        font-size: 10px;
+        padding: 4px 7px;
+    }
+
+    .empty-message {
+        padding: 20px;
+        font-size: 14px;
+    }
+
+    .status-filter {
+        padding: 8px;
+    }
+
+    .status-filter label, .status-filter select {
+        font-size: 14px;
+    }
 }
