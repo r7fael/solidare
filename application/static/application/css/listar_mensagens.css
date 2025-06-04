@@ -1,110 +1,99 @@
 :root {
-    /* Cores base */
-    --cor-fundo-geral: #f5f9ff; /* Azul muito claro para o fundo da página */
-    --cor-fundo-card: #ffffff; /* Branco para o fundo dos cartões */
-    --cor-texto-principal: #34495e; /* Azul escuro para texto principal */
-    --cor-texto-secundario: #6b7280; /* Cinza para texto secundário/metadados */
-    --cor-borda-padrao: #e0e7ff; /* Azul muito claro para bordas e separadores */
-    --cor-sombra-leve: rgba(0, 0, 0, 0.05); /* Sombra sutil */
-    --cor-sombra-media: rgba(0, 0, 0, 0.1); /* Sombra um pouco mais visível */
-
-    /* Tons de azul profissionais */
-    --azul-titulo: #1e40af; /* Azul forte para títulos */
-    --azul-destaque: #3b82f6; /* Azul vibrante para bordas e interatividade */
-    --azul-card-titulo: #1e40af; /* Azul para títulos de cartão */
-    --azul-fundo-filtro: #e0e7ff; /* Azul claro para o fundo do filtro */
-    
-    /* Cores de status aprimoradas */
-    --status-enviado-fundo: #e0f2fe; /* Azul claro */
-    --status-enviado-texto: #2563eb; /* Azul médio */
-    --status-entregue-aceita-fundo: #dcfce7; /* Verde claro */
-    --status-entregue-aceita-texto: #16a34a; /* Verde médio */
-    --status-lido-fundo: #fffbe6; /* Amarelo claro */
-    --status-lido-texto: #d97706; /* Laranja escuro */
-    --status-erro-fundo: #fee2e2; /* Vermelho claro */
-    --status-erro-texto: #dc2626; /* Vermelho escuro */
+    --cor-fundo-geral: #f5f9ff;
+    --cor-fundo-card: #ffffff;
+    --cor-texto-principal: #34495e;
+    --cor-texto-secundario: #6b7280;
+    --cor-borda-padrao: #e0e7ff;
+    --cor-sombra-leve: rgba(0, 0, 0, 0.05);
+    --cor-sombra-media: rgba(0, 0, 0, 0.1);
+    --azul-titulo: #1e40af;
+    --azul-destaque: #3b82f6;
+    --azul-card-titulo: #1e40af;
+    --azul-fundo-filtro: #e0e7ff;
+    --status-enviado-fundo: #e0f2fe;
+    --status-enviado-texto: #2563eb;
+    --status-entregue-aceita-fundo: #dcfce7;
+    --status-entregue-aceita-texto: #16a34a;
+    --status-lido-fundo: #fffbe6;
+    --status-lido-texto: #d97706;
+    --status-erro-fundo: #fee2e2;
+    --status-erro-texto: #dc2626;
 }
 
-/* Container Geral */
 .container {
-    max-width: 900px; /* Aumentado um pouco a largura máxima */
-    margin: 20px auto; /* Adicionado margin-top/bottom */
-    padding: 30px; /* Aumentado o padding */
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 30px;
     font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     background-color: var(--cor-fundo-geral);
-    border-radius: 12px; /* Adicionado borda arredondada ao container */
-    box-shadow: 0 4px 15px var(--cor-sombra-leve); /* Sombra suave para o container */
+    border-radius: 12px;
+    box-shadow: 0 4px 15px var(--cor-sombra-leve);
 }
 
-/* Título Principal */
 h1 {
     color: var(--azul-titulo);
-    margin-bottom: 25px; /* Aumentado margin-bottom */
-    font-size: 28px; /* Aumentado o tamanho da fonte */
-    font-weight: 700; /* Mais negrito */
-    border-bottom: 3px solid var(--azul-destaque); /* Borda mais grossa e cor de destaque */
-    padding-bottom: 15px; /* Aumentado padding-bottom */
-    text-align: center; /* Centralizado para um visual mais clean */
+    margin-bottom: 25px;
+    font-size: 28px;
+    font-weight: 700;
+    border-bottom: 3px solid var(--azul-destaque);
+    padding-bottom: 15px;
+    text-align: center;
 }
 
-/* Lista de Mensagens */
 .messages-list {
     display: flex;
     flex-direction: column;
-    gap: 20px; /* Aumentado o espaçamento entre os cartões */
+    gap: 20px;
 }
 
-/* Cartão de Mensagem Individual */
 .message-card {
     background-color: var(--cor-fundo-card);
-    border-radius: 10px; /* Borda mais arredondada */
-    box-shadow: 0 4px 12px var(--cor-sombra-media); /* Sombra mais visível e elegante */
-    padding: 25px; /* Aumentado o padding interno */
-    border-left: 5px solid var(--azul-destaque); /* Borda lateral mais pronunciada */
-    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Transição para sombra também */
+    border-radius: 10px;
+    box-shadow: 0 4px 12px var(--cor-sombra-media);
+    padding: 25px;
+    border-left: 5px solid var(--azul-destaque);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .message-card:hover {
-    transform: translateY(-5px); /* Efeito de elevação mais perceptível */
-    box-shadow: 0 8px 20px rgba(66, 153, 225, 0.25); /* Sombra mais intensa no hover */
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(66, 153, 225, 0.25);
 }
 
 .message-card h3 {
     color: var(--azul-card-titulo);
     margin-top: 0;
-    margin-bottom: 12px; /* Ajustado margin-bottom */
-    font-size: 20px; /* Aumentado o tamanho da fonte */
-    font-weight: 600; /* Mais negrito */
+    margin-bottom: 12px;
+    font-size: 20px;
+    font-weight: 600;
 }
 
 .message-card p {
     color: var(--cor-texto-principal);
-    margin-bottom: 18px; /* Aumentado margin-bottom */
-    line-height: 1.6; /* Aumentado line-height para melhor legibilidade */
-    font-size: 15px; /* Levemente aumentado o tamanho da fonte */
+    margin-bottom: 18px;
+    line-height: 1.6;
+    font-size: 15px;
 }
 
-/* Metadados da Mensagem (data/status) */
 .message-meta {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 13px; /* Levemente diminuído para ser mais discreto */
+    font-size: 13px;
     color: var(--cor-texto-secundario);
-    border-top: 1px solid var(--cor-borda-padrao); /* Adicionado um separador sutil */
-    padding-top: 15px; /* Padding acima do separador */
-    margin-top: 10px; /* Margem do separador */
+    border-top: 1px solid var(--cor-borda-padrao);
+    padding-top: 15px;
+    margin-top: 10px;
 }
 
-/* Estilos dos Status Badges */
 .status {
-    padding: 6px 10px; /* Aumentado padding para botões de status */
-    border-radius: 20px; /* Mais arredondado (pílula) */
-    font-weight: 600; /* Mais negrito */
-    font-size: 12px; /* Levemente aumentado */
-    text-transform: uppercase; /* Em maiúsculas para destaque */
-    letter-spacing: 0.5px; /* Espaçamento entre letras */
-    box-shadow: 0 1px 3px var(--cor-sombra-leve); /* Sombra sutil para badges */
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 1px 3px var(--cor-sombra-leve);
 }
 
 .status.enviado {
@@ -127,28 +116,26 @@ h1 {
     color: var(--status-erro-texto);
 }
 
-/* Mensagem de Lista Vazia */
 .empty-message {
     text-align: center;
     color: var(--cor-texto-secundario);
-    padding: 30px; /* Aumentado padding */
+    padding: 30px;
     background-color: var(--cor-fundo-card);
     border-radius: 10px;
-    border: 2px dashed var(--cor-borda-padrao); /* Borda pontilhada mais visível */
-    font-style: italic; /* Texto em itálico */
+    border: 2px dashed var(--cor-borda-padrao);
+    font-style: italic;
     font-size: 16px;
 }
 
-/* Filtro de Status */
 .status-filter {
-    margin-bottom: 25px; /* Aumentado margin-bottom */
-    padding: 15px; /* Aumentado padding */
+    margin-bottom: 25px;
+    padding: 15px;
     background-color: var(--azul-fundo-filtro);
-    border-radius: 10px; /* Borda mais arredondada */
-    display: flex; /* Usando flexbox para o layout interno */
-    justify-content: center; /* Centraliza os itens do filtro */
-    gap: 15px; /* Espaçamento entre os elementos do filtro */
-    box-shadow: 0 2px 8px var(--cor-sombra-leve); /* Sombra para o filtro */
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    box-shadow: 0 2px 8px var(--cor-sombra-leve);
 }
 
 .status-filter label {
@@ -174,7 +161,6 @@ h1 {
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .container {
         padding: 20px;
@@ -200,9 +186,9 @@ h1 {
     }
 
     .message-meta {
-        flex-direction: column; /* Empilha data e status */
-        align-items: flex-start; /* Alinha à esquerda */
-        gap: 8px; /* Espaçamento entre eles */
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
         padding-top: 10px;
         margin-top: 8px;
     }
@@ -213,7 +199,7 @@ h1 {
     }
 
     .status-filter {
-        flex-direction: column; /* Empilha os filtros */
+        flex-direction: column;
         gap: 10px;
         padding: 10px;
     }

@@ -1,33 +1,30 @@
 :root {
-  --cor-primaria: #1a202c; /* Azul muito escuro para fundo geral */
-  --cor-secundaria: #2c3e50; /* Azul escuro para elementos de destaque */
-  --cor-accent: #3498db; /* Azul vibrante para detalhes interativos */
-  --cor-texto-claro: #ecf0f1; /* Texto claro para fundos escuros */
-  --cor-texto-escuro: #34495e; /* Texto escuro para fundos claros */
-  --cor-borda: #4a5568; /* Cor de borda sutil */
-  --cor-fundo-card: #ffffff; /* Fundo branco para cards */
-  --cor-fundo-principal: #f8fafc; /* Fundo claro para o conteúdo principal */
-
-  /* Tons de azul para a sidebar e elementos primários */
-  --azul-sidebar-gradiente-inicio: #1e3a8a; /* Azul mais escuro */
-  --azul-sidebar-gradiente-fim: #15307a; /* Azul um pouco mais escuro */
-  --azul-link-ativo: #3b82f6; /* Azul médio para links ativos */
-  --azul-borda-avatar: #3b82f6; /* Azul médio para borda do avatar */
-  --azul-fundo-claro: #e0e7ff; /* Azul muito claro para fundo de avatar */
-  --azul-texto-claro: #93c5fd; /* Azul claro para texto de destaque */
-  --azul-hover: #3b82f6; /* Azul para hover em links */
-  --azul-titulo-principal: #1e40af; /* Azul para títulos de seção */
-  --azul-card-destaque: #f0f4ff; /* Azul muito claro para cards de estatística */
-  --azul-botoes-primario: #1e40af; /* Azul para botões primários */
-  --azul-botoes-primario-hover: #1e3a8a; /* Azul mais escuro para hover de botões primários */
-  --azul-botoes-secundario-hover: #f0f4ff; /* Azul muito claro para hover de botões secundários */
-  --azul-tabela-cabecalho: #f0f4ff; /* Azul muito claro para cabeçalho de tabela */
-  --azul-tabela-texto-cabecalho: #1e40af; /* Azul para texto de cabeçalho de tabela */
-  --azul-foco-campo: #3b82f6; /* Azul para foco de campo */
-  --azul-sombra-foco: rgba(59, 130, 246, 0.2); /* Sombra azul para foco de campo */
+  --cor-primaria: #1a202c;
+  --cor-secundaria: #2c3e50;
+  --cor-accent: #3498db;
+  --cor-texto-claro: #ecf0f1;
+  --cor-texto-escuro: #34495e;
+  --cor-borda: #4a5568;
+  --cor-fundo-card: #ffffff;
+  --cor-fundo-principal: #f8fafc;
+  --azul-sidebar-gradiente-inicio: #1e3a8a;
+  --azul-sidebar-gradiente-fim: #15307a;
+  --azul-link-ativo: #3b82f6;
+  --azul-borda-avatar: #3b82f6;
+  --azul-fundo-claro: #e0e7ff;
+  --azul-texto-claro: #93c5fd;
+  --azul-hover: #3b82f6;
+  --azul-titulo-principal: #1e40af;
+  --azul-card-destaque: #f0f4ff;
+  --azul-botoes-primario: #1e40af;
+  --azul-botoes-primario-hover: #1e3a8a;
+  --azul-botoes-secundario-hover: #f0f4ff;
+  --azul-tabela-cabecalho: #f0f4ff;
+  --azul-tabela-texto-cabecalho: #1e40af;
+  --azul-foco-campo: #3b82f6;
+  --azul-sombra-foco: rgba(59, 130, 246, 0.2);
 }
 
-/* Base e Layout */
 .painel-container {
   display: flex;
   min-height: 100vh;
@@ -35,7 +32,6 @@
   background-color: var(--cor-fundo-principal);
 }
 
-/* Sidebar */
 .barra-lateral {
   width: 280px;
   background: linear-gradient(135deg, var(--azul-sidebar-gradiente-inicio) 0%, var(--azul-sidebar-gradiente-fim) 100%);
@@ -48,7 +44,7 @@
   display: flex;
   flex-direction: column;
   z-index: 10;
-  overflow-y: auto; /* Adicionado para rolagem interna */
+  overflow-y: auto;
 }
 
 .perfil-usuario {
@@ -89,14 +85,14 @@
 
 .resumo-perfil {
   display: flex;
-  justify-content: space-around; /* Ajustado para melhor espaçamento */
+  justify-content: space-around;
   margin-top: 1.5rem;
 }
 
 .item-resumo {
   text-align: center;
   flex: 1;
-  padding: 0 0.5rem; /* Adicionado padding para evitar que os números "grudem" nas bordas */
+  padding: 0 0.5rem;
 }
 
 .numero {
@@ -118,7 +114,6 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  /* max-height: calc(100vh - 280px); Removido para permitir rolagem da sidebar inteira */
 }
 
 .navegacao-lateral li {
@@ -126,13 +121,13 @@
 }
 
 .navegacao-lateral a {
-  display: flex; /* Para alinhar ícone e texto */
+  display: flex;
   align-items: center;
-  gap: 0.75rem; /* Espaçamento entre ícone e texto */
-  padding: 0.85rem 1.2rem; /* Aumentado um pouco o padding */
+  gap: 0.75rem;
+  padding: 0.85rem 1.2rem;
   color: var(--azul-fundo-claro);
   text-decoration: none;
-  border-radius: 8px; /* Borda mais arredondada */
+  border-radius: 8px;
   transition: all 0.3s ease;
   font-weight: 500;
   font-size: 0.95rem;
@@ -141,17 +136,16 @@
 .navegacao-lateral a:hover {
   background-color: rgba(255, 255, 255, 0.15);
   color: var(--cor-texto-claro);
-  transform: translateX(5px); /* Efeito sutil ao passar o mouse */
+  transform: translateX(5px);
 }
 
 .navegacao-lateral a.ativo {
   background-color: var(--azul-link-ativo);
   color: var(--cor-texto-claro);
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Sombra para o item ativo */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Conteúdo Principal */
 .conteudo-principal {
   flex: 1;
   padding: 2rem 3rem;
@@ -161,7 +155,7 @@
 
 .secao-conteudo {
   display: none;
-  animation: fadeIn 0.4s ease-out forwards; /* Ajustado animação */
+  animation: fadeIn 0.4s ease-out forwards;
 }
 
 .secao-conteudo.ativo {
@@ -173,19 +167,18 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Cards e Seções */
 .cartao-boasvindas {
   background-color: var(--cor-fundo-card);
   border-radius: 12px;
   padding: 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Sombra mais suave */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   margin-bottom: 2rem;
 }
 
 .cartao-boasvindas h1 {
   color: var(--azul-titulo-principal);
   margin-top: 0;
-  font-size: 2rem; /* Aumentado o tamanho do título */
+  font-size: 2rem;
   font-weight: 700;
 }
 
@@ -208,8 +201,8 @@
   border-radius: 8px;
   padding: 1.5rem;
   text-align: center;
-  border-left: 5px solid var(--azul-link-ativo); /* Borda mais pronunciada */
-  min-width: 200px; /* Aumentado min-width */
+  border-left: 5px solid var(--azul-link-ativo);
+  min-width: 200px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s ease;
 }
@@ -221,7 +214,7 @@
 .cartao-estatistica h3 {
   color: var(--azul-titulo-principal);
   margin: 0 0 0.5rem 0;
-  font-size: 1.6rem; /* Aumentado tamanho do número */
+  font-size: 1.6rem;
   font-weight: 700;
 }
 
@@ -237,7 +230,7 @@
 .ultimas-acoes h3 {
   color: var(--azul-titulo-principal);
   margin-bottom: 1rem;
-  font-size: 1.5rem; /* Aumentado tamanho do título */
+  font-size: 1.5rem;
   font-weight: 600;
 }
 
@@ -267,12 +260,12 @@
 
 .info-doacao {
   display: flex;
-  gap: 1.2rem; /* Aumentado espaçamento */
+  gap: 1.2rem;
   align-items: center;
 }
 
 .valor {
-  font-weight: 700; /* Mais negrito */
+  font-weight: 700;
   color: var(--azul-titulo-principal);
   font-size: 1.1rem;
 }
@@ -287,7 +280,6 @@
   font-size: 0.85rem;
 }
 
-/* Status Badges */
 .status {
   padding: 0.3rem 0.8rem;
   border-radius: 9999px;
@@ -295,28 +287,27 @@
   font-weight: 700;
   text-transform: uppercase;
   line-height: 1.2;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Sombra sutil para badges */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-/* Ajustes de cores para status */
 .status-concluido, .status-CONCLUIDO, .status-ativo, .status-ATIVO, .status-aprovado, .status-APROVADO {
   background-color: #dcfce7;
-  color: #16a34a; /* Verde mais escuro */
+  color: #16a34a;
 }
 
 .status-pendente, .status-PENDENTE, .status-aguardando, .status-AGUARDANDO {
   background-color: #fef3c7;
-  color: #d97706; /* Laranja mais escuro */
+  color: #d97706;
 }
 
 .status-cancelado, .status-inativo, .status-INATIVO, .status-rejeitado, .status-REJEITADO {
   background-color: #fee2e2;
-  color: #dc2626; /* Vermelho mais escuro */
+  color: #dc2626;
 }
 
 .status-disponivel, .status-DISPONIVEL {
     background-color: #DBEAFE;
-    color: #2563eb; /* Azul mais forte */
+    color: #2563eb;
 }
 .status-esgotado, .status-ESGOTADO {
     background-color: #E5E7EB;
@@ -336,7 +327,6 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-/* Métricas */
 .container-metricas h1 {
   color: var(--azul-titulo-principal);
   margin-top: 0;
@@ -378,7 +368,7 @@
 
 .metrica-item p {
   color: var(--azul-titulo-principal);
-  font-size: 1.8rem; /* Aumentado o número */
+  font-size: 1.8rem;
   font-weight: 700;
   margin: 0;
 }
@@ -421,7 +411,6 @@
   font-size: 0.9rem;
 }
 
-/* Cabeçalhos de Seção e Ações */
 .cabecalho-secao {
   display: flex;
   justify-content: space-between;
@@ -443,7 +432,6 @@
     font-size: 0.9rem;
 }
 
-/* Filtros */
 .filtros {
   display: flex;
   gap: 1.2rem;
@@ -469,7 +457,7 @@
 }
 
 .grupo-filtro select,
-.grupo-filtro input[type="text"] { /* Adicionado input para filtros de texto */
+.grupo-filtro input[type="text"] {
   padding: 0.6rem 0.9rem;
   border: 1px solid #d1d5db;
   border-radius: 6px;
@@ -486,7 +474,6 @@
   box-shadow: 0 0 0 3px var(--azul-sombra-foco);
 }
 
-/* Tabelas */
 .tabela-container {
   background-color: var(--cor-fundo-card);
   border-radius: 8px;
@@ -505,18 +492,18 @@ table.tabela-visitacao {
 
 table.tabela-padrao th, table.tabela-doacoes th, .tabela-beneficiarios th, .tabela-visitacao th {
   text-align: left;
-  padding: 0.9rem 1.5rem; /* Ajustado padding */
+  padding: 0.9rem 1.5rem;
   background-color: var(--azul-tabela-cabecalho);
   color: var(--azul-tabela-texto-cabecalho);
   font-size: 0.85rem;
-  font-weight: 700; /* Mais negrito */
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.7px;
   border-bottom: 2px solid var(--azul-link-ativo);
 }
 
 table.tabela-padrao td, table.tabela-doacoes td, .tabela-beneficiarios td, .tabela-visitacao td {
-  padding: 0.8rem 1.5rem; /* Ajustado padding */
+  padding: 0.8rem 1.5rem;
   border-bottom: 1px solid #e5e7eb;
   color: var(--cor-texto-escuro);
   font-size: 0.9rem;
@@ -536,21 +523,20 @@ table.tabela-doacoes tr:hover td,
   background-color: var(--cor-fundo-principal);
 }
 
-/* Formulários */
 .formulario-container,
 .formulario-doacao {
-  max-width: 750px; /* Aumentado a largura máxima */
+  max-width: 750px;
   margin: 2rem auto;
   background-color: var(--cor-fundo-card);
   padding: 2.5rem;
   border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12); /* Sombra mais profunda */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 }
 
 .formulario-container h1, .formulario-doacao h1 {
   color: var(--azul-titulo-principal);
   margin-top: 0;
-  margin-bottom: 2.5rem; /* Aumentado o margin-bottom */
+  margin-bottom: 2.5rem;
   text-align: center;
   font-size: 1.8rem;
   font-weight: 700;
@@ -558,7 +544,7 @@ table.tabela-doacoes tr:hover td,
 
 .form-coluna {
     display: flex;
-    gap: 2rem; /* Aumentado o gap */
+    gap: 2rem;
     margin-bottom: 0;
 }
 .form-coluna > * {
@@ -566,14 +552,14 @@ table.tabela-doacoes tr:hover td,
 }
 
 .campo-formulario {
-  margin-bottom: 1.5rem; /* Aumentado margin-bottom */
+  margin-bottom: 1.5rem;
 }
 
 .campo-formulario label {
   display: block;
-  margin-bottom: 0.6rem; /* Aumentado margin-bottom */
+  margin-bottom: 0.6rem;
   color: var(--cor-texto-escuro);
-  font-weight: 600; /* Mais negrito */
+  font-weight: 600;
   font-size: 0.9rem;
 }
 
@@ -585,9 +571,9 @@ table.tabela-doacoes tr:hover td,
 .campo-formulario select,
 .campo-formulario textarea {
   width: 100%;
-  padding: 0.75rem 1rem; /* Aumentado padding */
-  border: 1px solid #cbd5e0; /* Borda mais suave */
-  border-radius: 8px; /* Mais arredondado */
+  padding: 0.75rem 1rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
   font-size: 0.95rem;
   color: var(--cor-texto-escuro);
   background-color: var(--cor-fundo-card);
@@ -612,26 +598,25 @@ table.tabela-doacoes tr:hover td,
 .campo-formulario textarea:focus {
   outline: none;
   border-color: var(--azul-foco-campo);
-  box-shadow: 0 0 0 4px var(--azul-sombra-foco); /* Sombra de foco mais visível */
+  box-shadow: 0 0 0 4px var(--azul-sombra-foco);
 }
 
 .acoes-formulario {
   display: flex;
   justify-content: flex-end;
   gap: 1.2rem;
-  margin-top: 2.5rem; /* Aumentado margin-top */
+  margin-top: 2.5rem;
 }
 
-/* Botões */
 .botao-primario {
   background-color: var(--azul-botoes-primario);
   color: white;
   border: none;
-  padding: 0.85rem 1.8rem; /* Ajustado padding */
-  border-radius: 8px; /* Mais arredondado */
+  padding: 0.85rem 1.8rem;
+  border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease; /* Adicionado transform */
+  transition: background-color 0.2s ease, transform 0.1s ease;
   text-decoration: none;
   display: inline-block;
   font-size: 0.95rem;
@@ -647,11 +632,11 @@ table.tabela-doacoes tr:hover td,
   background-color: var(--cor-fundo-card);
   color: var(--azul-botoes-primario);
   border: 1px solid #d1d5db;
-  padding: 0.85rem 1.8rem; /* Ajustado padding */
-  border-radius: 8px; /* Mais arredondado */
+  padding: 0.85rem 1.8rem;
+  border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease, transform 0.1s ease; /* Adicionado transform */
+  transition: all 0.2s ease, transform 0.1s ease;
   text-decoration: none;
   display: inline-block;
   font-size: 0.95rem;
@@ -687,19 +672,18 @@ table.tabela-doacoes tr:hover td,
     background-color: #dc2626;
 }
 
-/* Mensagens */
 .lista-mensagens {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem; /* Aumentado o gap */
+  gap: 1.2rem;
   margin-top: 1.5rem;
 }
 
 .cartao-mensagem {
   background: var(--cor-fundo-card);
   border-radius: 10px;
-  padding: 1.5rem; /* Aumentado padding */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); /* Sombra mais suave */
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   margin-bottom: 1rem;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -715,7 +699,7 @@ table.tabela-doacoes tr:hover td,
   align-items: flex-start;
   margin-bottom: 0.8rem;
   flex-wrap: wrap;
-  gap: 0.8rem; /* Aumentado gap */
+  gap: 0.8rem;
 }
 .cabecalho-mensagem .info-basica {
     flex-grow: 1;
@@ -810,7 +794,6 @@ table.tabela-doacoes tr:hover td,
   align-items: center;
 }
 
-/* Visitas */
 .calendario-visitas {
   margin-top: 1.5rem;
 }
@@ -829,15 +812,15 @@ table.tabela-doacoes tr:hover td,
 
 .lista-visitas {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Card maior */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
 }
 
 .cartao-visita {
   background-color: var(--cor-fundo-card);
-  border: 1px solid #e0e0e0; /* Borda mais suave */
+  border: 1px solid #e0e0e0;
   border-radius: 10px;
-  padding: 1.5rem; /* Aumentado padding */
+  padding: 1.5rem;
   transition: all 0.3s ease;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
@@ -870,7 +853,6 @@ table.tabela-doacoes tr:hover td,
   font-size: 0.9rem;
 }
 
-/* Modals */
 .modal {
   display: none;
   position: fixed;
@@ -880,7 +862,7 @@ table.tabela-doacoes tr:hover td,
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.6); /* Fundo mais escuro */
+  background-color: rgba(0, 0, 0, 0.6);
   animation: fadeInModal 0.3s ease-out;
 }
 
@@ -891,12 +873,12 @@ table.tabela-doacoes tr:hover td,
 
 .modal-conteudo {
   background-color: var(--cor-fundo-card);
-  margin: 8vh auto; /* Posição um pouco mais centralizada */
-  padding: 2.5rem; /* Aumentado padding */
+  margin: 8vh auto;
+  padding: 2.5rem;
   border-radius: 10px;
   width: 90%;
-  max-width: 650px; /* Aumentado max-width */
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); /* Sombra mais forte */
+  max-width: 650px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
   position: relative;
   animation: slideInModal 0.3s ease-out;
 }
@@ -911,12 +893,12 @@ table.tabela-doacoes tr:hover td,
     justify-content: space-between;
     align-items: center;
     padding-bottom: 1.2rem;
-    margin-bottom: 1.8rem; /* Aumentado margin-bottom */
+    margin-bottom: 1.8rem;
     border-bottom: 1px solid #e5e7eb;
 }
 .modal-conteudo .cabecalho-modal h2 {
     margin: 0;
-    font-size: 1.5rem; /* Aumentado título */
+    font-size: 1.5rem;
     color: var(--azul-titulo-principal);
     font-weight: 700;
 }
@@ -924,7 +906,7 @@ table.tabela-doacoes tr:hover td,
 .fechar-modal {
   background: none;
   border: none;
-  font-size: 2rem; /* Aumentado tamanho do X */
+  font-size: 2rem;
   font-weight: 300;
   color: #6b7280;
   cursor: pointer;
@@ -934,7 +916,7 @@ table.tabela-doacoes tr:hover td,
 }
 .fechar-modal:hover {
   color: var(--cor-texto-escuro);
-  transform: rotate(90deg); /* Efeito de rotação ao fechar */
+  transform: rotate(90deg);
 }
 
 .modal-botoes {
@@ -946,13 +928,12 @@ table.tabela-doacoes tr:hover td,
   border-top: 1px solid #e5e7eb;
 }
 
-/* Progress Bars */
 #campanhas-gestor .progress {
-  height: 12px; /* Altura da barra */
+  height: 12px;
   border-radius: 6px;
   background-color: #e9ecef;
   margin: 0.6rem 0;
-  overflow: hidden; /* Garante que a barra interna respeite o border-radius */
+  overflow: hidden;
 }
 
 #campanhas-gestor .progress-bar {
@@ -961,8 +942,8 @@ table.tabela-doacoes tr:hover td,
   font-size: 0.75rem;
   line-height: 12px;
   text-align: center;
-  transition: width 0.6s ease-in-out; /* Transição mais suave */
-  border-radius: 6px; /* Borda da barra de preenchimento */
+  transition: width 0.6s ease-in-out;
+  border-radius: 6px;
 }
 #campanhas-gestor .progress-bar.bg-success {
     background-color: #10b981;
@@ -974,7 +955,6 @@ table.tabela-doacoes tr:hover td,
     background-color: #f59e0b;
 }
 
-/* Links de Relatório */
 .cartao-relatorio-link .card {
     transition: transform .2s ease-in-out, box-shadow .2s ease-in-out;
     background-color: var(--cor-fundo-card);
@@ -1000,11 +980,9 @@ table.tabela-doacoes tr:hover td,
     padding: 0.75rem 1rem;
 }
 
-
-/* Media Queries para Responsividade */
 @media (max-width: 1024px) {
   .barra-lateral {
-    width: 260px; /* Levemente reduzido */
+    width: 260px;
     padding: 1.8rem 1.2rem;
   }
   .conteudo-principal {
@@ -1024,11 +1002,11 @@ table.tabela-doacoes tr:hover td,
     height: auto;
     position: relative;
     padding: 1.5rem;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Sombra para a base da sidebar em mobile */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   }
   .navegacao-lateral ul {
       max-height: none;
-      display: flex; /* Para tornar a navegação horizontal em mobile */
+      display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 0.5rem;
@@ -1052,8 +1030,8 @@ table.tabela-doacoes tr:hover td,
       gap: 1rem;
   }
   .item-resumo {
-      flex: none; /* Remove flex-grow para melhor layout em mobile */
-      width: 45%; /* Duas colunas */
+      flex: none;
+      width: 45%;
   }
   .conteudo-principal {
     padding: 1.5rem;
@@ -1064,11 +1042,11 @@ table.tabela-doacoes tr:hover td,
   }
   .form-coluna {
       flex-direction: column;
-      gap: 0; /* O gap é gerenciado pelo margin-bottom do campo-formulario */
+      gap: 0;
   }
   .modal-conteudo {
       width: 95%;
-      margin: 3vh auto; /* Mais próximo do topo em telas pequenas */
+      margin: 3vh auto;
       padding: 1.5rem;
   }
   .tabela-container table {
@@ -1079,7 +1057,7 @@ table.tabela-doacoes tr:hover td,
   }
   table.tabela-padrao th, table.tabela-doacoes th, .tabela-beneficiarios th, .tabela-visitacao th,
   table.tabela-padrao td, table.tabela-doacoes td, .tabela-beneficiarios td, .tabela-visitacao td {
-      padding: 0.75rem 1rem; /* Reduzido padding da tabela */
+      padding: 0.75rem 1rem;
       font-size: 0.8rem;
   }
   .cabecalho-secao h1 {
@@ -1126,7 +1104,7 @@ table.tabela-doacoes tr:hover td,
       gap: 1rem;
   }
   .cartao-estatistica, .metrica-item {
-      min-width: 140px; /* Permite mais que duas colunas se necessário */
+      min-width: 140px;
       padding: 1rem;
   }
   .cartao-estatistica h3 {
@@ -1166,6 +1144,6 @@ table.tabela-doacoes tr:hover td,
       padding: 0.3rem 0.6rem;
   }
   .lista-visitas {
-      grid-template-columns: 1fr; /* Uma coluna em telas muito pequenas */
+      grid-template-columns: 1fr;
   }
 }

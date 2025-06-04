@@ -1,20 +1,13 @@
-/*
-  CSS Styles for Solidare Admin Panel
-  Author: Gemini AI
-  Date: June 4, 2025 (Updated)
-*/
-
-/* --- Variables --- */
 :root {
-  --primary-color: #2c3e50; /* Dark Blue */
-  --secondary-color: #34495e; /* Slightly Lighter Dark Blue */
-  --accent-color: #3498db; /* Bright Blue */
-  --text-light: #ecf0f1; /* Light Gray for dark backgrounds */
-  --text-dark: #2c3e50; /* Dark Blue for light backgrounds */
-  --success-color: #2ecc71; /* Green */
-  --warning-color: #f39c12; /* Orange */
-  --danger-color: #e74c3c; /* Red */
-  --info-color: #2196f3; /* Light Blue for info */
+  --primary-color: #2c3e50;
+  --secondary-color: #34495e;
+  --accent-color: #3498db;
+  --text-light: #ecf0f1;
+  --text-dark: #2c3e50;
+  --success-color: #2ecc71;
+  --warning-color: #f39c12;
+  --danger-color: #e74c3c;
+  --info-color: #2196f3;
   --border-radius-sm: 4px;
   --border-radius-md: 8px;
   --border-radius-lg: 12px;
@@ -23,10 +16,9 @@
   --box-shadow-lg: 0 8px 20px rgba(0, 0, 0, 0.12);
   --transition-speed: 0.3s;
   --transition-ease: ease-in-out;
-  --main-padding: 30px; /* Consistent padding for main content areas */
+  --main-padding: 30px;
 }
 
-/* --- Base Styles & Layout --- */
 body {
   margin: 0;
   padding: 0;
@@ -39,10 +31,9 @@ body {
 .painel-container {
   display: flex;
   min-height: 100vh;
-  background-color: #f5f7fa; /* Light background for the entire panel */
+  background-color: #f5f7fa;
 }
 
-/* --- Sidebar (Barra Lateral) --- */
 .barra-lateral {
   width: 280px;
   background: var(--primary-color);
@@ -55,12 +46,10 @@ body {
   display: flex;
   flex-direction: column;
   z-index: 1000;
-  /* Ensure content doesn't overflow if it becomes too large */
   overflow-y: auto;
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-x: hidden;
 }
 
-/* User Profile in Sidebar */
 .perfil-usuario {
   text-align: center;
   margin-bottom: 30px;
@@ -69,27 +58,27 @@ body {
 }
 
 .avatar-usuario {
-  width: 90px; /* Slightly smaller avatar */
+  width: 90px;
   height: 90px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 12px; /* Reduced margin */
+  margin-bottom: 12px;
   border: 3px solid var(--accent-color);
   box-shadow: var(--box-shadow-md);
 }
 
 .perfil-usuario h2 {
-  margin: 8px 0 4px; /* Adjusted margins */
-  font-size: 1.2rem; /* Slightly smaller font for better fit */
+  margin: 8px 0 4px;
+  font-size: 1.2rem;
   color: var(--text-light);
-  white-space: nowrap; /* Prevent name from wrapping aggressively */
+  white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis; /* Add ellipsis if name is too long */
+  text-overflow: ellipsis;
 }
 
 .perfil-usuario p {
   margin: 0;
-  font-size: 0.85rem; /* Slightly smaller font */
+  font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.7);
   white-space: nowrap;
   overflow: hidden;
@@ -99,32 +88,31 @@ body {
 .resumo-perfil {
   display: flex;
   justify-content: space-around;
-  margin-top: 15px; /* Reduced margin */
-  padding: 0 10px; /* Add some horizontal padding to prevent crowding */
+  margin-top: 15px;
+  padding: 0 10px;
 }
 
 .item-resumo {
   text-align: center;
-  flex: 1; /* Allow items to share space equally */
-  min-width: 0; /* Important for flex items with text-overflow */
+  flex: 1;
+  min-width: 0;
 }
 
 .numero {
-  font-size: 1.1rem; /* Slightly smaller */
+  font-size: 1.1rem;
   font-weight: bold;
   display: block;
   color: var(--accent-color);
 }
 
 .rotulo {
-  font-size: 0.75rem; /* Slightly smaller */
+  font-size: 0.75rem;
   color: rgba(255, 255, 255, 0.7);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* Sidebar Navigation */
 .navegacao-lateral ul {
   list-style: none;
   padding: 0;
@@ -136,7 +124,7 @@ body {
   align-items: center;
   color: var(--text-light);
   padding: 12px 15px;
-  margin: 6px 0; /* Reduced vertical margin between links */
+  margin: 6px 0;
   border-radius: var(--border-radius-md);
   text-decoration: none;
   transition: all var(--transition-speed) var(--transition-ease);
@@ -154,7 +142,6 @@ body {
   box-shadow: inset 3px 0 0 var(--accent-color);
 }
 
-/* --- Main Content Area --- */
 .conteudo-principal {
   flex: 1;
   padding: var(--main-padding);
@@ -177,7 +164,6 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- Cards & Sections --- */
 .cartao-boasvindas {
   background: white;
   border-radius: var(--border-radius-md);
@@ -192,7 +178,6 @@ body {
   font-size: 1.8rem;
 }
 
-/* Impact Statistics */
 .estatisticas-impacto {
   display: flex;
   gap: 20px;
@@ -228,7 +213,6 @@ body {
   font-size: 0.9rem;
 }
 
-/* Recent Actions / Donations */
 .ultimas-acoes {
   margin-top: 30px;
   padding-top: 20px;
@@ -290,7 +274,6 @@ body {
   text-transform: capitalize;
 }
 
-/* Status Colors */
 .status-concluido, .status-concluida, .status-ativo, .status-aprovado {
   color: var(--success-color);
   background-color: rgba(46, 204, 113, 0.1);
@@ -317,7 +300,6 @@ body {
   margin-top: 20px;
 }
 
-/* --- Section Headers & Actions --- */
 .cabecalho-secao {
   display: flex;
   justify-content: space-between;
@@ -336,7 +318,6 @@ body {
   gap: 10px;
 }
 
-/* Buttons */
 .botao-primario {
   background-color: var(--accent-color);
   color: white;
@@ -421,7 +402,6 @@ body {
   box-shadow: var(--box-shadow-sm);
 }
 
-/* --- Filters --- */
 .filtros {
   display: flex;
   gap: 15px;
@@ -460,7 +440,6 @@ body {
   cursor: pointer;
 }
 
-/* --- Tables --- */
 .tabela-container {
   background: white;
   border-radius: var(--border-radius-md);
@@ -518,7 +497,6 @@ table.tabela-metricas tr:hover {
   background-color: #fcfcfc;
 }
 
-/* --- Forms --- */
 .formulario-container, .formulario-doacao {
   background: white;
   border-radius: var(--border-radius-md);
@@ -604,7 +582,6 @@ table.tabela-metricas tr:hover {
   transform: scale(1.1);
 }
 
-/* --- Reports (Relatórios) --- */
 .lista-relatorios {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -653,7 +630,6 @@ table.tabela-metricas tr:hover {
   margin-top: 15px;
 }
 
-/* --- Messages (Mensagens) --- */
 .lista-mensagens {
   display: grid;
   gap: 15px;
@@ -665,7 +641,7 @@ table.tabela-metricas tr:hover {
   padding: 20px;
   box-shadow: var(--box-shadow-md);
   transition: all var(--transition-speed) var(--transition-ease);
-  overflow: hidden; /* Ensure content doesn't break out */
+  overflow: hidden;
 }
 
 .cartao-mensagem:hover {
@@ -678,19 +654,19 @@ table.tabela-metricas tr:hover {
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 15px;
-  flex-wrap: wrap; /* Allow wrapping of elements */
-  gap: 10px 15px; /* Vertical and horizontal gap */
+  flex-wrap: wrap;
+  gap: 10px 15px;
 }
 
 .info-basica {
-  flex: 1 1 auto; /* Allow this to grow and shrink */
-  min-width: 0; /* Important for text-overflow to work */
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .info-basica > div {
   margin-bottom: 5px;
   color: #555;
-  white-space: nowrap; /* Prevent subject/sender from wrapping */
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -702,8 +678,8 @@ table.tabela-metricas tr:hover {
 .status-acoes {
   display: flex;
   align-items: center;
-  gap: 10px; /* Reduced gap */
-  flex-shrink: 0; /* Prevent from shrinking too much */
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .corpo-mensagem {
@@ -717,7 +693,7 @@ table.tabela-metricas tr:hover {
     color: var(--text-dark);
     font-size: 1.05rem;
     font-weight: 600;
-    white-space: nowrap; /* Prevent subject from wrapping within body */
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -726,8 +702,8 @@ table.tabela-metricas tr:hover {
     color: #555;
     line-height: 1.6;
     font-size: 0.95rem;
-    display: -webkit-box; /* For multi-line ellipsis */
-    -webkit-line-clamp: 3; /* Limit to 3 lines */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -743,17 +719,16 @@ table.tabela-metricas tr:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap; /* Allow wrapping */
+  flex-wrap: wrap;
   gap: 5px 10px;
 }
 
 .acoes-mensagem {
   display: flex;
-  gap: 8px; /* Reduced gap for small buttons */
+  gap: 8px;
   justify-content: flex-end;
 }
 
-/* --- Modals (Popups) --- */
 .modal {
   display: none;
   position: fixed;
@@ -855,13 +830,11 @@ table.tabela-metricas tr:hover {
   gap: 10px;
 }
 
-/* Animations */
 @keyframes slideDown {
   from { transform: translateY(-50px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
 
-/* Loading Spinner */
 .loading {
   display: inline-block;
   width: 18px;
@@ -882,7 +855,6 @@ table.tabela-metricas tr:hover {
   border-top-color: #ccc;
 }
 
-/* --- Campaign Cards (Doador View) --- */
 .lista-campanhas-doador {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -964,9 +936,6 @@ table.tabela-metricas tr:hover {
     font-size: 1.5rem;
 }
 
-/* --- Responsive Adjustments --- */
-
-/* Laptops/Desktops (1200px and below) */
 @media (max-width: 1200px) {
   .barra-lateral {
     width: 240px;
@@ -977,7 +946,6 @@ table.tabela-metricas tr:hover {
   }
 }
 
-/* Tablets (992px and below) */
 @media (max-width: 992px) {
   .painel-container {
     flex-direction: column;
@@ -990,14 +958,13 @@ table.tabela-metricas tr:hover {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     border-bottom-left-radius: var(--border-radius-md);
     border-bottom-right-radius: var(--border-radius-md);
-    /* Ensure content inside is centered or well-distributed when horizontal */
-    flex-direction: row; /* Layout items horizontally */
-    flex-wrap: wrap; /* Allow wrapping */
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
   }
   .perfil-usuario {
-    width: 100%; /* Take full width for centering */
+    width: 100%;
     margin-bottom: 15px;
     padding-bottom: 10px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -1009,7 +976,7 @@ table.tabela-metricas tr:hover {
     justify-content: space-around;
   }
   .navegacao-lateral {
-    width: 100%; /* Take full width below profile */
+    width: 100%;
     margin-top: 15px;
   }
   .navegacao-lateral ul {
@@ -1074,7 +1041,6 @@ table.tabela-metricas tr:hover {
   }
 }
 
-/* Mobile (768px and below) */
 @media (max-width: 768px) {
   .estatisticas-impacto {
     flex-direction: column;
@@ -1098,7 +1064,7 @@ table.tabela-metricas tr:hover {
     min-width: unset;
   }
   .modal-conteudo {
-    width: 90%;
+    width: 85%;
     margin: 5% auto;
     padding: 20px;
   }
@@ -1130,25 +1096,23 @@ table.tabela-metricas tr:hover {
     justify-content: flex-start;
   }
 
-  /* Specific adjustments for message cards on smaller screens */
   .cartao-mensagem .cabecalho-mensagem {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
   .cartao-mensagem .status-acoes {
-    width: 100%; /* Make status/actions take full width */
-    justify-content: space-between; /* Distribute horizontally */
-    align-items: center; /* Keep items vertically centered */
-    gap: 5px; /* Reduce gap further */
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
   }
   .cartao-mensagem .botao-ver-mais {
-    flex-grow: 1; /* Allow button to grow */
+    flex-grow: 1;
     text-align: center;
   }
 }
 
-/* Smaller Mobile (576px and below) */
 @media (max-width: 576px) {
   .conteudo-principal {
     padding: 15px;
@@ -1187,29 +1151,26 @@ table.tabela-metricas tr:hover {
   .cabecalho-modal h2, .cabecalho-modal h3 {
     font-size: 1.2rem;
   }
-  /* For message cards, keep status and action together if possible */
   .cartao-mensagem .status-acoes {
-      flex-direction: column; /* Stack status and button on tiny screens */
+      flex-direction: column;
       align-items: flex-start;
   }
   .cartao-mensagem .status {
-      width: 100%; /* Make status take full width for better readability */
+      width: 100%;
       text-align: center;
-      margin-bottom: 5px; /* Space between status and button */
+      margin-bottom: 5px;
   }
   .cartao-mensagem .botao-ver-mais {
-      width: 100%; /* Full width button */
+      width: 100%;
   }
 }
 
-/* Ensure font awesome icons are visually aligned */
 .navegacao-lateral a i,
 .cabecalho-relatorio i {
   margin-right: 10px;
   font-size: 1.1em;
 }
 
-/* Additional utility classes */
 .text-center {
   text-align: center;
 }
@@ -1218,7 +1179,6 @@ table.tabela-metricas tr:hover {
 .mr-10 { margin-right: 10px; }
 .p-20 { padding: 20px; }
 
-/* Scrollbar styling (for webkit browsers) */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
