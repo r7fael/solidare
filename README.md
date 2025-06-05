@@ -108,12 +108,11 @@ As cinco histórias de usuário definidas para aprimorar a compreensão do futur
 As histórias e seus respectivos cenários podem ser acessados e revisados no seguinte documento: [Histórias de Usuário](https://docs.google.com/document/d/15lNQA87yBFTOUeHxDLRP9XGcK0BDhXuryyQLcdqMKJI/edit?usp=sharing).
 
 **Backlog**
-![Solidare_Backlog]
 
 ![Captura de tela 2025-06-05 203415](https://github.com/user-attachments/assets/1738ccf7-5366-4ad9-a92e-c2f3f6e192b9)
 
 **Painel**
-![Solidare_Painel]
+
 ![Captura de tela 2025-06-05 203432](https://github.com/user-attachments/assets/599da8a0-be8c-440c-acc6-5ec7ab750485)
 
 **Bug Tracker**
