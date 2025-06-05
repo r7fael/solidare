@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read # Necessário para actions/checkout
+      contents: read
 
     steps:
       - uses: actions/checkout@v4
@@ -30,7 +30,6 @@ jobs:
       - name: Cleaning testing files for package
         run: |
           rm -f db.sqlite3
-          # rm -f .env # Removido pois .env* já é excluído no zip e é bom ter cuidado ao remover .env do build server
       
       - name: Create deployment package
         run: |
@@ -64,6 +63,9 @@ jobs:
           pip install -r requirements.txt
       
       - name: Apply Django migrations (for a test DB)
+        env:
+          DJANGO_SETTINGS_MODULE: solidare.settings
+          TARGET_ENV: 'test'
         run: |
           source venv_test/bin/activate
           rm -f db.sqlite3 
@@ -86,6 +88,9 @@ jobs:
         run: npm ci 
 
       - name: Start Django development server for E2E tests
+        env:
+          DJANGO_SETTINGS_MODULE: solidare.settings
+          TARGET_ENV: 'test'
         run: |
           source venv_test/bin/activate
           python manage.py runserver 0.0.0.0:8000 &
@@ -115,7 +120,7 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write
-      contents: read 
+      contents: read
 
     steps:
       - name: Download artifact from build job
@@ -125,7 +130,6 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
-
       
       - name: Login to Azure
         uses: azure/login@v2
@@ -138,6 +142,6 @@ jobs:
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
-          app-name: 'solidare' # Nome da sua nova aplicação
+          app-name: 'solidare'
           slot-name: 'Production'
-          package: '.' # O conteúdo foi descompactado na raiz
+          package: '.'
