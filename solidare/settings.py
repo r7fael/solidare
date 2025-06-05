@@ -58,7 +58,6 @@ else:
         }
     }
 
-
 # Application definition
 INSTALLED_APPS = [
     # Django built-in apps
