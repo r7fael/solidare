@@ -1,8 +1,4 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-# More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
-
-name: Build and deploy Python app to Azure Web App - solidare
+name: Build, Test, and Deploy Python app to Azure Web App - solidare
 
 on:
   push:
@@ -14,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read # Necessário para actions/checkout
 
     steps:
       - uses: actions/checkout@v4
@@ -24,43 +20,102 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Create and start virtual environment
+      - name: Create virtual environment and install dependencies
         run: |
           python -m venv venv
           source venv/bin/activate
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
       
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-        
-      - name: Cleaning testing files
+      - name: Cleaning testing files for package
         run: |
           rm -f db.sqlite3
-          rm -f .env
+          # rm -f .env # Removido pois .env* já é excluído no zip e é bom ter cuidado ao remover .env do build server
       
-        
-      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
-
       - name: Create deployment package
         run: |
-          zip -r release.zip . -x "venv/*" "*.sqlite3" "__pycache__/*" "*.env*" ".git/*"
+          zip -r release.zip . -x "venv/*" "*.sqlite3" "__pycache__/*" "*.pyc" ".git/*" ".github/*" "cypress/*" "node_modules/*" "cypress.config.js" "package.json" "package-lock.json" "README.md" "*.log" ".env*" "Procfile_dev" "requirements_dev.txt"
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v4
         with:
           name: python-app
+          path: release.zip
+
+  e2e-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python version
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Create virtual environment for tests
+        run: python -m venv venv_test
+      
+      - name: Install Python dependencies for tests (Django, etc.)
+        run: |
+          source venv_test/bin/activate
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Apply Django migrations (for a test DB)
+        run: |
+          source venv_test/bin/activate
+          rm -f db.sqlite3 
+          python manage.py migrate --noinput 
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install npm dependencies (Cypress)
+        run: npm ci 
+
+      - name: Start Django development server for E2E tests
+        run: |
+          source venv_test/bin/activate
+          python manage.py runserver 0.0.0.0:8000 &
+
+      - name: Run Cypress E2E tests
+        uses: cypress-io/github-action@v6
+        with:
+          wait-on: 'http://127.0.0.1:8000' 
+          wait-on-timeout: 180 
+          browser: chrome
+          headless: true
+          
+      - name: Upload Cypress artifacts (videos, screenshots)
+        if: always() 
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-artifacts-solidare-${{ github.run_number }}
           path: |
-            release.zip
-            !venv/
+            cypress/videos
+            cypress/screenshots
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build, e2e-tests]
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
+      id-token: write
+      contents: read 
 
     steps:
       - name: Download artifact from build job
@@ -83,6 +138,6 @@ jobs:
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
-          app-name: 'solidare'
+          app-name: 'solidare' # Nome da sua nova aplicação
           slot-name: 'Production'
-          
+          package: '.' # O conteúdo foi descompactado na raiz
