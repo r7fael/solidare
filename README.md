@@ -126,7 +126,7 @@ Durante o desenvolvimento do projeto Solidare, a equipe adotou, em determinados 
 
 **Sketches do Protótipo Lo-Fi**
 <br>
-Disponível através do [Figma]().
+Disponível através do [Figma](https://www.figma.com/design/G0Yuk7esIEczckooTxzw0p/Untitled?node-id=0-1&p=f&t=OYGahr6fAL5XtRcY-0).
 <br>
 
 **ScreenCasts**
