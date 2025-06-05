@@ -5,6 +5,7 @@ from .models import Campanha
 from doacoes.models import Doacao 
 from decimal import Decimal, InvalidOperation
 from django.urls import reverse
+from django.utils import timezone
 
 @login_required
 def listar_campanhas(request):
@@ -82,6 +83,8 @@ def criar_campanha(request):
         descricao = request.POST.get('descricao')
         meta_str = request.POST.get('meta_arrecadacao','0').replace('.', '').replace(',', '.')
         data_fim_str = request.POST.get('data_fim') 
+        
+        imagem_arquivo = request.FILES.get('imagem_destaque') 
 
         if not nome or not descricao or not meta_str:
             messages.error(request, "Nome, descrição e meta são obrigatórios.")
@@ -96,7 +99,8 @@ def criar_campanha(request):
                         descricao=descricao,
                         meta_arrecadacao=meta,
                         gestor_responsavel=request.user,
-                        ativa=True 
+                        ativa=True,
+                        imagem_destaque=imagem_arquivo
                     )
                     if data_fim_str:
                         nova_campanha.data_fim = data_fim_str
@@ -131,32 +135,30 @@ def listar_campanhas_gestor(request):
         return redirect('usuarios:painel_gestor')
 
 
+
 @login_required
 def editar_campanha(request, campanha_id):
     secao_campanhas_gestor = 'campanhas-gestor'
 
     if request.user.tipo_usuario != 'gestor':
-        messages.error(request, "Acesso não permitido.")
+        messages.error(request, "Acesso não permitido. Apenas gestores podem editar campanhas.")
         return redirect('painel_doador' if request.user.tipo_usuario == 'doador' else 'login')
 
     campanha = get_object_or_404(Campanha, id=campanha_id)
-    if campanha.gestor_responsavel != request.user and not request.user.is_superuser:
-        messages.error(request, "Você não tem permissão para editar esta campanha.")
-        try:
-            return redirect(reverse('usuarios:painel_gestor_secao', kwargs={'secao_nome': secao_campanhas_gestor}))
-        except: return redirect('usuarios:painel_gestor')
 
 
     if request.method == 'POST':
         nome = request.POST.get('nome')
         descricao = request.POST.get('descricao')
-        meta_str = request.POST.get('meta_arrecadacao','0').replace('.', '').replace(',', '.')
+        meta_str = request.POST.get('meta_arrecadacao', '0').replace('.', '').replace(',', '.')
         data_fim_str = request.POST.get('data_fim')
-        ativa = request.POST.get('ativa') == 'on' 
+        ativa = request.POST.get('ativa') == 'on'
 
         if not nome or not descricao or not meta_str:
             messages.error(request, "Nome, descrição e meta são obrigatórios.")
         else:
+            nova_imagem = request.FILES.get('imagem_destaque')
+
             try:
                 meta = Decimal(meta_str)
                 if meta <= Decimal('0.00'):
@@ -166,20 +168,45 @@ def editar_campanha(request, campanha_id):
                     campanha.descricao = descricao
                     campanha.meta_arrecadacao = meta
                     campanha.ativa = ativa
+
                     if data_fim_str:
                         campanha.data_fim = data_fim_str
                     else:
-                        campanha.data_fim = None
+                        campanha.data_fim = None 
+
+                    if nova_imagem:
+                        campanha.imagem_destaque = nova_imagem
+                    
                     campanha.save()
                     messages.success(request, f"Campanha '{campanha.nome}' atualizada com sucesso!")
             except (ValueError, InvalidOperation):
-                messages.error(request, "Meta de arrecadação inválida.")
+                messages.error(request, "Meta de arrecadação inválida. Use o formato 1.234,56")
             except Exception as e:
-                messages.error(request, f"Erro ao atualizar campanha: {e}")
-        
-        return redirect('campanhas:listar_campanhas_gestor')
+                messages.error(request, f"Erro ao atualizar campanha: {str(e)}")
+
+        try:
+            return redirect(reverse('usuarios:painel_gestor_secao', kwargs={'secao_nome': secao_campanhas_gestor}))
+        except Exception:
+            return redirect('usuarios:painel_gestor')
+
+    try:
+        return redirect(reverse('usuarios:painel_gestor_secao', kwargs={'secao_nome': secao_campanhas_gestor}))
+    except Exception:
+        return redirect('usuarios:painel_gestor')
     
     try:
         return redirect(reverse('usuarios:painel_gestor_secao', kwargs={'secao_nome': secao_campanhas_gestor}))
     except Exception:
         return redirect('usuarios:painel_gestor')
+    
+
+def listar_campanhas_publicas(request):
+    campanhas_ativas = Campanha.objects.filter(
+        ativa=True, 
+        data_fim__gte=timezone.now()
+    ).order_by('-data_inicio')
+    
+    context = {
+        'campanhas_ativas': campanhas_ativas,
+    }
+    return render(request, 'lista_campanhas.html', context)

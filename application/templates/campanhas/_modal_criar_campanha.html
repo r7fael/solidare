@@ -1,29 +1,41 @@
 {% load l10n %}
-<div id="modal-criar-campanha" class="modal" style="display: none;">
+<div id="modal-criar-campanha" class="modal modal-painel" style="display: none;">
     <div class="modal-conteudo">
-        <span class="fechar-modal fechar-modal-criar-campanha">&times;</span>
-        <h2>Nova Campanha</h2>
-        <form id="form-criar-campanha" method="POST" action="{% url 'campanhas:criar_campanha' %}">
+        <button class="fechar-modal fechar-modal-criar-campanha">&times;</button>
+        <div class="cabecalho-modal">
+            <h2>Nova Campanha</h2>
+        </div>
+
+        <form id="form-criar-campanha" method="POST" action="{% url 'campanhas:criar_campanha' %}" enctype="multipart/form-data" class="formulario-geral">
             {% csrf_token %}
             <div class="campo-formulario">
-                <label for="criar-campanha-nome">Nome*</label>
+                <label for="criar-campanha-nome">Nome da Campanha*</label>
                 <input type="text" id="criar-campanha-nome" name="nome" required>
             </div>
             <div class="campo-formulario">
                 <label for="criar-campanha-descricao">Descrição*</label>
                 <textarea id="criar-campanha-descricao" name="descricao" rows="3" required></textarea>
             </div>
+            
             <div class="campo-formulario">
-                <label for="criar-campanha-meta">Meta de Arrecadação (R$)*</label>
-                <input type="text" id="criar-campanha-meta" name="meta_arrecadacao" placeholder="Ex: 10000,00" required>
+                <label for="criar-campanha-imagem">Imagem de Destaque (Opcional)</label>
+                <input type="file" id="criar-campanha-imagem" name="imagem_destaque" accept="image/*">
+                <small>Imagem que aparecerá no card da campanha para os doadores.</small>
             </div>
-            <div class="campo-formulario">
-                <label for="criar-campanha-data_fim">Data de Término (Opcional)</label>
-                <input type="date" id="criar-campanha-data_fim" name="data_fim">
+            
+            <div class="linha-formulario">
+                <div class="campo-formulario">
+                    <label for="criar-campanha-meta">Meta de Arrecadação (R$)*</label>
+                    <input type="text" id="criar-campanha-meta" name="meta_arrecadacao" placeholder="Ex: 10.000,00" required>
+                </div>
+                <div class="campo-formulario">
+                    <label for="criar-campanha-data_fim">Data de Término (Opcional)</label>
+                    <input type="date" id="criar-campanha-data_fim" name="data_fim">
+                </div>
             </div>
             <div class="acoes-formulario">
                 <button type="submit" class="botao-primario">Criar Campanha</button>
-                <button type="button" class="botao-secundario fechar-modal-criar-campanha">Cancelar</button>
+                <button type="button" class="botao-neutro fechar-modal-criar-campanha">Cancelar</button>
             </div>
         </form>
     </div>

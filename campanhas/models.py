@@ -18,6 +18,13 @@ class Campanha(models.Model):
     )
     ativa = models.BooleanField(default=True)
     
+    imagem_destaque = models.ImageField(
+        upload_to='campanhas_imagens/', 
+        null=True, 
+        blank=True, 
+        help_text="Imagem que aparecerá no card da campanha."
+    )
+    
     def __str__(self):
         return self.nome
 

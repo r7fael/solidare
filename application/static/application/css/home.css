@@ -1,6 +1,6 @@
 :root {
     --color-primary-dark: #003366;
-    --color-accent-orange: #FFA500; 
+    --color-accent-orange: #FFA500;
     --color-accent-yellow: #FFC107;
     --color-white: #ffffff;
     --color-text-light: #f8f9fa;
@@ -67,7 +67,7 @@ h1, h2, h3, h4 {
 }
 
 .logo-cabecalho {
-    height: 50px; 
+    height: 50px;
 }
 
 .navegacao-principal ul {
@@ -91,16 +91,38 @@ h1, h2, h3, h4 {
 }
 
 .nav-center-logo {
-    height: 35px; 
+    height: 35px;
     margin: 0 10px;
 }
 
-.area-perfil .icone-perfil {
-    height: 35px; 
-    width: 35px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 1px solid var(--color-border);
+.area-perfil {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.links-autenticacao {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.links-autenticacao a {
+    color: var(--color-primary-dark);
+    padding: 2px 0;
+    transition: color 0.3s ease;
+}
+
+.links-autenticacao a:hover {
+    color: var(--color-accent-orange);
+}
+
+.separador-links {
+    color: var(--color-text-medium);
+    font-size: 0.8rem;
+    margin: 2px 0;
 }
 
 .alternador-navegacao-mobile {
@@ -113,10 +135,10 @@ h1, h2, h3, h4 {
 }
 
 .secao-destaque {
-    background-color: var(--color-primary-dark); 
+    background-color: var(--color-primary-dark);
     color: var(--color-white);
     padding: 40px 0;
-    min-height: 60vh; 
+    min-height: 60vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -132,28 +154,28 @@ h1, h2, h3, h4 {
 .destaque-imagem-ancora-clicavel {
     display: inline-block;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border-radius: 10px; 
+    border-radius: 10px;
 }
 
 .destaque-imagem-ancora-clicavel:hover {
     transform: scale(1.03);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
 .destaque-imagem-conteudo {
-    max-width: 550px; 
+    max-width: 550px;
     margin: 0 auto;
 }
 
 .destaque-imagem-conteudo img {
-    border-radius: 10px; 
-    display: block; 
+    border-radius: 10px;
+    display: block;
 }
 
 .botao {
     display: inline-block;
     padding: 12px 30px;
-    border-radius: 50px; 
+    border-radius: 50px;
     font-weight: 600;
     text-align: center;
     transition: transform 0.2s ease, background-color 0.3s ease;
@@ -190,7 +212,7 @@ h1, h2, h3, h4 {
 
 .quem-somos-conteudo-principal {
     display: grid;
-    grid-template-columns: 1.2fr 0.8fr; 
+    grid-template-columns: 1.2fr 0.8fr;
     gap: 40px;
     align-items: center;
     margin-bottom: 50px;
@@ -202,17 +224,17 @@ h1, h2, h3, h4 {
 }
 
 .quem-somos-logo img {
-    max-width: 280px; 
+    max-width: 280px;
     margin: 0 auto;
 }
 
 .instituto-solidare-detalhes {
     display: grid;
-    grid-template-columns: 0.8fr 1.2fr; 
+    grid-template-columns: 0.8fr 1.2fr;
     gap: 40px;
-    align-items: flex-start; 
+    align-items: flex-start;
     padding: 30px;
-    background-color: var(--color-background-light); 
+    background-color: var(--color-background-light);
     border-radius: 8px;
 }
 .instituto-imagem-conteudo img {
@@ -228,7 +250,7 @@ h1, h2, h3, h4 {
 }
 
 .logo-instituto-bottom {
-    height: 50px; 
+    height: 50px;
     margin-top: 15px;
 }
 
@@ -271,16 +293,16 @@ h1, h2, h3, h4 {
 
 @media (max-width: 768px) {
     .navegacao-principal {
-        display: none; 
+        display: none;
         position: absolute;
-        top: 100%; 
+        top: 100%;
         left: 0;
         width: 100%;
         background-color: var(--color-white);
         box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
     .navegacao-principal.ativo {
-        display: block; 
+        display: block;
     }
     .navegacao-principal ul {
         flex-direction: column;
@@ -295,18 +317,21 @@ h1, h2, h3, h4 {
         padding: 15px;
     }
     .nav-center-logo-link {
-        display: none; 
+        display: none;
     }
     .alternador-navegacao-mobile {
-        display: block; 
+        display: block;
     }
 
     .logo-cabecalho {
         height: 40px;
     }
-    .area-perfil .icone-perfil {
-        height: 30px;
-        width: 30px;
+    .area-perfil {
+        display: flex;
+        order: 1;
+    }
+    .links-autenticacao {
+        font-size: 0.85rem;
     }
 
     .secao-destaque {
@@ -314,7 +339,7 @@ h1, h2, h3, h4 {
         padding: 30px 0;
     }
     .destaque-imagem-conteudo {
-        max-width: 300px; 
+        max-width: 300px;
     }
 
     .secao-quem-somos h3,

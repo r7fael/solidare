@@ -1,11 +1,14 @@
 {% load l10n %}
-<div id="modal-editar-campanha" class="modal" style="display: none;">
+<div id="modal-editar-campanha" class="modal modal-painel" style="display: none;">
     <div class="modal-conteudo">
-        <span class="fechar-modal fechar-modal-editar-campanha">&times;</span>
-        <h2>Editar Campanha</h2>
-        <form id="form-editar-campanha" method="POST" action="">
+        <button class="fechar-modal fechar-modal-editar-campanha">&times;</button>
+        <div class="cabecalho-modal">
+            <h2>Editar Campanha</h2>
+        </div>
+        <form id="form-editar-campanha" method="POST" action="" enctype="multipart/form-data" class="formulario-geral">
             {% csrf_token %}
             <input type="hidden" id="editar-campanha-id" name="campanha_id">
+            
             <div class="campo-formulario">
                 <label for="editar-campanha-nome">Nome*</label>
                 <input type="text" id="editar-campanha-nome" name="nome" required>
@@ -14,23 +17,36 @@
                 <label for="editar-campanha-descricao">Descrição*</label>
                 <textarea id="editar-campanha-descricao" name="descricao" rows="3" required></textarea>
             </div>
+
             <div class="campo-formulario">
-                <label for="editar-campanha-meta">Meta de Arrecadação (R$)*</label>
-                <input type="text" id="editar-campanha-meta" name="meta_arrecadacao" required>
+                <label for="editar-campanha-imagem">Imagem de Destaque</label>
+                <p id="imagem-atual-container" style="margin-bottom: 10px;">
+                    Imagem Atual: <a id="link-imagem-atual" href="#" target="_blank" rel="noopener noreferrer">Ver Imagem</a>
+                    <span id="sem-imagem-atual">Nenhuma</span>
+                </p>
+                <input type="file" id="editar-campanha-imagem" name="imagem_destaque" accept="image/*">
+                <small>Envie uma nova imagem para substituir a atual. Deixe em branco para manter a imagem existente.</small>
             </div>
-            <div class="campo-formulario">
-                <label for="editar-campanha-data_fim">Data de Término (Opcional)</label>
-                <input type="date" id="editar-campanha-data_fim" name="data_fim">
+
+            <div class="linha-formulario">
+                <div class="campo-formulario">
+                    <label for="editar-campanha-meta">Meta de Arrecadação (R$)*</label>
+                    <input type="text" id="editar-campanha-meta" name="meta_arrecadacao" required>
+                </div>
+                <div class="campo-formulario">
+                    <label for="editar-campanha-data_fim">Data de Término</label>
+                    <input type="date" id="editar-campanha-data_fim" name="data_fim">
+                </div>
             </div>
-            <div class="campo-formulario">
-                <label for="editar-campanha-ativa" class="checkbox-label">
-                    <input type="checkbox" id="editar-campanha-ativa" name="ativa">
-                    <span>Ativa</span>
-                </label>
+            
+            <div class="campo-formulario campo-checkbox">
+                <input type="checkbox" id="editar-campanha-ativa" name="ativa" value="on" class="checkbox-input">
+                <label for="editar-campanha-ativa" class="checkbox-label">Campanha Ativa</label>
             </div>
+
             <div class="acoes-formulario">
                 <button type="submit" class="botao-primario">Salvar Alterações</button>
-                <button type="button" class="botao-secundario fechar-modal-editar-campanha">Cancelar</button>
+                <button type="button" class="botao-neutro fechar-modal-editar-campanha">Cancelar</button>
             </div>
         </form>
     </div>

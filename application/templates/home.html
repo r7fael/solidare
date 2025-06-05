@@ -17,16 +17,19 @@
             </a>
             <nav class="navegacao-principal">
                 <ul>
-                    <li><a href="/usuarios/registro/">Apadrinhar</a></li>
+                    <li><a href="">Apadrinhar</a></li>
                     <li><a href="#quem-somos">Quem somos</a></li>
-                    <li><a href="/usuarios/registro/">Doe agora</a></li>
+                    <li><a href="">Doe agora</a></li>
+                    <li><a href="{% url 'campanhas:lista_campanhas_publicas' %}">Campanhas</a></li>
                     <li><a href="#informacoes">Informações</a></li>
                 </ul>
             </nav>
             <div class="area-perfil">
-                <a href="/usuarios/login/" class="perfil-ancora">
-                    <img src="{% static 'application/images/user_icon.png' %}" alt="Perfil do Usuário" class="icone-perfil">
-                </a>
+                <div class="links-autenticacao">
+                    <a href="/usuarios/login/" class="link-entrar">Entre</a>
+                    <span class="separador-links">ou</span>
+                    <a href="/usuarios/registro/" class="link-registrar">Registre-se</a>
+                </div>
             </div>
             <button class="alternador-navegacao-mobile" aria-label="Abrir menu">
                 <i class="fas fa-bars"></i>
