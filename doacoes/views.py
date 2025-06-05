@@ -34,7 +34,7 @@ def minhas_doacoes(request):
             messages.success(request, "Todas as doações pendentes foram confirmadas!")
         else:
             messages.info(request, "Nenhuma doação pendente para confirmar.")
-        return redirect('doacoes:minhas_doacoes')
+        return redirect('usuarios:painel_doador')
     
     doacoes = Doacao.objects.filter(doador=request.user).select_related('campanha').order_by('-data_doacao')
     doacoes_concluidas = doacoes.filter(status='CONCLUIDO')
@@ -79,7 +79,7 @@ def nova_doacao(request):
                 status='PENDENTE'
             )
             messages.success(request, "Doação registrada com sucesso!")
-            return redirect('doacoes:minhas_doacoes')
+            return redirect('usuarios:painel_doador')
             
         except ValueError:
             messages.error(request, "Valor inválido. Use o formato 1.234,56")
@@ -88,38 +88,41 @@ def nova_doacao(request):
     
     return redirect('doacoes:minhas_doacoes')
 
-@login_required
+@login_required 
 def aceitar_doacao(request, doacao_id):
-    if not request.user.is_authenticated:
-        return redirect('usuarios:login')
-    
+    is_gestor = False
+    if hasattr(request.user, 'tipo_usuario'): 
+        if request.user.tipo_usuario == 'gestor':
+            is_gestor = True
+    elif hasattr(request.user, 'gestor_profile'):
+        if request.user.gestor_profile is not None:
+            is_gestor = True
+
+    if not is_gestor:
+        messages.error(request, "Você não tem permissão para realizar esta ação.")
+        return redirect('usuarios:painel_doador') 
+
     try:
         doacao = get_object_or_404(Doacao, id=doacao_id)
 
-        if doacao.doador != request.user and not request.user.is_staff:
-             messages.error(request, "Você não tem permissão para modificar esta doação.")
-             return redirect('doacoes:minhas_doacoes')
-
         if doacao.status == 'PENDENTE':
-            doacao.status = 'CONCLUIDO'
+            doacao.status = 'CONCLUIDO' 
             doacao.save(update_fields=['status']) 
 
             if doacao.campanha:
                 Campanha.objects.filter(id=doacao.campanha.id).update(
                     valor_arrecadado=F('valor_arrecadado') + doacao.valor
                 )
-            messages.success(request, "Doação confirmada com sucesso!")
+            messages.success(request, "Doação aprovada com sucesso!")
         else:
-            messages.warning(request, "Esta doação já foi processada.")
+            messages.warning(request, "Esta doação não está pendente ou já foi processada.")
             
     except Doacao.DoesNotExist:
-        messages.error(request, "Doação não encontrada")
+        messages.error(request, "Doação não encontrada.")
     except Exception as e:
-        messages.error(request, f"Erro ao confirmar doação: {str(e)}")
+        messages.error(request, f"Erro ao aprovar doação: {str(e)}")
 
-    if request.user.is_staff and request.user.tipo_usuario == 'gestor':
-        return redirect(request.META.get('HTTP_REFERER', 'painel_gestor'))
-    return redirect('doacoes:minhas_doacoes')
+    return redirect(request.META.get('HTTP_REFERER', 'usuarios:painel_gestor'))
 
 @login_required
 def todas_as_doacoes(request):

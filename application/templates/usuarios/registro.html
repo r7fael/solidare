@@ -3,7 +3,26 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Cadastro</title>
+    <title>Cadastro - Plataforma Solidare</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('{% static "application/images/fundo2.jpeg" %}'); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: 'Poppins', sans-serif;
+            color: var(--cor-texto-principal); 
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px 0; 
+        }
+    </style>
     <link rel="stylesheet" href="{% static 'application/css/registro.css' %}">
 </head>
 <body>
@@ -15,7 +34,7 @@
             {% if messages %}
             <div class="alertas">
                 {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                <div class="alerta alerta-{{ message.tags }}">{{ message }}</div>
                 {% endfor %}
             </div>
             {% endif %}
@@ -27,7 +46,9 @@
             
             <div class="grupo-campo">
                 <label>CPF:</label>
-                <input type="text" name="cpf" required placeholder="000.000.000-00">
+                <input type="text" name="cpf" required placeholder="000.000.000-00" 
+                       pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" 
+                       title="Formato esperado: 000.000.000-00">
             </div>
             
             <div class="grupo-campo">
@@ -43,14 +64,27 @@
             <div class="grupo-campo">
                 <label>Tipo de usuário:</label>
                 <select name="tipo_usuario" required>
-                    <option value="">Selecione...</option>
+                    <option value="" disabled selected>Selecione...</option>
                     <option value="doador">Doador</option>
                     <option value="gestor">Gestor</option>
                 </select>
             </div>
             
             <button type="submit" class="botao-principal">Cadastrar</button>
+            <a href="{% url 'usuarios:login' %}" class="link-inferior">Já tem uma conta? Faça login</a>
         </form>
     </div>
+    <script>
+        const cpfInput = document.querySelector('input[name="cpf"]');
+        if (cpfInput) {
+            cpfInput.addEventListener('input', function (e) {
+                let value = e.target.value.replace(/\D/g, '');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                e.target.value = value.slice(0, 14);
+            });
+        }
+    </script>
 </body>
 </html>

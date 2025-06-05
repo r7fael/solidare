@@ -6,459 +6,464 @@
 {% block title %}Painel do Gestor | SOLIDARE{% endblock %}
 
 {% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{% static 'application/css/painel_gestor.css' %}?v={% now 'U' %}">
 
-<div class="painel-container">
-    <div class="barra-lateral">
-        <div class="perfil-usuario">
-            <img src="{% static 'application/images/user-avatar.png' %}" alt="Avatar" class="avatar-usuario">
-            <h2>{{ user.nome }}</h2>
-            <p>Gestor</p>
-            <div class="resumo-perfil">
-                <div class="item-resumo">
-                    <span class="numero">R$ {{ total_doacoes|floatformat:2|intcomma }}</span>
-                    <span class="rotulo">Total Arrecadado</span>
-                </div>
-                <div class="item-resumo">
-                    <span class="numero">{{ total_beneficiarios }}</span>
-                    <span class="rotulo">Beneficiários</span>
+<div class="painel-fundo-wrapper">
+    <div class="painel-container">
+        <div class="barra-lateral">
+            <div class="perfil-usuario">
+                <img src="{% static 'application/images/logo_sem_nome.png' %}" alt="Logo Solidare" class="logo-usuario">
+                <h2>{{ user.nome }}</h2>
+                <p>Gestor</p>
+                <div class="resumo-perfil">
+                    <div class="item-resumo">
+                        <span class="numero">R$ {{ total_doacoes|floatformat:2|intcomma }}</span>
+                        <span class="rotulo">Total Arrecadado</span>
+                    </div>
+                    <div class="item-resumo">
+                        <span class="numero">{{ total_beneficiarios }}</span>
+                        <span class="rotulo">Beneficiários</span>
+                    </div>
                 </div>
             </div>
+            <nav class="navegacao-lateral">
+                <ul>
+                    <li><a href="#" data-secao="inicio" class="{% if secao_ativa == 'inicio' %}ativo{% endif %}">Início</a></li>
+                    <li><a href="#" data-secao="campanhas-gestor" class="{% if secao_ativa == 'campanhas-gestor' %}ativo{% endif %}">Campanhas</a></li>
+                    <li><a href="#" data-secao="doacoes" class="{% if secao_ativa == 'doacoes' %}ativo{% endif %}">Doações</a></li>
+                    <li><a href="#" data-secao="beneficiarios" class="{% if secao_ativa == 'beneficiarios' %}ativo{% endif %}">Beneficiários</a></li>
+                    <li><a href="#" data-secao="cadastrar-beneficiario" class="{% if secao_ativa == 'cadastrar-beneficiario' %}ativo{% endif %}">Cadastrar Beneficiário</a></li>
+                    <li><a href="#" data-secao="mensagens" class="{% if secao_ativa == 'mensagens' %}ativo{% endif %}">Mensagens</a></li>
+                    <li><a href="#" data-secao="relatorios" class="{% if secao_ativa == 'relatorios' %}ativo{% endif %}">Relatórios</a></li>
+                    <li><a href="#" data-secao="visitacao" class="{% if secao_ativa == 'visitacao' %}ativo{% endif %}">Visitações</a></li>
+                    <li><a href="{% url 'usuarios:logout' %}">Sair</a></li>
+                </ul>
+            </nav>
         </div>
-        <nav class="navegacao-lateral">
-            <ul>
-                <li><a href="#" data-secao="inicio" class="{% if secao_ativa == 'inicio' %}ativo{% endif %}">Início</a></li>
-                <li><a href="#" data-secao="campanhas-gestor" class="{% if secao_ativa == 'campanhas-gestor' %}ativo{% endif %}">Campanhas</a></li>
-                <li><a href="#" data-secao="doacoes" class="{% if secao_ativa == 'doacoes' %}ativo{% endif %}">Doações</a></li>
-                <li><a href="#" data-secao="beneficiarios" class="{% if secao_ativa == 'beneficiarios' %}ativo{% endif %}">Beneficiários</a></li>
-                <li><a href="#" data-secao="cadastrar-beneficiario" class="{% if secao_ativa == 'cadastrar-beneficiario' %}ativo{% endif %}">Cadastrar Beneficiário</a></li>
-                <li><a href="#" data-secao="mensagens" class="{% if secao_ativa == 'mensagens' %}ativo{% endif %}">Mensagens</a></li>
-                <li><a href="#" data-secao="relatorios" class="{% if secao_ativa == 'relatorios' %}ativo{% endif %}">Relatórios</a></li>
-                <li><a href="#" data-secao="visitacao" class="{% if secao_ativa == 'visitacao' %}ativo{% endif %}">Visitações</a></li>
-                <li><a href="{% url 'usuarios:logout' %}">Sair</a></li>
-            </ul>
-        </nav>
-    </div>
 
-    <div class="conteudo-principal">
+        <div class="conteudo-principal">
+    
         {% if messages %}
             {% for message in messages %}
-                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert" style="margin-bottom: 15px;">
+                <div class="alerta alerta-{{ message.tags|default:'info' }} alerta-popup" role="alert">
                     {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" class="botao-fechar-alerta" onclick="this.parentElement.style.display='none';">&times;</button>
                 </div>
             {% endfor %}
         {% endif %}
 
-        <div id="inicio" class="secao-conteudo {% if secao_ativa == 'inicio' %}ativo{% endif %}">
-            <div class="cartao-boasvindas">
-                <h1>Bem-vindo, Gestor {{ user.nome }}!</h1>
-                <p>Acompanhe aqui as métricas da plataforma:</p>
-                <div class="estatisticas-impacto">
-                    <div class="cartao-estatistica">
-                        <h3>R$ {{ total_doacoes|floatformat:2|intcomma }}</h3>
-                        <p>Total Arrecadado</p>
-                    </div>
-                    <div class="cartao-estatistica">
-                        <h3>{{ pessoas_impactadas }}</h3>
-                        <p>Pessoas impactadas</p>
-                    </div>
-                    <div class="cartao-estatistica">
-                        <h3>{{ doacoes_concluidas }}</h3>
-                        <p>Doações concluídas</p>
-                    </div>
-                    <div class="cartao-estatistica">
-                        <h3>{{ total_beneficiarios }}</h3>
-                        <p>Beneficiários ativos</p>
-                    </div>
-                </div>
-                <div class="ultimas-acoes">
-                    <h3>Últimas doações recebidas</h3>
-                    <div class="lista-doacoes">
-                        {% for doacao_item in ultimas_doacoes %}
-                        <div class="item-doacao">
-                            <div class="info-doacao">
-                                <span class="valor">R$ {{ doacao_item.valor|intcomma }}</span>
-                                <span class="doador">{{ doacao_item.doador.nome }}</span>
-                                <span class="destino">
-                                    {% if doacao_item.campanha %}
-                                        Campanha: {{ doacao_item.campanha.nome }}
-                                    {% else %}
-                                        {{ doacao_item.get_destino_display }}
-                                    {% endif %}
-                                </span>
-                            </div>
-                            <span class="status status-{{ doacao_item.status|lower }}">
-                                {{ doacao_item.get_status_display }}
-                            </span>
+            <div id="inicio" class="secao-conteudo {% if secao_ativa == 'inicio' %}ativo{% endif %}">
+                <div class="cartao-boasvindas">
+                    <h1>Bem-vindo, {{ user.nome }}!</h1>
+                    <p>Acompanhe aqui as métricas da plataforma:</p>
+                    <div class="estatisticas-impacto">
+                        <div class="cartao-estatistica">
+                            <h3>R$ {{ total_doacoes|floatformat:2|intcomma }}</h3>
+                            <p>Total Arrecadado</p>
                         </div>
-                        {% empty %}
-                        <div class="sem-doacoes">
-                            <p>Nenhuma doação registrada ainda</p>
+                        <div class="cartao-estatistica">
+                            <h3>{{ pessoas_impactadas }}</h3>
+                            <p>Pessoas impactadas</p>
                         </div>
-                        {% endfor %}
+                        <div class="cartao-estatistica">
+                            <h3>{{ doacoes_concluidas }}</h3>
+                            <p>Doações concluídas</p>
+                        </div>
+                        <div class="cartao-estatistica">
+                            <h3>{{ total_beneficiarios }}</h3>
+                            <p>Beneficiários ativos</p>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="campanhas-gestor" class="secao-conteudo {% if secao_ativa == 'campanhas-gestor' %}ativo{% endif %}">
-            {% include 'campanhas/_secao_campanhas_gestor.html' %}
-        </div>
-
-        <div id="doacoes" class="secao-conteudo {% if secao_ativa == 'doacoes' %}ativo{% endif %}">
-            <div class="cabecalho-secao">
-                <h1>Gerenciamento de Doações</h1>
-            </div>
-            <div class="filtros">
-                <div class="grupo-filtro">
-                    <label for="filtro-status-doacoes-gestor">Status:</label>
-                    <select id="filtro-status-doacoes-gestor">
-                        <option value="TODOS">Todos</option>
-                        <option value="CONCLUIDO">Concluídas</option>
-                        <option value="PENDENTE">Pendentes</option>
-                    </select>
-                </div>
-                <div class="grupo-filtro">
-                    <label for="filtro-destino-doacoes-gestor">Destino/Campanha:</label>
-                    <select id="filtro-destino-doacoes-gestor">
-                        <option value="TODOS">Todos</option>
-                        {% for destino_cod, destino_nome in destinos_disponiveis %}
-                        <option value="destino_{{ destino_cod }}">{{ destino_nome }} (Geral)</option>
-                        {% endfor %}
-                        {% for camp in todas_as_campanhas %}
-                        <option value="campanha_{{ camp.id }}">{{ camp.nome }} (Campanha)</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="grupo-filtro">
-                    <label for="filtro-metodo-doacoes-gestor">Método:</label>
-                    <select id="filtro-metodo-doacoes-gestor">
-                        <option value="TODOS">Todos</option>
-                        {% for metodo_cod, metodo_nome in metodos_disponiveis %}
-                        <option value="{{ metodo_cod }}">{{ metodo_nome }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-            <div class="tabela-container">
-                <table class="tabela-doacoes">
-                    <thead>
-                        <tr>
-                            <th>Doador</th>
-                            <th>Valor</th>
-                            <th>Método</th>
-                            <th>Destino/Campanha</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for doacao_item in doacoes %}
-                        <tr data-status="{{ doacao_item.status }}" data-destino="{% if doacao_item.campanha %}campanha_{{ doacao_item.campanha.id }}{% elif doacao_item.destino %}destino_{{ doacao_item.destino }}{% else %}TODOS{% endif %}" data-metodo="{{ doacao_item.metodo }}">
-                            <td>{{ doacao_item.doador.nome }}</td>
-                            <td>R$ {{ doacao_item.valor|intcomma }}</td>
-                            <td>{{ doacao_item.get_metodo_display }}</td>
-                            <td>
-                                {% if doacao_item.campanha %}
-                                    Campanha: {{ doacao_item.campanha.nome }}
-                                {% elif doacao_item.destino %}
-                                    {{ doacao_item.get_destino_display }}
-                                {% else %}
-                                    N/A
-                                {% endif %}
-                            </td>
-                            <td>
-                                <span class="status status-{{ doacao_item.status|lower }}">
+                    <div class="ultimas-acoes">
+                        <h3>Últimas doações recebidas</h3>
+                        <div class="lista-doacoes">
+                            {% for doacao_item in ultimas_doacoes %}
+                            <div class="item-doacao">
+                                <div class="info-doacao">
+                                    <span class="valor">R$ {{ doacao_item.valor|intcomma }}</span>
+                                    <span class="doador">{{ doacao_item.doador.nome }}</span>
+                                    <span class="destino">
+                                        {% if doacao_item.campanha %}
+                                            Campanha: {{ doacao_item.campanha.nome }}
+                                        {% else %}
+                                            {{ doacao_item.get_destino_display }}
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <span class="status status-{{ doacao_item.status|lower|unlocalize }}">
                                     {{ doacao_item.get_status_display }}
                                 </span>
-                            </td>
-                            <td>
-                                {% if doacao_item.status == 'PENDENTE' %}
-                                <a href="{% url 'doacoes:aceitar_doacao' doacao_item.id %}" class="botao-acao">Aprovar</a>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="6" class="sem-registros">
+                            </div>
+                            {% empty %}
+                            <div class="sem-doacoes">
                                 <p>Nenhuma doação registrada ainda</p>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <div id="beneficiarios" class="secao-conteudo {% if secao_ativa == 'beneficiarios' %}ativo{% endif %}">
-            <div class="cabecalho-secao">
-                <h1>Gerenciamento de Beneficiários</h1>
+            <div id="campanhas-gestor" class="secao-conteudo {% if secao_ativa == 'campanhas-gestor' %}ativo{% endif %}">
+                {% include 'campanhas/_secao_campanhas_gestor.html' %}
             </div>
-            <div class="filtros">
-                <div class="grupo-filtro">
-                    <label for="filtro-status-benef">Status:</label>
-                    <select id="filtro-status-benef">
-                        <option value="TODOS">Todos</option>
-                        <option value="ATIVO">Ativos</option>
-                        <option value="INATIVO">Inativos</option>
-                    </select>
+
+            <div id="doacoes" class="secao-conteudo {% if secao_ativa == 'doacoes' %}ativo{% endif %}">
+                <div class="cabecalho-secao">
+                    <h1>Gerenciamento de Doações</h1>
                 </div>
-                <div class="grupo-filtro">
-                    <label for="filtro-idade-benef">Idade:</label>
-                    <select id="filtro-idade-benef">
-                        <option value="TODOS">Todas</option>
-                        <option value="0-12">0-12 anos</option>
-                        <option value="13-18">13-18 anos</option>
-                        <option value="19+">19+ anos</option>
-                    </select>
+                <div class="filtros">
+                    <div class="grupo-filtro">
+                        <label for="filtro-status-doacoes-gestor">Status:</label>
+                        <select id="filtro-status-doacoes-gestor">
+                            <option value="TODOS">Todos</option>
+                            <option value="CONCLUIDO">Concluídas</option>
+                            <option value="PENDENTE">Pendentes</option>
+                        </select>
+                    </div>
+                    <div class="grupo-filtro">
+                        <label for="filtro-destino-doacoes-gestor">Destino/Campanha:</label>
+                        <select id="filtro-destino-doacoes-gestor">
+                            <option value="TODOS">Todos</option>
+                            {% for destino_cod, destino_nome in destinos_disponiveis %}
+                            <option value="destino_{{ destino_cod }}">{{ destino_nome }} (Geral)</option>
+                            {% endfor %}
+                            {% for camp in todas_as_campanhas %}
+                            <option value="campanha_{{ camp.id }}">{{ camp.nome }} (Campanha)</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="grupo-filtro">
+                        <label for="filtro-metodo-doacoes-gestor">Método:</label>
+                        <select id="filtro-metodo-doacoes-gestor">
+                            <option value="TODOS">Todos</option>
+                            {% for metodo_cod, metodo_nome in metodos_disponiveis %}
+                            <option value="{{ metodo_cod }}">{{ metodo_nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="tabela-container">
+                    <table class="tabela-padrao">
+                        <thead>
+                            <tr>
+                                <th>Doador</th>
+                                <th>Valor</th>
+                                <th>Método</th>
+                                <th>Destino/Campanha</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for doacao_item in doacoes %}
+                            <tr data-status="{{ doacao_item.status }}" data-destino="{% if doacao_item.campanha %}campanha_{{ doacao_item.campanha.id }}{% elif doacao_item.destino %}destino_{{ doacao_item.destino }}{% else %}TODOS{% endif %}" data-metodo="{{ doacao_item.metodo }}">
+                                <td>{{ doacao_item.doador.nome }}</td>
+                                <td>R$ {{ doacao_item.valor|intcomma }}</td>
+                                <td>{{ doacao_item.get_metodo_display }}</td>
+                                <td>
+                                    {% if doacao_item.campanha %}
+                                        Campanha: {{ doacao_item.campanha.nome }}
+                                    {% elif doacao_item.destino %}
+                                        {{ doacao_item.get_destino_display }}
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="status status-{{ doacao_item.status|lower|unlocalize }}">
+                                        {{ doacao_item.get_status_display }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if doacao_item.status == 'PENDENTE' %}
+                                    <a href="{% url 'doacoes:aceitar_doacao' doacao_item.id %}" class="botao-pequeno aprovar">Aprovar</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="sem-registros">
+                                    <p>Nenhuma doação registrada ainda</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div class="tabela-container">
-                <table class="tabela-beneficiarios">
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Idade</th>
-                            <th>Responsável</th>
-                            <th>Contato</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for beneficiario_item in beneficiarios %}
-                        <tr data-status="{% if beneficiario_item.ativo %}ATIVO{% else %}INATIVO{% endif %}" data-idade="{{ beneficiario_item.idade }}">
-                            <td>{{ beneficiario_item.nome }}</td>
-                            <td>{{ beneficiario_item.idade }} anos</td>
-                            <td>{{ beneficiario_item.nome_responsavel|default:"-" }}</td>
-                            <td>
-                                {% if beneficiario_item.telefone_responsavel %}
-                                {{ beneficiario_item.telefone_responsavel }}
-                                {% else %}
-                                {{ beneficiario_item.email_responsavel|default:"-" }}
+
+            <div id="beneficiarios" class="secao-conteudo {% if secao_ativa == 'beneficiarios' %}ativo{% endif %}">
+                <div class="cabecalho-secao">
+                    <h1>Gerenciamento de Beneficiários</h1>
+                </div>
+                <div class="filtros">
+                    <div class="grupo-filtro">
+                        <label for="filtro-status-benef">Status:</label>
+                        <select id="filtro-status-benef">
+                            <option value="TODOS">Todos</option>
+                            <option value="ATIVO">Ativos</option>
+                            <option value="INATIVO">Inativos</option>
+                        </select>
+                    </div>
+                    <div class="grupo-filtro">
+                        <label for="filtro-idade-benef">Idade:</label>
+                        <select id="filtro-idade-benef">
+                            <option value="TODOS">Todas</option>
+                            <option value="0-12">0-12 anos</option>
+                            <option value="13-18">13-18 anos</option>
+                            <option value="19+">19+ anos</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="tabela-container">
+                    <table class="tabela-padrao">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Idade</th>
+                                <th>Responsável</th>
+                                <th>Contato</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for beneficiario_item in beneficiarios %}
+                            <tr data-status="{% if beneficiario_item.ativo %}ATIVO{% else %}INATIVO{% endif %}" data-idade="{{ beneficiario_item.idade }}">
+                                <td>{{ beneficiario_item.nome }}</td>
+                                <td>{{ beneficiario_item.idade }} anos</td>
+                                <td>{{ beneficiario_item.nome_responsavel|default:"-" }}</td>
+                                <td>
+                                    {% if beneficiario_item.telefone_responsavel %}
+                                    {{ beneficiario_item.telefone_responsavel }}
+                                    {% else %}
+                                    {{ beneficiario_item.email_responsavel|default:"-" }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="status status-{% if beneficiario_item.ativo %}ativo{% else %}inativo{% endif %}">
+                                        {% if beneficiario_item.ativo %}Ativo{% else %}Inativo{% endif %}
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="botao-pequeno editar editar-beneficiario-btn" 
+                                        data-id="{{ beneficiario_item.id }}"
+                                        data-nome="{{ beneficiario_item.nome }}"
+                                        data-idade="{{ beneficiario_item.idade }}"
+                                        data-nome_responsavel="{{ beneficiario_item.nome_responsavel|default:'' }}"
+                                        data-telefone_responsavel="{{ beneficiario_item.telefone_responsavel|default:'' }}"
+                                        data-email_responsavel="{{ beneficiario_item.email_responsavel|default:'' }}"
+                                        data-observacoes="{{ beneficiario_item.observacoes|default:'' }}"
+                                        data-ativo="{{ beneficiario_item.ativo|yesno:'true,false' }}">Editar</button>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="sem-registros">
+                                    <p>Nenhum beneficiário cadastrado</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="cadastrar-beneficiario" class="secao-conteudo {% if secao_ativa == 'cadastrar-beneficiario' %}ativo{% endif %}">
+                <div class="cabecalho-secao">
+                    <h1>Cadastrar Novo Beneficiário</h1>
+                </div>
+                <div class="formulario-wrapper">
+                    <form method="POST" action="{% url 'cadastrar_beneficiario' %}" class="formulario-geral">
+                        {% csrf_token %}
+                        <div class="linha-formulario">
+                            <div class="campo-formulario">
+                                <label for="cad-nome">Nome*</label>
+                                <input type="text" id="cad-nome" name="nome" required>
+                            </div>
+                            <div class="campo-formulario">
+                                <label for="cad-idade">Idade*</label>
+                                <input type="number" id="cad-idade" name="idade" min="0" required>
+                            </div>
+                        </div>
+                        <div class="linha-formulario">
+                            <div class="campo-formulario">
+                                <label for="cad-nome_responsavel">Nome do Responsável</label>
+                                <input type="text" id="cad-nome_responsavel" name="nome_responsavel">
+                            </div>
+                            <div class="campo-formulario">
+                                <label for="cad-telefone_responsavel">Telefone do Responsável</label>
+                                <input type="tel" id="cad-telefone_responsavel" name="telefone_responsavel">
+                            </div>
+                        </div>
+                        <div class="linha-formulario">
+                             <div class="campo-formulario">
+                                <label for="cad-email_responsavel">Email do Responsável</label>
+                                <input type="email" id="cad-email_responsavel" name="email_responsavel">
+                            </div>
+                            <div class="campo-formulario">
+                                <label for="cad-observacoes">Observações</label>
+                                <textarea id="cad-observacoes" name="observacoes" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="acoes-formulario">
+                            <button type="submit" class="botao-primario">Cadastrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div id="mensagens" class="secao-conteudo {% if secao_ativa == 'mensagens' %}ativo{% endif %}">
+                <div class="cabecalho-secao">
+                    <h1>Mensagens dos Doadores</h1>
+                </div>
+                <div class="filtros">
+                    <div class="grupo-filtro">
+                        <label for="filtro-status-gestor-mensagens">Status:</label>
+                        <select id="filtro-status-gestor-mensagens">
+                            <option value="TODAS">Todas</option>
+                            <option value="AGUARDANDO">Aguardando Aprovação</option>
+                            <option value="APROVADO">Aprovadas</option>
+                            <option value="REJEITADO">Rejeitadas</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="lista-mensagens">
+                    {% for mensagem_item in mensagens %}
+                    <div class="cartao-mensagem" data-status="{{ mensagem_item.status|lower|unlocalize }}" data-id="{{ mensagem_item.id }}">
+                        <div class="cabecalho-mensagem">
+                            <div class="info-basica-mensagem">
+                                <div class="remetente-mensagem">
+                                    <strong>De:</strong> {{ mensagem_item.remetente.nome }}
+                                </div>
+                                {% if mensagem_item.destinatario %}
+                                <div class="destinatario-mensagem">
+                                    <strong>Para:</strong> {{ mensagem_item.destinatario.nome }}
+                                </div>
                                 {% endif %}
-                            </td>
-                            <td>
-                                <span class="status status-{% if beneficiario_item.ativo %}ativo{% else %}inativo{% endif %}">
-                                    {% if beneficiario_item.ativo %}Ativo{% else %}Inativo{% endif %}
+                                <div class="assunto-mensagem">
+                                    <strong>Assunto:</strong> {{ mensagem_item.assunto }}
+                                </div>
+                            </div>
+                            <div class="status-acoes-mensagem">
+                                <span class="status status-{{ mensagem_item.status|lower|unlocalize }}">
+                                    {{ mensagem_item.get_status_display }}
                                 </span>
-                            </td>
-                            <td>
-                                <button class="botao-acao editar-beneficiario-btn" 
-                                    data-id="{{ beneficiario_item.id }}"
-                                    data-nome="{{ beneficiario_item.nome }}"
-                                    data-idade="{{ beneficiario_item.idade }}"
-                                    data-nome_responsavel="{{ beneficiario_item.nome_responsavel|default:'' }}"
-                                    data-telefone_responsavel="{{ beneficiario_item.telefone_responsavel|default:'' }}"
-                                    data-email_responsavel="{{ beneficiario_item.email_responsavel|default:'' }}"
-                                    data-observacoes="{{ beneficiario_item.observacoes|default:'' }}"
-                                    data-ativo="{{ beneficiario_item.ativo|yesno:'true,false' }}">Editar</button>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="6" class="sem-registros">
-                                <p>Nenhum beneficiário cadastrado</p>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                                <button class="botao-pequeno ver-mais btn-ver-mais-mensagem-gestor" data-id="{{ mensagem_item.id }}">Ver mais</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal modal-painel" id="modal-mensagem-gestor-{{ mensagem_item.id }}">
+                        <div class="modal-conteudo">
+                            <div class="cabecalho-modal">
+                                <h3>Detalhes da Mensagem</h3>
+                                <button class="fechar-modal fechar-modal-gestor-mensagem" data-modal-id="modal-mensagem-gestor-{{ mensagem_item.id }}">&times;</button>
+                            </div>
+                            <div class="corpo-modal">
+                                <p><strong>De:</strong> {{ mensagem_item.remetente.nome }}</p>
+                                {% if mensagem_item.destinatario %}<p><strong>Para:</strong> {{ mensagem_item.destinatario.nome }}</p>{% endif %}
+                                <p><strong>Assunto:</strong> {{ mensagem_item.assunto }}</p>
+                                <p><strong>Status:</strong> <span class="status status-{{ mensagem_item.status|lower|unlocalize }}">{{ mensagem_item.get_status_display }}</span></p>
+                                <h4>Mensagem:</h4>
+                                <p class="conteudo-mensagem-modal">{{ mensagem_item.conteudo }}</p>
+                                {% if mensagem_item.status == 'REJEITADO' and mensagem_item.motivo_rejeicao %}
+                                <div class="motivo-rejeicao"><strong>Motivo da rejeição:</strong> {{ mensagem_item.motivo_rejeicao }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="rodape-modal">
+                                {% if mensagem_item.status == 'AGUARDANDO' %}
+                                <div class="acoes-modal">
+                                    <form method="POST" action="{% url 'mensagens:aprovar_mensagem' mensagem_item.id %}" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="botao-primario">Aprovar</button>
+                                    </form>
+                                    <button type="button" class="botao-secundario btn-rejeitar-mensagem-gestor" data-id="{{ mensagem_item.id }}">Rejeitar</button>
+                                </div>
+                                {% endif %}
+                                <button class="botao-neutro fechar-modal-gestor-mensagem" data-modal-id="modal-mensagem-gestor-{{ mensagem_item.id }}">Voltar</button>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="sem-mensagens">
+                        <p>Nenhuma mensagem recebida</p>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
 
-        <div id="cadastrar-beneficiario" class="secao-conteudo {% if secao_ativa == 'cadastrar-beneficiario' %}ativo{% endif %}">
-            <div class="cabecalho-secao">
-                <h1>Cadastrar Novo Beneficiário</h1>
-            </div>
-            <div class="formulario-container">
-                <form method="POST" action="{% url 'cadastrar_beneficiario' %}">
-                    {% csrf_token %}
-                    <div class="form-coluna">
-                        <div class="campo-formulario">
-                            <label for="cad-nome">Nome*</label>
-                            <input type="text" id="cad-nome" name="nome" required>
-                        </div>
-                        <div class="campo-formulario">
-                            <label for="cad-idade">Idade*</label>
-                            <input type="number" id="cad-idade" name="idade" min="0" required>
-                        </div>
-                        <div class="campo-formulario">
-                            <label for="cad-nome_responsavel">Nome do Responsável</label>
-                            <input type="text" id="cad-nome_responsavel" name="nome_responsavel">
-                        </div>
-                    </div>
-                    <div class="form-coluna">
-                        <div class="campo-formulario">
-                            <label for="cad-telefone_responsavel">Telefone do Responsável</label>
-                            <input type="tel" id="cad-telefone_responsavel" name="telefone_responsavel">
-                        </div>
-                        <div class="campo-formulario">
-                            <label for="cad-email_responsavel">Email do Responsável</label>
-                            <input type="email" id="cad-email_responsavel" name="email_responsavel">
-                        </div>
-                        <div class="campo-formulario">
-                            <label for="cad-observacoes">Observações</label>
-                            <textarea id="cad-observacoes" name="observacoes" rows="3"></textarea>
-                        </div>
-                    </div>
-                    <div class="acoes-formulario">
-                        <button type="submit" class="botao-primario">Cadastrar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <div id="mensagens" class="secao-conteudo {% if secao_ativa == 'mensagens' %}ativo{% endif %}">
-            <div class="cabecalho-secao">
-                <h1>Mensagens dos Doadores</h1>
-            </div>
-            <div class="filtros-mensagens">
-                <div class="grupo-filtro">
-                    <label for="filtro-status-gestor-mensagens">Status:</label>
-                    <select id="filtro-status-gestor-mensagens">
-                        <option value="TODAS">Todas</option>
-                        <option value="AGUARDANDO">Aguardando Aprovação</option>
-                        <option value="APROVADO">Aprovadas</option>
-                        <option value="REJEITADO">Rejeitadas</option>
-                    </select>
+            <div id="relatorios" class="secao-conteudo {% if secao_ativa == 'relatorios' %}ativo{% endif %}">
+                <div class="cabecalho-secao">
+                    <h1>Relatórios</h1>
                 </div>
-            </div>
-            <div class="lista-mensagens">
-                {% for mensagem_item in mensagens %}
-                <div class="cartao-mensagem" data-status="{{ mensagem_item.status|lower }}" data-id="{{ mensagem_item.id }}">
-                    <div class="cabecalho-mensagem">
-                        <div class="info-basica">
-                            <div class="remetente">
-                                <strong>De:</strong> {{ mensagem_item.remetente.nome }}
-                            </div>
-                            {% if mensagem_item.destinatario %}
-                            <div class="destinatario">
-                                <strong>Para:</strong> {{ mensagem_item.destinatario.nome }}
-                            </div>
-                            {% endif %}
-                            <div class="assunto">
-                                <strong>Assunto:</strong> {{ mensagem_item.assunto }}
-                            </div>
-                        </div>
-                        <div class="status-acoes">
-                            <span class="status status-{{ mensagem_item.status|lower }}">
-                                {{ mensagem_item.get_status_display }}
-                            </span>
-                            <button class="botao-ver-mais btn-ver-mais-mensagem-gestor" data-id="{{ mensagem_item.id }}">Ver mais</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-mensagem modal-gestor-mensagem" id="modal-mensagem-gestor-{{ mensagem_item.id }}" style="display:none;">
-                    <div class="modal-conteudo">
-                        <div class="cabecalho-modal">
-                            <h3>Detalhes da Mensagem</h3>
-                            <button class="fechar-modal fechar-modal-gestor-mensagem" data-modal-id="modal-mensagem-gestor-{{ mensagem_item.id }}">&times;</button>
-                        </div>
-                        <div class="corpo-modal">
-                            <p><strong>De:</strong> {{ mensagem_item.remetente.nome }}</p>
-                            {% if mensagem_item.destinatario %}<p><strong>Para:</strong> {{ mensagem_item.destinatario.nome }}</p>{% endif %}
-                            <p><strong>Assunto:</strong> {{ mensagem_item.assunto }}</p>
-                            <p><strong>Status:</strong> <span class="status status-{{ mensagem_item.status|lower }}">{{ mensagem_item.get_status_display }}</span></p>
-                            <h4>Mensagem:</h4>
-                            <p>{{ mensagem_item.conteudo }}</p>
-                            {% if mensagem_item.status == 'REJEITADO' and mensagem_item.motivo_rejeicao %}
-                            <div class="motivo-rejeicao"><strong>Motivo da rejeição:</strong> {{ mensagem_item.motivo_rejeicao }}</div>
-                            {% endif %}
-                        </div>
-                        <div class="rodape-modal">
-                            {% if mensagem_item.status == 'AGUARDANDO' %}
-                            <div class="acoes-modal">
-                                <form method="POST" action="{% url 'mensagens:aprovar_mensagem' mensagem_item.id %}" style="display: inline;">
-                                    {% csrf_token %}
-                                    <button type="submit" class="botao-primario">Aprovar</button>
-                                </form>
-                                <button type="button" class="botao-secundario btn-rejeitar-mensagem-gestor" data-id="{{ mensagem_item.id }}">Rejeitar</button>
-                            </div>
-                            {% endif %}
-                            <button class="botao-voltar fechar-modal-gestor-mensagem" data-modal-id="modal-mensagem-gestor-{{ mensagem_item.id }}">Voltar</button>
-                        </div>
-                    </div>
-                </div>
-                {% empty %}
-                <div class="sem-mensagens">
-                    <p>Nenhuma mensagem recebida</p>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-
-        <div id="relatorios" class="secao-conteudo {% if secao_ativa == 'relatorios' %}ativo{% endif %}">
-            <div class="cabecalho-secao">
-                <h1>Relatórios</h1>
-            </div>
-            <div class="lista-relatorios">
-                <div class="card mb-3 shadow-sm cartao-relatorio-link">
-                    <div class="card-body">
-                        <h5 class="card-title text-primary">Relatório de Impacto das Doações</h5>
-                        <p class="card-text">Gere um arquivo PDF com o resumo completo do impacto das doações concluídas, incluindo totais arrecadados, número de doadores, e distribuição por destino, campanha e método de pagamento.</p>
-                        <a href="{% url 'relatorios:exportar_relatorio_impacto_pdf' %}" class="btn btn-success" target="_blank">
-                            <i class="fas fa-file-pdf"></i> Gerar Relatório de Impacto em PDF
+                <div class="lista-relatorios">
+                    <div class="cartao-item">
+                        <h3>Relatório de Impacto das Doações</h3>
+                        <p>Gere um arquivo PDF com o resumo completo do impacto das doações concluídas, incluindo totais arrecadados, número de doadores, e distribuição por destino, campanha e método de pagamento.</p>
+                        <br>
+                        <a href="{% url 'relatorios:exportar_relatorio_impacto_pdf' %}" class="botao-sucesso" target="_blank">
+                            Gerar Relatório em PDF
                         </a>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div id="visitacao" class="secao-conteudo {% if secao_ativa == 'visitacao' %}ativo{% endif %}">
-            <div class="cabecalho-secao">
-                <h1>Gerenciamento de Visitações</h1>
-                <div class="acoes-superiores">
-                    <button id="btn-abrir-modal-nova-visitacao" class="botao-primario">Nova Data</button>
+            <div id="visitacao" class="secao-conteudo {% if secao_ativa == 'visitacao' %}ativo{% endif %}">
+                <div class="cabecalho-secao">
+                    <h1>Gerenciamento de Visitações</h1>
+                    <div class="acoes-cabecalho">
+                        <button id="btn-abrir-modal-nova-visitacao" class="botao-primario">Nova Data de Visitação</button>
+                    </div>
                 </div>
-            </div>
-            <div class="filtros">
-                <div class="grupo-filtro">
-                    <label for="filtro-status-visitacao-gestor">Status:</label>
-                    <select id="filtro-status-visitacao-gestor">
-                        <option value="TODOS">Todos</option>
-                        <option value="DISPONIVEL">Disponível</option>
-                        <option value="ESGOTADO">Esgotado</option>
-                        <option value="REALIZADA">Realizada</option>
-                    </select>
+                <div class="filtros">
+                    <div class="grupo-filtro">
+                        <label for="filtro-status-visitacao-gestor">Status:</label>
+                        <select id="filtro-status-visitacao-gestor">
+                            <option value="TODOS">Todos</option>
+                            <option value="DISPONIVEL">Disponível</option>
+                            <option value="ESGOTADO">Esgotado</option>
+                            <option value="REALIZADA">Realizada</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="tabela-container">
-                <table class="tabela-visitacao">
-                    <thead>
-                        <tr>
-                            <th>Data</th>
-                            <th>Capacidade</th>
-                            <th>Agendados</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for visita_item in visitas %}
-                        <tr data-status="{{ visita_item.status|lower }}" data-data="{{ visita_item.data|date:'Y-m-d' }}">
-                            <td>{{ visita_item.data|date:"d/m/Y" }}</td>
-                            <td>{{ visita_item.capacidade_maxima }} pessoas</td>
-                            <td>{{ visita_item.num_doadores }}/{{ visita_item.capacidade_maxima }}</td>
-                            <td>
-                                <span class="status status-{{ visita_item.status|lower }}">
-                                    {{ visita_item.get_status_display }}
-                                </span>
-                            </td>
-                            <td>
-                                <button class="botao-acao btn-editar-visitacao-gestor" 
-                                    data-id="{{ visita_item.id }}"
-                                    data-data="{{ visita_item.data|date:'Y-m-d' }}"
-                                    data-capacidade="{{ visita_item.capacidade_maxima }}">Editar</button>
-                                <a href="{% url 'visitacao:excluir_visita' visita_item.id %}" class="botao-acao excluir">Excluir</a>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr><td colspan="5" class="sem-registros"><p>Nenhuma data de visitação cadastrada</p></td></tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <div class="tabela-container">
+                    <table class="tabela-padrao">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Capacidade</th>
+                                <th>Agendados</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for visita_item in visitas %}
+                            <tr data-status="{{ visita_item.status|lower|unlocalize }}" data-data="{{ visita_item.data|date:'Y-m-d' }}">
+                                <td>{{ visita_item.data|date:"d/m/Y" }}</td>
+                                <td>{{ visita_item.capacidade_maxima }} pessoas</td>
+                                <td>{{ visita_item.num_doadores }}/{{ visita_item.capacidade_maxima }}</td>
+                                <td>
+                                    <span class="status status-{{ visita_item.status|lower|unlocalize }}">
+                                        {{ visita_item.get_status_display }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="botao-pequeno editar btn-editar-visitacao-gestor" 
+                                        data-id="{{ visita_item.id }}"
+                                        data-data="{{ visita_item.data|date:'Y-m-d' }}"
+                                        data-capacidade="{{ visita_item.capacidade_maxima }}">Editar</button>
+                                    <a href="{% url 'visitacao:excluir_visita' visita_item.id %}" class="botao-pequeno excluir">Excluir</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="5" class="sem-registros"><p>Nenhuma data de visitação cadastrada</p></td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -467,57 +472,76 @@
 {% include 'campanhas/_modal_criar_campanha.html' %}
 {% include 'campanhas/_modal_editar_campanha.html' %}
 
-<div id="modal-editar-beneficiario-gestor" class="modal" style="display:none;">
+<div id="modal-editar-beneficiario-gestor" class="modal modal-painel">
     <div class="modal-conteudo">
-        <span class="fechar-modal fechar-modal-editar-beneficiario-gestor">&times;</span>
-        <h2>Editar Beneficiário</h2>
-        <form id="form-editar-beneficiario-gestor" method="POST" action="{% url 'editar_beneficiario' %}">
+        <button class="fechar-modal fechar-modal-editar-beneficiario-gestor">&times;</button>
+        <div class="cabecalho-modal">
+            <h2>Editar Beneficiário</h2>
+        </div>
+        <form id="form-editar-beneficiario-gestor" method="POST" action="{% url 'editar_beneficiario' %}" class="formulario-geral">
             {% csrf_token %}
             <input type="hidden" id="edit-benef-id" name="beneficiario_id">
-            <div class="form-coluna">
+            <div class="linha-formulario">
                 <div class="campo-formulario"><label for="edit-benef-nome">Nome*</label><input type="text" id="edit-benef-nome" name="nome" required></div>
                 <div class="campo-formulario"><label for="edit-benef-idade">Idade*</label><input type="number" id="edit-benef-idade" name="idade" min="0" required></div>
+            </div>
+            <div class="linha-formulario">
                 <div class="campo-formulario"><label for="edit-benef-nome_responsavel">Nome do Responsável</label><input type="text" id="edit-benef-nome_responsavel" name="nome_responsavel"></div>
-            </div>
-            <div class="form-coluna">
                 <div class="campo-formulario"><label for="edit-benef-telefone_responsavel">Telefone</label><input type="tel" id="edit-benef-telefone_responsavel" name="telefone_responsavel"></div>
-                <div class="campo-formulario"><label for="edit-benef-email_responsavel">Email</label><input type="email" id="edit-benef-email_responsavel" name="email_responsavel"></div>
-                <div class="campo-formulario"><label for="edit-benef-observacoes">Observações</label><textarea id="edit-benef-observacoes" name="observacoes" rows="3"></textarea></div>
             </div>
-            <div class="campo-formulario"><label for="edit-benef-ativo" class="checkbox-label"><input type="checkbox" id="edit-benef-ativo" name="ativo" value="true"><span>Ativo</span></label></div>
-            <div class="acoes-formulario"><button type="submit" class="botao-primario">Salvar</button><button type="button" class="botao-secundario fechar-modal-editar-beneficiario-gestor">Cancelar</button></div>
+            <div class="linha-formulario">
+                 <div class="campo-formulario"><label for="edit-benef-email_responsavel">Email</label><input type="email" id="edit-benef-email_responsavel" name="email_responsavel"></div>
+                 <div class="campo-formulario"><label for="edit-benef-observacoes">Observações</label><textarea id="edit-benef-observacoes" name="observacoes" rows="3"></textarea></div>
+            </div>
+            <div class="campo-formulario campo-checkbox">
+                <input type="checkbox" id="edit-benef-ativo" name="ativo" value="true" class="checkbox-input">
+                <label for="edit-benef-ativo" class="checkbox-label">Ativo</label>
+            </div>
+            <div class="acoes-formulario">
+                <button type="submit" class="botao-primario">Salvar Alterações</button>
+                <button type="button" class="botao-neutro fechar-modal-editar-beneficiario-gestor">Cancelar</button>
+            </div>
         </form>
     </div>
 </div>
 
-<div id="modal-rejeitar-mensagem-gestor" class="modal" style="display:none;">
+<div id="modal-rejeitar-mensagem-gestor" class="modal modal-painel">
     <div class="modal-conteudo">
-        <span class="fechar-modal fechar-modal-rejeitar-mensagem-gestor">&times;</span>
-        <h2>Rejeitar Mensagem</h2>
-        <form id="form-rejeitar-mensagem-gestor" method="POST" action="">
+        <button class="fechar-modal fechar-modal-rejeitar-mensagem-gestor">&times;</button>
+         <div class="cabecalho-modal">
+            <h2>Rejeitar Mensagem</h2>
+        </div>
+        <form id="form-rejeitar-mensagem-gestor" method="POST" action="" class="formulario-geral">
             {% csrf_token %}
             <div class="campo-formulario">
-                <label for="motivo-rejeicao-gestor">Motivo da rejeição:</label>
+                <label for="motivo-rejeicao-gestor">Motivo da rejeição (será visível para o doador):</label>
                 <textarea id="motivo-rejeicao-gestor" name="motivo_rejeicao" rows="4" required></textarea>
             </div>
             <div class="acoes-formulario">
-                <button type="submit" class="botao-primario">Confirmar Rejeição</button>
-                <button type="button" class="botao-secundario fechar-modal-rejeitar-mensagem-gestor">Cancelar</button>
+                <button type="submit" class="botao-perigo">Confirmar Rejeição</button>
+                <button type="button" class="botao-neutro fechar-modal-rejeitar-mensagem-gestor">Cancelar</button>
             </div>
         </form>
     </div>
 </div>
 
-<div id="modal-visitacao-gestor" class="modal" style="display:none;">
+<div id="modal-visitacao-gestor" class="modal modal-painel">
     <div class="modal-conteudo">
-        <span class="fechar-modal fechar-modal-visitacao-gestor">&times;</span>
-        <h2 id="modal-visitacao-gestor-titulo">Nova Data de Visitação</h2>
-        <form id="form-visitacao-gestor" method="POST" action="">
+        <button class="fechar-modal fechar-modal-visitacao-gestor">&times;</button>
+        <div class="cabecalho-modal">
+            <h2 id="modal-visitacao-gestor-titulo">Nova Data de Visitação</h2>
+        </div>
+        <form id="form-visitacao-gestor" method="POST" action="" class="formulario-geral">
             {% csrf_token %}
             <input type="hidden" id="gestor-visita-id" name="visita_id">
-            <div class="campo-formulario"><label for="gestor-data-visita">Data*</label><input type="date" id="gestor-data-visita" name="data" required></div>
-            <div class="campo-formulario"><label for="gestor-capacidade-visita">Capacidade Máxima*</label><input type="number" id="gestor-capacidade-visita" name="capacidade_maxima" min="1" required></div>
-            <div class="acoes-formulario"><button type="submit" class="botao-primario">Salvar</button><button type="button" class="botao-secundario fechar-modal-visitacao-gestor">Cancelar</button></div>
+            <div class="linha-formulario">
+                <div class="campo-formulario"><label for="gestor-data-visita">Data*</label><input type="date" id="gestor-data-visita" name="data" required></div>
+                <div class="campo-formulario"><label for="gestor-capacidade-visita">Capacidade Máxima*</label><input type="number" id="gestor-capacidade-visita" name="capacidade_maxima" min="1" required></div>
+            </div>
+            <div class="acoes-formulario">
+                <button type="submit" class="botao-primario">Salvar Data</button>
+                <button type="button" class="botao-neutro fechar-modal-visitacao-gestor">Cancelar</button>
+            </div>
         </form>
     </div>
 </div>
@@ -533,84 +557,103 @@ document.addEventListener('DOMContentLoaded', function() {
         const activeSecao = document.getElementById(secaoId);
         if (activeSecao) activeSecao.classList.add('ativo');
 
-        if (secaoId !== 'inicio' && secaoId) {
-            history.pushState(null, '', `/usuarios/painel-gestor/secao/${secaoId}/`);
-        } else if (secaoId === 'inicio') {
-            history.pushState(null, '', `/usuarios/painel-gestor/`);
+        const basePath = "{% url 'usuarios:painel_gestor' %}";
+        if (secaoId && secaoId !== 'inicio') {
+            history.pushState({secao: secaoId}, '', `${basePath}secao/${secaoId}/`);
+        } else {
+            history.pushState({secao: 'inicio'}, '', basePath);
         }
     }
+    
+    window.onpopstate = function(event) {
+        if (event.state && event.state.secao) {
+            mostrarSecao(event.state.secao);
+        } else {
+            mostrarSecao('{{ secao_ativa|default:"inicio" }}');
+        }
+    };
 
     const initialSecaoGestor = '{{ secao_ativa|default:"inicio" }}';
     mostrarSecao(initialSecaoGestor);
+    if (initialSecaoGestor && initialSecaoGestor !== 'inicio') {
+         history.replaceState({secao: initialSecaoGestor}, '', `{% url 'usuarios:painel_gestor' %}secao/${initialSecaoGestor}/`);
+    } else {
+         history.replaceState({secao: 'inicio'}, '', `{% url 'usuarios:painel_gestor' %}`);
+    }
 
     document.querySelectorAll('.navegacao-lateral a[data-secao]').forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
-            mostrarSecao(this.getAttribute('data-secao'));
+            const secaoId = this.getAttribute('data-secao');
+            if (secaoId) {
+                 mostrarSecao(secaoId);
+            }
         });
     });
 
-    function setupModal(modalId, abrirBtnId, fecharClasse) {
+    function setupModal(modalId, abrirTriggers, fecharTriggersClasse) {
         const modal = document.getElementById(modalId);
-        const abrirBtn = document.getElementById(abrirBtnId);
-        const fecharBtns = document.querySelectorAll('.' + fecharClasse);
+        if (!modal) return;
 
-        if (abrirBtn && modal) abrirBtn.onclick = () => {
-            modal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
+        const abrirBtns = document.querySelectorAll(abrirTriggers);
+        const fecharBtns = modal.querySelectorAll('.' + fecharTriggersClasse);
+
+        abrirBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+        });
+        
         fecharBtns.forEach(btn => {
-            if (modal) btn.onclick = () => {
+            btn.addEventListener('click', () => {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+        });
+        
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
                 modal.style.display = 'none';
                 document.body.style.overflow = 'auto';
             }
         });
-        if (modal) {
-            window.addEventListener('click', function(event) {
-                if (event.target == modal) {
-                    modal.style.display = 'none';
-                    document.body.style.overflow = 'auto';
-                }
-            });
-        }
     }
     
-    setupModal('modal-criar-campanha', 'abrir-modal-criar-campanha', 'fechar-modal-criar-campanha');
-    setupModal('modal-editar-beneficiario-gestor', null, 'fechar-modal-editar-beneficiario-gestor');
-    setupModal('modal-rejeitar-mensagem-gestor', null, 'fechar-modal-rejeitar-mensagem-gestor');
-    setupModal('modal-visitacao-gestor', 'btn-abrir-modal-nova-visitacao', 'fechar-modal-visitacao-gestor');
-    
-    const modalEditarCampanha = document.getElementById('modal-editar-campanha');
-    const formEditarCampanha = document.getElementById('form-editar-campanha');
+    setupModal('modal-criar-campanha', '#abrir-modal-criar-campanha', 'fechar-modal-criar-campanha');
+    setupModal('modal-editar-beneficiario-gestor', '.editar-beneficiario-btn', 'fechar-modal-editar-beneficiario-gestor');
+    setupModal('modal-rejeitar-mensagem-gestor', '.btn-rejeitar-mensagem-gestor', 'fechar-modal-rejeitar-mensagem-gestor');
+    setupModal('modal-visitacao-gestor', '#btn-abrir-modal-nova-visitacao, .btn-editar-visitacao-gestor', 'fechar-modal-visitacao-gestor');
+    setupModal('modal-editar-campanha', '.editar-campanha', 'fechar-modal-editar-campanha');
+
     document.querySelectorAll('.editar-campanha').forEach(botao => {
         botao.addEventListener('click', function() {
+            const modalEditarCampanha = document.getElementById('modal-editar-campanha');
+            const formEditarCampanha = document.getElementById('form-editar-campanha');
             const campanhaId = this.dataset.id;
             document.getElementById('editar-campanha-id').value = campanhaId;
-            if(formEditarCampanha) formEditarCampanha.action = `{% url 'campanhas:editar_campanha' 0 %}`.replace('0', campanhaId);
+            
+            if(formEditarCampanha) formEditarCampanha.action = "{% url 'campanhas:editar_campanha' 0 %}".replace('0', campanhaId);
+
             document.getElementById('editar-campanha-nome').value = this.dataset.nome;
             document.getElementById('editar-campanha-descricao').value = this.dataset.descricao;
-            document.getElementById('editar-campanha-meta').value = this.dataset.meta.replace('.', ',');
+            
+            let metaValue = parseFloat(this.dataset.meta.replace(',', '.'));
+            document.getElementById('editar-campanha-meta').value = isNaN(metaValue) ? '' : metaValue.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
             document.getElementById('editar-campanha-data_fim').value = this.dataset.data_fim;
-            document.getElementById('editar-campanha-ativa').checked = (this.dataset.ativa === 'true');
+            document.getElementById('editar-campanha-ativa').checked = (this.dataset.ativa === 'True' || this.dataset.ativa === 'true');
+            
             if(modalEditarCampanha) {
-                modalEditarCampanha.style.display = 'block';
+                modalEditarCampanha.style.display = 'flex';
                 document.body.style.overflow = 'hidden';
             }
         });
     });
-    document.querySelectorAll('.fechar-modal-editar-campanha').forEach(btn => {
-        btn.onclick = () => { 
-            if(modalEditarCampanha) modalEditarCampanha.style.display = 'none'; 
-            document.body.style.overflow = 'auto';
-        };
-    });
-
+    
     document.querySelectorAll('.editar-beneficiario-btn').forEach(botao => {
         botao.addEventListener('click', function(e) {
             e.preventDefault();
-            const modal = document.getElementById('modal-editar-beneficiario-gestor');
-            const form = document.getElementById('form-editar-beneficiario-gestor');
-            form.action = `{% url 'editar_beneficiario' %}`;
             document.getElementById('edit-benef-id').value = this.dataset.id;
             document.getElementById('edit-benef-nome').value = this.dataset.nome;
             document.getElementById('edit-benef-idade').value = this.dataset.idade;
@@ -619,10 +662,6 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('edit-benef-email_responsavel').value = this.dataset.email_responsavel;
             document.getElementById('edit-benef-observacoes').value = this.dataset.observacoes;
             document.getElementById('edit-benef-ativo').checked = (this.dataset.ativo === 'true');
-            if(modal) {
-                modal.style.display = 'block';
-                document.body.style.overflow = 'hidden';
-            }
         });
     });
 
@@ -647,19 +686,13 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.btn-rejeitar-mensagem-gestor').forEach(botao => {
         botao.addEventListener('click', function() {
             const mensagemId = this.dataset.id;
-            const modalRejeicao = document.getElementById('modal-rejeitar-mensagem-gestor');
             const formRejeicao = document.getElementById('form-rejeitar-mensagem-gestor');
             if(formRejeicao) formRejeicao.action = `{% url 'mensagens:rejeitar_mensagem' 0 %}`.replace('0', mensagemId);
-            if(modalRejeicao) {
-                modalRejeicao.style.display = 'block';
-                document.body.style.overflow = 'hidden';
-            }
         });
     });
     
     document.querySelectorAll('.btn-editar-visitacao-gestor').forEach(botao => {
         botao.addEventListener('click', function() {
-            const modal = document.getElementById('modal-visitacao-gestor');
             const form = document.getElementById('form-visitacao-gestor');
             const visitaId = this.dataset.id;
             form.action = `{% url 'visitacao:editar_visita' 0 %}`.replace('0', visitaId);
@@ -667,62 +700,63 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('gestor-data-visita').value = this.dataset.data;
             document.getElementById('gestor-capacidade-visita').value = this.dataset.capacidade;
             document.getElementById('modal-visitacao-gestor-titulo').textContent = 'Editar Data de Visitação';
-            if(modal) {
-                modal.style.display = 'block';
-                document.body.style.overflow = 'hidden';
-            }
         });
     });
-    document.getElementById('btn-abrir-modal-nova-visitacao')?.addEventListener('click', function() {
-        const modal = document.getElementById('modal-visitacao-gestor');
-        const form = document.getElementById('form-visitacao-gestor');
-        form.action = `{% url 'visitacao:nova_visita' %}`;
-        form.reset();
-        document.getElementById('gestor-visita-id').value = '';
-        document.getElementById('modal-visitacao-gestor-titulo').textContent = 'Nova Data de Visitação';
-        if(modal) {
-            modal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-    });
 
-    function aplicarFiltrosTabela(tabelaSelector, filtrosConfig) {
-        const linhas = document.querySelectorAll(`${tabelaSelector} tbody tr`);
-        linhas.forEach(linha => {
-            let mostrarLinha = true;
+    const btnNovaVisitacao = document.getElementById('btn-abrir-modal-nova-visitacao');
+    if(btnNovaVisitacao) {
+        btnNovaVisitacao.addEventListener('click', function() {
+            const form = document.getElementById('form-visitacao-gestor');
+            form.action = `{% url 'visitacao:nova_visita' %}`;
+            form.reset();
+            document.getElementById('gestor-visita-id').value = '';
+            document.getElementById('modal-visitacao-gestor-titulo').textContent = 'Nova Data de Visitação';
+        });
+    }
+
+    function aplicarFiltrosTabela(tabelaSelector, filtrosConfig, isCardList = false) {
+        const container = isCardList ? document.querySelector(tabelaSelector) : document.querySelector(`${tabelaSelector} tbody`);
+        if(!container) return;
+        const itens = isCardList ? container.querySelectorAll('.cartao-mensagem') : container.querySelectorAll('tr');
+
+        itens.forEach(item => {
+            let mostrarItem = true;
             for (const config of filtrosConfig) {
-                const valorFiltro = document.getElementById(config.filtroId)?.value;
-                if (valorFiltro && valorFiltro !== 'TODOS') {
-                    const valorLinha = linha.getAttribute(config.dataAtributo);
+                const valorFiltroElement = document.getElementById(config.filtroId);
+                if (!valorFiltroElement) continue;
+                const valorFiltro = valorFiltroElement.value;
+
+                if (valorFiltro && valorFiltro.toUpperCase() !== 'TODOS') {
+                    const valorItem = item.getAttribute(config.dataAtributo);
                     if (config.comparador) {
-                        if (!config.comparador(valorLinha, valorFiltro)) {
-                            mostrarLinha = false;
+                        if (!config.comparador(valorItem, valorFiltro)) {
+                            mostrarItem = false;
                             break;
                         }
                     } else {
-                        if (valorLinha !== valorFiltro) {
-                            mostrarLinha = false;
+                        if (valorItem !== valorFiltro) {
+                            mostrarItem = false;
                             break;
                         }
                     }
                 }
             }
-            linha.style.display = mostrarLinha ? '' : 'none';
+            item.style.display = mostrarItem ? (isCardList ? 'block' : '') : 'none';
         });
     }
 
     document.querySelectorAll('#doacoes .filtros select').forEach(select => 
-        select.addEventListener('change', () => aplicarFiltrosTabela('#doacoes .tabela-doacoes', [
+        select.addEventListener('change', () => aplicarFiltrosTabela('#doacoes .tabela-padrao', [
             { filtroId: 'filtro-status-doacoes-gestor', dataAtributo: 'data-status' },
             { filtroId: 'filtro-destino-doacoes-gestor', dataAtributo: 'data-destino' },
             { filtroId: 'filtro-metodo-doacoes-gestor', dataAtributo: 'data-metodo' }
         ]))
     );
     document.querySelectorAll('#beneficiarios .filtros select').forEach(select => 
-        select.addEventListener('change', () => aplicarFiltrosTabela('#beneficiarios .tabela-beneficiarios', [
+        select.addEventListener('change', () => aplicarFiltrosTabela('#beneficiarios .tabela-padrao', [
             { filtroId: 'filtro-status-benef', dataAtributo: 'data-status' },
-            { filtroId: 'filtro-idade-benef', dataAtributo: 'data-idade', comparador: (idadeLinha, filtroIdade) => {
-                const idadeNum = parseInt(idadeLinha);
+            { filtroId: 'filtro-idade-benef', dataAtributo: 'data-idade', comparador: (idadeItem, filtroIdade) => {
+                const idadeNum = parseInt(idadeItem);
                 if (filtroIdade === '0-12') return idadeNum >= 0 && idadeNum <= 12;
                 if (filtroIdade === '13-18') return idadeNum >= 13 && idadeNum <= 18;
                 if (filtroIdade === '19+') return idadeNum >= 19;
@@ -730,13 +764,18 @@ document.addEventListener('DOMContentLoaded', function() {
             }}
         ]))
     );
-    document.getElementById('filtro-status-gestor-mensagens')?.addEventListener('change', () => 
-        aplicarFiltrosTabela('#mensagens .lista-mensagens', [{
-            filtroId: 'filtro-status-gestor-mensagens', dataAtributo: 'data-status', comparador: (valLinha, valFiltro) => valFiltro.toLowerCase() === 'todas' || valLinha === valFiltro.toLowerCase()
-        }], true) 
-    );
+    
+    const filtroStatusMensagens = document.getElementById('filtro-status-gestor-mensagens');
+    if(filtroStatusMensagens) {
+        filtroStatusMensagens.addEventListener('change', () => 
+            aplicarFiltrosTabela('#mensagens .lista-mensagens', [{
+                filtroId: 'filtro-status-gestor-mensagens', dataAtributo: 'data-status'
+            }], true) 
+        );
+    }
+
     document.querySelectorAll('#visitacao .filtros select').forEach(select =>
-        select.addEventListener('change', () => aplicarFiltrosTabela('#visitacao .tabela-visitacao', [
+        select.addEventListener('change', () => aplicarFiltrosTabela('#visitacao .tabela-padrao', [
             { filtroId: 'filtro-status-visitacao-gestor', dataAtributo: 'data-status' }
         ]))
     );
@@ -747,7 +786,7 @@ document.addEventListener('DOMContentLoaded', function() {
             input.addEventListener('input', function(e) {
                 let value = e.target.value.replace(/\D/g, '');
                 if (value) {
-                    value = (parseInt(value) / 100).toFixed(2).replace('.', ',');
+                     value = (parseInt(value) / 100).toFixed(2).replace('.', ',');
                 }
                 e.target.value = value;
             });

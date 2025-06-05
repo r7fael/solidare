@@ -28,11 +28,13 @@ def registrar_usuario(request):
                 nome=nome,
                 tipo_usuario=tipo
             )
+            
 
             if tipo == 'doador':
                 Doador.objects.create(usuario=usuario)
             elif tipo == 'gestor':
                 Gestor.objects.create(usuario=usuario)
+                
 
             login(request, usuario)
             return redirect('usuarios:login')

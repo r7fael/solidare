@@ -4,42 +4,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plataforma Solidare - Conectando doadores e ONGs</title>
+    <title>Instituto Solidare - Transformando Sonhos</title>
     <link rel="stylesheet" href="{% static 'application/css/home.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <header class="hero">
-        <div class="container">
-            <nav class="navbar">
-                <div class="logo">
-                    <i class="fas fa-hands-helping"></i>
-                    <span>Solidare</span>
-                </div>
-                <div class="auth-links">
-                    <a href="/usuarios/login/" class="btn btn-outline">Login</a>
-                    <a href="/usuarios/registro/" class="btn btn-primary">Registrar</a>
-                </div>
+    <header class="cabecalho-site">
+        <div class="conteudo-geral navegacao-conteudo">
+            <a href="/" class="logo-ancora">
+                <img src="{% static 'application/images/logo_sem_nome.png' %}" alt="Instituto Solidare Logo" class="logo-cabecalho">
+            </a>
+            <nav class="navegacao-principal">
+                <ul>
+                    <li><a href="/usuarios/registro/">Apadrinhar</a></li>
+                    <li><a href="#quem-somos">Quem somos</a></li>
+                    <li><a href="/usuarios/registro/">Doe agora</a></li>
+                    <li><a href="#informacoes">Informações</a></li>
+                </ul>
             </nav>
-            
-            <div class="hero-content">
-                <h1>Bem-vindo à Plataforma Solidare</h1>
-                <p class="subtitle">Conectando doadores a causas que transformam vidas</p>
-                
-                <div class="cta-buttons">
-                    <a href="/usuarios/registro/" class="btn btn-primary btn-large">
-                        <i class="fas fa-user-plus"></i> Quero Ajudar
-                    </a>
-                    <a href="/ong/cadastro/" class="btn btn-secondary btn-large">
-                        <i class="fas fa-hand-holding-heart"></i> Sou uma ONG
+            <div class="area-perfil">
+                <a href="/usuarios/login/" class="perfil-ancora">
+                    <img src="{% static 'application/images/user_icon.png' %}" alt="Perfil do Usuário" class="icone-perfil">
+                </a>
+            </div>
+            <button class="alternador-navegacao-mobile" aria-label="Abrir menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section class="secao-destaque">
+            <div class="conteudo-geral">
+                <div class="grade-conteudo-destaque">
+                    <a href="/usuarios/registro/" class="destaque-imagem-ancora-clicavel">
+                        <div class="destaque-imagem-conteudo">
+                            <img src="{% static 'application/images/BANNER-01.png.png' %}" alt="Criança sorrindo - Apadrinhe um sonho">
+                        </div>
                     </a>
                 </div>
             </div>
-        </div>
-        
-        <div class="wave"></div>
-    </header>
+        </section>
 
-</body>    
+        <section id="quem-somos" class="secao-quem-somos">
+            <div class="conteudo-geral">
+                <div class="quem-somos-conteudo-principal">
+                    <div class="quem-somos-texto">
+                        <h3>Quem somos:</h3>
+                        <p>O Nosso Sonho é um programa de apadrinhamento que conecta pessoas dispostas a ajudar na realização de sonhos com crianças e jovens em situação de vulnerabilidade. Como padrinho ou madrinha, você contribui mensalmente para garantir acesso a educação, cultura, lazer e cuidado. É simples, seguro e transforma vidas - inclusive a sua. Faça parte!</p>
+                    </div>
+                    <div class="quem-somos-logo">
+                        <img src="{% static 'application/images/logo.png' %}" alt="Nosso Sonho Instituto Solidare">
+                    </div>
+                </div>
+
+                <div class="instituto-solidare-detalhes">
+                    <div class="instituto-imagem-conteudo">
+                        <img src="{% static 'application/images/image_body.png' %}" alt="Transformando sonhos em realidade">
+                    </div>
+                    <div class="instituto-texto-conteudo">
+                         <h4>Instituto Solidare</h4>
+                         <p>O Instituto Solidare é uma organização da sociedade civil de direito privado, do segmento da assistência social. Criado no ano de 2006 por iniciativa da Igreja Batista em Coqueiral e lideranças comunitárias.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="informacoes" class="secao-informacoes-espaco">
+            <div class="conteudo-geral">
+                <h2>Informações Adicionais</h2>
+                <p>Lorem ipsum</p>
+                <p><em>(Conteúdo de placeholder para o link "Informações")</em></p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="rodape-inferior-site">
+        <div class="conteudo-geral">
+            <p>&copy; {% now "Y" %} Instituto Solidare. Todos os direitos reservados.</p>
+            </div>
+    </footer>
+
+    <script>
+        const alternadorNavegacaoMobile = document.querySelector('.alternador-navegacao-mobile');
+        const navegacaoPrincipal = document.querySelector('.navegacao-principal');
+
+        if (alternadorNavegacaoMobile && navegacaoPrincipal) {
+            alternadorNavegacaoMobile.addEventListener('click', () => {
+                navegacaoPrincipal.classList.toggle('ativo');
+            });
+        }
+    </script>
+
+</body>
 </html>
