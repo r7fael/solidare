@@ -48,7 +48,8 @@
                             data-descricao="{{ campanha.descricao }}"
                             data-meta="{{ campanha.meta_arrecadacao|stringformat:'.2f'|unlocalize }}"
                             data-data_fim="{{ campanha.data_fim|date:'Y-m-d'|default:'' }}"
-                            data-ativa="{{ campanha.ativa|yesno:'true,false' }}">
+                            data-ativa="{{ campanha.ativa|yesno:'true,false' }}"
+                            data-imagem-url="{% if campanha.imagem_destaque %}{{ campanha.imagem_destaque.url }}{% endif %}">
                         Editar
                     </button>
                 </td>

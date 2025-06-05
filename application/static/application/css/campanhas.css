@@ -1,0 +1,133 @@
+.secao-listagem {
+    padding: 60px 0;
+    background-color: var(--color-background-light);
+}
+
+.cabecalho-secao-listagem {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.cabecalho-secao-listagem h1 {
+    font-size: 2.8rem;
+    color: var(--color-primary-dark);
+    margin-bottom: 10px;
+}
+
+.cabecalho-secao-listagem p {
+    font-size: 1.1rem;
+    color: var(--color-text-medium);
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.grade-campanhas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+.cartao-campanha {
+    background-color: var(--cor-fundo-card-solido, #fff);
+    border-radius: 12px;
+    box-shadow: var(--cor-sombra-card, 0 5px 20px rgba(44, 62, 80, 0.08));
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cartao-campanha:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(44, 62, 80, 0.12);
+}
+
+.cartao-campanha img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.info-campanha {
+    padding: 20px 25px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.info-campanha h3 {
+    font-size: 1.4rem;
+    color: var(--color-primary-dark);
+    margin: 0 0 10px 0;
+    font-weight: 600;
+}
+
+.info-campanha .descricao-campanha {
+    font-size: 0.95rem;
+    color: var(--color-text-medium);
+    line-height: 1.6;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+.progresso-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--color-text-medium);
+    margin-bottom: 8px;
+}
+
+.barra-progresso-container {
+    width: 100%;
+    background-color: var(--cor-borda-suave, #e0e5ec);
+    border-radius: 20px;
+    height: 18px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.barra-progresso-preenchimento {
+    height: 100%;
+    background-color: var(--cor-verde-sucesso, #7EC28F);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    transition: width 0.5s ease-in-out;
+}
+
+.botao-doar-campanha {
+    background-color: var(--cor-azul-principal, #79CDF1);
+    color: var(--cor-texto-claro, #fff);
+    text-align: center;
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    margin-top: auto; 
+}
+
+.botao-doar-campanha:hover {
+    background-color: var(--cor-azul-principal-escura, #59B7E1);
+}
+
+.botao-voltar-home {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 25px;
+    background-color: var(--cor-texto-medio);
+    color: var(--cor-texto-claro);
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.botao-voltar-home:hover {
+    background-color: var(--cor-texto-escuro);
+    transform: translateY(-2px);
+}

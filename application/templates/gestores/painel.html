@@ -643,6 +643,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
             document.getElementById('editar-campanha-data_fim').value = this.dataset.data_fim;
             document.getElementById('editar-campanha-ativa').checked = (this.dataset.ativa === 'True' || this.dataset.ativa === 'true');
+
+            const imagemUrl = this.dataset.imagemUrl;
+            const linkImagemAtual = document.getElementById('link-imagem-atual');
+            const semImagemAtualSpan = document.getElementById('sem-imagem-atual');
+            const containerImagem = document.getElementById('imagem-atual-container');
+
+            if (imagemUrl && imagemUrl !== 'None' && imagemUrl !== '') {
+                linkImagemAtual.href = imagemUrl;
+                linkImagemAtual.style.display = 'inline';
+                semImagemAtualSpan.style.display = 'none';
+            } else {
+                linkImagemAtual.style.display = 'none';
+                semImagemAtualSpan.style.display = 'inline';
+            }
             
             if(modalEditarCampanha) {
                 modalEditarCampanha.style.display = 'flex';

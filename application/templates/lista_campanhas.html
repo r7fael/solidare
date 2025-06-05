@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% load l10n %}
+
+{% block title %}Nossas Campanhas | SOLIDARE{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'application/css/home.css' %}">
+<link rel="stylesheet" href="{% static 'application/css/campanhas.css' %}">
+
+<main>
+    <section class="secao-listagem">
+        <div class="conteudo-geral">
+            <div class="cabecalho-secao-listagem">
+                <h1>Campanhas Ativas</h1>
+                <p>Conheça nossas causas, entenda o impacto e ajude a transformar vidas.</p>
+                <a href="{% url 'home' %}" class="botao-voltar-home">Voltar à Página Inicial</a>
+            </div>
+
+            {% if campanhas_ativas %}
+            <div class="grade-campanhas">
+                {% for campanha in campanhas_ativas %}
+                <div class="cartao-campanha">
+                    {% if campanha.imagem_destaque %}
+                        <img src="{{ campanha.imagem_destaque.url }}" alt="Imagem da campanha {{ campanha.nome }}">
+                    {% else %}
+                        <img src="{% static 'application/images/placeholder_campanha.jpg' %}" alt="Imagem padrão de campanha">
+                    {% endif %}
+                    <div class="info-campanha">
+                        <h3>{{ campanha.nome }}</h3>
+                        <p class="descricao-campanha">{{ campanha.descricao|truncatewords:22 }}</p>
+                        
+                        <div class="progresso-info">
+                            <span><strong>Arrecadado:</strong> R$ {{ campanha.valor_arrecadado|floatformat:2|intcomma }}</span>
+                            <span><strong>Meta:</strong> R$ {{ campanha.meta_arrecadacao|floatformat:2|intcomma }}</span>
+                        </div>
+                        <div class="barra-progresso-container">
+                            <div class="barra-progresso-preenchimento" style="width: {{ campanha.progresso|floatformat:0 }}%;">
+                                {{ campanha.progresso|floatformat:0 }}%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="sem-registros">
+                <p>Nenhuma campanha ativa no momento. Volte em breve para ver novas oportunidades de ajudar!</p>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+</main>
+
+{% include 'campanhas/_modal_doar_campanha_painel.html' with metodos_pagamento_doacao=metodos_pagamento_disponiveis %}
+{% endblock %}
