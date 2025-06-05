@@ -1,147 +1,135 @@
-// cypress/e2e/historia7_doador_campanhas.cy.js (Exemplo de nome de arquivo)
+const BASE_URL = 'http://127.0.0.1:8000';
 
-// Define a URL base da sua aplicação Django
-const BASE_URL = 'http://127.0.0.1:8000'; // CONFIRME se o seu servidor Django roda nesta porta!
+describe('História de Usuário 7: Doador Interage com Campanhas Específicas', () => {
+  const testRunTimestamp = Date.now();
 
-// Função utilitária para gerar CPF (simplificada, para fins de teste)
-// Se seu backend tiver uma validação de CPF muito rigorosa, considere uma biblioteca mais robusta
-// ou use um CPF válido estático conhecido para testes.
-function gerarCPFValidoSimples() {
-  const n = 9;
-  const randomiza = () => Math.floor(Math.random() * n);
-  const num = Array(9).fill(0).map(randomiza);
+  const gestorNome = `Gestor Campanha ${testRunTimestamp}`;
+  const gestorCpfNumeros = ('555444333' + String(testRunTimestamp).slice(-2)).padStart(11, '0');
+  const gestorEmail = `gestor.campanha.${testRunTimestamp}@example.com`;
+  const gestorPassword = 'passwordGestorCamp';
+
+  let doadorEmail;
+  let doadorPassword;
+  let doadorNome;
   
-  let d1 = num.reduce((acc, val, idx) => acc + (val * (10 - idx)), 0) % 11;
-  d1 = d1 < 2 ? 0 : 11 - d1;
+  let campanhaNomeGlobal; // Para usar nos cenários
+  const valorDoacaoCampanha = '6500'; // R$ 65,00
 
-  let d2 = num.reduce((acc, val, idx) => acc + (val * (11 - idx)), 0) + (d1 * 2);
-  d2 = d2 % 11;
-  d2 = d2 < 2 ? 0 : 11 - d2;
-  
-  return `${num.join('')}${d1}${d2}`;
-}
+  const formatCPF = (cpf) => {
+    cpf = cpf.replace(/\D/g, ''); 
+    cpf = cpf.padStart(11, '0').slice(0, 11); 
+    return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+  };
 
-describe('História de Usuário 7: Campanhas de Arrecadação Específicas', () => {
+  before(() => {
+    cy.log('--- Iniciando Setup para HU7: Gestor cria campanha, Doador é registrado ---');
+    
+    const doadorTimestamp = Date.now() + 1; 
+    doadorNome = `Doador Campanha ${doadorTimestamp}`;
+    const doadorCpfNum = ('333222111' + String(doadorTimestamp).slice(-2)).padStart(11, '0');
+    doadorEmail = `doador.campanha.${doadorTimestamp}@example.com`;
+    doadorPassword = 'passwordDoadorCamp';
 
-  let createdUserEmail;
-  let createdUserPassword;
+    campanhaNomeGlobal = `Campanha para Doar ${testRunTimestamp}`;
+    const campanhaDescricao = `Descrição da campanha HU7 criada em ${new Date().toLocaleDateString()}.`;
+    const campanhaMeta = '30000'; // R$ 300,00
+    const hoje = new Date();
+    const dataFimCampanha = new Date(hoje.setDate(hoje.getDate() + 45)).toISOString().split('T')[0];
+
+    cy.log('1. Registrando Gestor...');
+    cy.visit(`${BASE_URL}/usuarios/registro/`);
+    cy.get('input[name="nome"]').type(gestorNome);
+    cy.get('input[name="cpf"]').type(formatCPF(gestorCpfNumeros));
+    cy.get('input[name="email"]').type(gestorEmail);
+    cy.get('input[name="senha"]').type(gestorPassword);
+    cy.get('select[name="tipo_usuario"]').select('gestor');
+    cy.get('.formulario-cadastro button[type="submit"].botao-principal').click();
+    cy.url().should('include', '/usuarios/login/');
+
+    cy.log('2. Login como Gestor...');
+    cy.get('input[name="email"]').type(gestorEmail);
+    cy.get('input[name="senha"]').type(gestorPassword);
+    cy.get('.formulario-acesso button[type="submit"].botao-acessar').click();
+    cy.url().should('include', '/usuarios/painel-gestor/');
+
+    cy.log('3. Criando Campanha pelo Gestor...');
+    cy.get('.navegacao-lateral a[data-secao="campanhas-gestor"]').click();
+    cy.get('#campanhas-gestor.secao-conteudo.ativo').should('be.visible');
+    cy.get('#abrir-modal-criar-campanha').click(); 
+    cy.get('#modal-criar-campanha').should('be.visible');
+    cy.get('#criar-campanha-nome').type(campanhaNomeGlobal);
+    cy.get('#criar-campanha-descricao').type(campanhaDescricao);
+    cy.get('#criar-campanha-meta').type(campanhaMeta); 
+    cy.get('#criar-campanha-data_fim').type(dataFimCampanha);
+    cy.intercept('POST', `${BASE_URL}/campanhas/gestao/nova/`).as('postNovaCampanha');
+    cy.get('#form-criar-campanha button[type="submit"]').click();
+    cy.wait('@postNovaCampanha');
+    cy.log(`Campanha "${campanhaNomeGlobal}" criada.`);
+
+    cy.log('4. Logout do Gestor...');
+    cy.get('.navegacao-lateral a[href*="logout"]').click();
+    cy.url().should('include', '/usuarios/login/');
+
+    cy.log('5. Registrando Doador para o teste...');
+    cy.visit(`${BASE_URL}/usuarios/registro/`);
+    cy.get('input[name="nome"]').type(doadorNome);
+    cy.get('input[name="cpf"]').type(formatCPF(doadorCpfNum));
+    cy.get('input[name="email"]').type(doadorEmail);
+    cy.get('input[name="senha"]').type(doadorPassword);
+    cy.get('select[name="tipo_usuario"]').select('doador');
+    cy.get('.formulario-cadastro button[type="submit"].botao-principal').click();
+    cy.url().should('include', '/usuarios/login/');
+    cy.log(`Doador ${doadorEmail} para HU7 registrado.`);
+    cy.log('--- Setup para História de Usuário 7 Concluído ---');
+  });
 
   beforeEach(() => {
-    // 1. Cadastrar um novo usuário doador dinamicamente
-    cy.visit(`${BASE_URL}/usuarios/registro/`);
-    const uniqueSuffix = Date.now();
-    const nomeCompleto = `Doador Campanha ${uniqueSuffix}`;
-    const cpf = gerarCPFValidoSimples(); // Usando a função para gerar CPF
-    createdUserEmail = `doador.campanha.h7.${uniqueSuffix}@example.com`;
-    createdUserPassword = 'password123';
-
-    cy.get('input[name="nome"]').type(nomeCompleto);
-    cy.get('input[name="cpf"]').type(cpf);
-    cy.get('input[name="email"]').type(createdUserEmail);
-    cy.get('input[name="senha"]').type(createdUserPassword);
-    cy.get('select[name="tipo_usuario"]').select('doador');
-    cy.get('button[type="submit"]').click();
-    cy.url().should('include', '/usuarios/login/'); // Espera o redirecionamento
-
-    // 2. Fazer login com o usuário recém-criado
     cy.visit(`${BASE_URL}/usuarios/login/`);
-    cy.get('input[name="email"]').type(createdUserEmail);
-    cy.get('input[name="senha"]').type(createdUserPassword);
-    cy.get('button[type="submit"]').click();
+    cy.get('input[name="email"]').type(doadorEmail);
+    cy.get('input[name="senha"]').type(doadorPassword);
+    cy.get('.formulario-acesso button[type="submit"].botao-acessar').click();
     cy.url().should('eq', `${BASE_URL}/usuarios/painel-doador/`);
-    // ATENÇÃO: Ajuste o seletor e o texto de boas-vindas se necessário
-    cy.get('h1').contains('Bem-vindo,').should('be.visible'); 
+    cy.get('#inicio .cartao-boasvindas h1').contains(doadorNome).should('be.visible');
   });
 
-  it('Cenário 7.1: deve permitir a descoberta e visualização de campanhas ativas', () => {
-    // Simula que a API de campanhas retorna campanhas ativas com detalhes.
-    // ATENÇÃO: Ajuste o endpoint `/api/campanhas/*` para o URL real da sua API.
-  
-
-    // 1. Navegar até a seção "Campanhas"
-    // ATENÇÃO: Ajuste o seletor `a[data-secao="campanhas-doador"]` se for diferente.
+  it('Cenário 7.1: Deve visualizar lista de campanhas ativas com detalhes', () => {
     cy.get('.navegacao-lateral a[data-secao="campanhas-doador"]').click();
-    // ATENÇÃO: Ajuste a URL da seção de campanhas do doador se for diferente.
     cy.url().should('include', '/usuarios/painel-doador/secao/campanhas-doador/');
+    cy.get('#campanhas-doador.secao-conteudo.ativo').should('be.visible');
 
-
+    cy.get('#campanhas-doador .cabecalho-secao h1').should('contain', 'Campanhas Ativas');
   });
 
-  it('Cenário 7.2: deve permitir a doação direcionada para uma campanha específica', () => {
-
-    cy.intercept('POST', `${BASE_URL}/api/doar-campanha/`, {
-      body: {
-        status: 'sucesso',
-        mensagem: 'Sua doação para a campanha "Mentes Brilhantes" foi registrada com sucesso!'
-      }
-    }).as('postDoacaoCampanha');
-
-    // 1. Navegar até a seção "Campanhas"
+  it('Cenário 7.2: Deve permitir ao doador contribuir para uma campanha específica', () => {
     cy.get('.navegacao-lateral a[data-secao="campanhas-doador"]').click();
-    cy.url().should('include', '/usuarios/painel-doador/secao/campanhas-doador/');
+    cy.get('#campanhas-doador.secao-conteudo.ativo').should('be.visible');
 
-
-    // 2. Clicar no botão "Doar" da campanha desejada
-    // ATENÇÃO: Ajuste o seletor do botão "Doar" (ex: '.btn-doar-campanha')
-    cy.get('.cartao-campanha-doador').first().within(() => {
-    cy.get('button.botao-primario.abrir-modal-doar-campanha').click();
-});
-
-    // 3. Verificar se o modal de doação aparece
-    // ATENÇÃO: Ajuste os seletores do modal e do título do modal.
+    cy.contains('.cartao-campanha-doador .card-title', campanhaNomeGlobal, { timeout: 10000 })
+      .scrollIntoView()
+      .should('be.visible')
+      .parents('.cartao-campanha-doador')
+      .find('button.abrir-modal-doar-campanha')
+      .click();
+    
     cy.get('#modal-doar-campanha-painel').should('be.visible');
-    cy.get('#modal-doar-campanha-painel').should('contain', '');
+    cy.get('#modal-doar-campanha-titulo').should('contain', campanhaNomeGlobal);
+    cy.get('#doar-campanha-valor-modal').type(valorDoacaoCampanha);
+    cy.get('#doar-campanha-metodo-modal').select(1); 
 
-    // 4. Preencher o valor e método de pagamento no modal
-    // ATENÇÃO: Ajuste os seletores dos campos do modal.
-    cy.get('#modal-doar-campanha-painel input[name="valor_campanha_painel"]').type('150.00'); // Formato do valor
-    cy.get('#modal-doar-campanha-painel select[name="metodo_campanha_painel"]').select('PIX');
+    cy.intercept('POST', `${BASE_URL}/campanhas/`).as('postDoarParaCampanha');
+    cy.get('#form-doar-campanha-painel button[type="submit"].botao-primario').click();
+    
+    cy.wait('@postDoarParaCampanha');
+    
+    cy.get('#modal-doar-campanha-painel').should('not.be.visible');
 
-
-    // 5. Clicar no botão de confirmar doação no modal
-    cy.get('#nova-doacao button[type="submit"]').click({ force: true });
-
-
-
-  
-
-    // 6. Verificar a confirmação de que a doação foi direcionada
-    // ATENÇÃO: Ajuste o seletor e o texto da mensagem de sucesso.
-    // Opcional: Verificar se o modal fechou
-  });
-
-  it('Cenário 7.3: deve indicar informações de progresso da campanha desatualizadas', () => {
-    // Simula que a API de campanhas retorna dados com progresso que não foi atualizado.
-    // ATENÇÃO: Ajuste o endpoint `/api/campanhas/*`.
-    cy.intercept('GET', `${BASE_URL}/api/campanhas/*`, {
-      body: [
-        {
-          nome: 'Mentes Brilhantes',
-          descricao: 'A campanha Mentes Brilhantes tem como objetivo identificar e incentivar talentos entre os alunos da rede pública, oferecendo oficinas gratuitas de reforço escolar, criatividade, lógica …',
-          meta_financeira: 25000.00,
-          arrecadado_atual: 0,
-          progresso_porcentagem: 0,// Data bem antiga para simular desatualização
-        }
-      ]
-    }).as('getCampanhaDesatualizada');
-
-    // 1. Navegar até a seção "Campanhas"
-    cy.get('.navegacao-lateral a[data-secao="campanhas-doador"]').click();
-    cy.url().should('include', '/usuarios/painel-doador/secao/campanhas-doador/');
-   
-
-    // 2. Verificar se a seção de campanhas está visível
-    cy.get('#campanhas-doador').should('be.visible');
-
-    // 3. Verificar que a campanha com dados desatualizados é exibida
-
-    // 4. Verificar a presença de um indicador de data de atualização (se existir na UI)
-    // ATENÇÃO: Se sua UI exibir a "data da última atualização" ou um aviso, ajuste os seletores e o texto.
-    // Exemplo: se houver um <span class="data-atualizacao-campanha">Atualizado em: DD/MM/YYYY</span>
-   // AJUSTE O FORMATO E TEXTO CONFORME SUA UI
-
-    // Opcional: Verificar se há uma mensagem de alerta explícita sobre dados desatualizados.
-    // cy.get('@campanhaCard').find('.aviso-dados-desatualizados').should('be.visible')
-    //   .and('contain', 'Informações podem estar desatualizadas.');
+    cy.get('.navegacao-lateral a[data-secao="doacoes"]').click();
+    cy.url().should('include', '/usuarios/painel-doador/secao/doacoes/');
+    cy.get('#doacoes.secao-conteudo.ativo').should('be.visible');
+    cy.get('#doacoes .tabela-padrao tbody tr').first().within(() => {
+      cy.get('td').eq(1).should('contain', (parseFloat(valorDoacaoCampanha)/100).toLocaleString('pt-BR', {minimumFractionDigits: 2}));
+      cy.get('td').eq(3).should('contain', campanhaNomeGlobal);
+      cy.get('td').eq(4).find('.status.status-pendente').should('contain', 'Pendente');
+    });
   });
 });
