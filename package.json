@@ -1,0 +1,23 @@
+{
+  "name": "solidare",
+  "version": "1.0.0",
+  "description": "O que é o Solidare ? O Instituto Solidare é uma organização da sociedade civil de direito privado do segmento da assistência social, sendo criado no ano de 2006 por iniciativa da Igreja Batista em Coqueiral(PE) e por lideranças comunitárias.\r A ONG tem o intuito de promover o desenvolvimento social, político e pedagógico de crianças e adolescentes, a partir de suas famílias, sem distinção de etnia e credo.",
+  "main": "cypress.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/r7fael/solidare.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/r7fael/solidare/issues"
+  },
+  "homepage": "https://github.com/r7fael/solidare#readme",
+  "devDependencies": {
+    "cypress": "^14.4.1"
+  }
+}
