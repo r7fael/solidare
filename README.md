@@ -136,7 +136,7 @@ Disponível através do [Figma]().
 
 **ScreenCasts**
 <br>
-Disponíveis nos links: [YouTube | Deploy](), 
+Disponíveis nos links: [YouTube | Deploy](https://youtu.be/ttYzjI8gwuo), 
 [YouTube | Protótipo]()
 <br>
 
