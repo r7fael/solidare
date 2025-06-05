@@ -98,8 +98,5 @@ describe('História de Usuário 2: Entender Programas antes da Doação', () => 
     cy.get('#campanhas-doador h1').should('contain', 'Campanhas');
 
     cy.get('#campanhas-doador .cartao-campanha').should('not.exist');
-
-    // Se você tiver uma mensagem específica para "nenhuma campanha", descomente e ajuste o seletor:
-    // cy.get('#campanhas-doador .alguma-classe-para-sem-campanhas').should('be.visible').and('contain', 'Nenhuma campanha disponível no momento');
   });
 });
