@@ -23,11 +23,11 @@ def cadastrar_beneficiario(request):
                 observacoes=request.POST.get('observacoes', ''),
                 ativo=request.POST.get('ativo', 'off') == 'on'
             )
-            return redirect('painel_gestor')
+            return redirect('usuarios:painel_gestor')
         except Exception as e:
-            return redirect('painel_gestor')
+            return redirect('usuarios:painel_gestor')
     
-    return redirect('painel_gestor')
+    return redirect('usuarios:painel_gestor')
 
 
 @csrf_protect
@@ -37,7 +37,7 @@ def editar_beneficiario(request):
         beneficiario_id = request.POST.get('beneficiario_id')
         if not beneficiario_id:
             messages.error(request, 'ID do beneficiário não fornecido')
-            return redirect('painel_gestor')
+            return redirect('usuarios:painel_gestor')
             
         beneficiario = get_object_or_404(Beneficiario, id=beneficiario_id)
         
@@ -54,4 +54,4 @@ def editar_beneficiario(request):
     except Exception as e:
         messages.error(request, f'Erro ao atualizar beneficiário: {str(e)}')
     
-    return redirect('painel_gestor')
+    return redirect('usuarios:painel_gestor')

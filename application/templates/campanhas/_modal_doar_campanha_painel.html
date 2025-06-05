@@ -1,0 +1,39 @@
+{% load l10n %}
+<div id="modal-doar-campanha-painel" class="modal" style="display:none;">
+    <div class="modal-conteudo">
+        <span class="fechar-modal fechar-modal-doar-campanha">&times;</span>
+        <h2 id="modal-doar-campanha-titulo">Doar para Campanha</h2>
+        <form id="form-doar-campanha-painel" method="POST" action="{% url 'campanhas:listar_campanhas' %}">
+            {% csrf_token %}
+            <input type="hidden" name="campanha_id_doacao" id="doar-campanha-id-modal">
+            
+            <input type="hidden" name="origem_doacao_painel" value="true">
+
+            <div class="campo-formulario">
+                <label for="doar-campanha-valor-modal">Valor da Doação (R$)*</label>
+                <input type="text" id="doar-campanha-valor-modal" name="valor_campanha_painel"
+                       placeholder="Ex: 50,00" required>
+            </div>
+            <div class="campo-formulario">
+                <label for="doar-campanha-metodo-modal">Método de Pagamento*</label>
+                <select id="doar-campanha-metodo-modal" name="metodo_campanha_painel" required> 
+                    <option value="" selected disabled>Selecione...</option>
+                    {% for codigo, nome_metodo in metodos_pagamento_doacao %}
+                        <option value="{{ codigo }}">{{ nome_metodo }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="acoes-formulario">
+                <button type="submit" class="botao-primario">Confirmar Doação</button>
+                <button type="button" class="botao-secundario fechar-modal-doar-campanha">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById('form-doar-campanha-painel').addEventListener('submit', function() {
+        document.getElementById('doar-campanha-valor-modal').name = 'valor_campanha_' + document.getElementById('doar-campanha-id-modal').value;
+        document.getElementById('doar-campanha-metodo-modal').name = 'metodo_campanha_' + document.getElementById('doar-campanha-id-modal').value;
+    });
+</script>

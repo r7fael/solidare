@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório de Impacto das Doações - SOLIDARE</title>
+    <style type="text/css">
+        @page {
+            size: a4 portrait;
+            margin: 1.5cm;
+            @frame header_frame {
+                -pdf-frame-content: header_content;
+                left: 1.5cm; right: 1.5cm; top: 0.5cm; height: 1cm;
+            }
+            @frame footer_frame {
+                -pdf-frame-content: footer_content;
+                left: 1.5cm; right: 1.5cm; bottom: 0.5cm; height: 1cm;
+            }
+        }
+        body {
+            font-family: "Helvetica", "Arial", sans-serif;
+            color: #333333;
+            font-size: 9pt;
+            line-height: 1.4;
+        }
+        #header_content, #footer_content {
+            text-align: center;
+            font-size: 8pt;
+            color: #555555;
+        }
+        .main-title {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 16pt;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .subtitle-date {
+            text-align: center;
+            font-size: 8pt;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+        h2.section-title {
+            font-size: 12pt;
+            color: #34495e;
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 4px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 5px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            font-size: 9pt;
+        }
+        td {
+            font-size: 8.5pt;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .summary-section {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #eeeeee;
+            border-radius: 3px;
+        }
+        .summary-section p {
+            margin: 4px 0;
+            font-size: 9pt;
+        }
+        .summary-section strong {
+            display: inline-block;
+            min-width: 180px;
+        }
+        .no-data {
+            text-align: center;
+            color: #7f8c8d;
+            margin-top: 30px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div id="header_content">
+        SOLIDARE - Relatório de Impacto das Doações
+    </div>
+
+    <div id="footer_content">
+        Página <pdf:pagenumber /> de <pdf:pagecount /> | Gerado em: {{ data_geracao_relatorio|date:"d/m/Y H:i:s" }}
+    </div>
+
+    <div class="main-title">Relatório de Impacto das Doações</div>
+    <div class="subtitle-date">Data de Geração: {{ data_geracao_relatorio|date:"d/m/Y H:i:s" }}</div>
+
+    {% if numero_doacoes_concluidas > 0 %}
+        <div class="summary-section">
+            <h2 class="section-title" style="margin-top:0; border-bottom:none;">Resumo Geral</h2>
+            <p><strong>Total Arrecadado Geral:</strong> R$ {{ total_arrecadado_geral|floatformat:2 }}</p>
+            <p><strong>Número Total de Doações Concluídas:</strong> {{ numero_doacoes_concluidas }}</p>
+            <p><strong>Número de Doadores Únicos:</strong> {{ numero_doadores_unicos }}</p>
+            <p><strong>Valor Médio por Doação:</strong> R$ {{ media_por_doacao|floatformat:2 }}</p>
+        </div>
+
+        {% if dist_por_destino %}
+        <section>
+            <h2 class="section-title">Distribuição por Destino (Doações Avulsas)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Destino</th>
+                        <th class="text-center">Quantidade de Doações</th>
+                        <th class="text-right">Valor Total Arrecadado (R$)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in dist_por_destino %}
+                    <tr>
+                        <td>{{ item.destino }}</td>
+                        <td class="text-center">{{ item.qtd_doacoes }}</td>
+                        <td class="text-right">{{ item.total_valor|floatformat:2 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+        {% endif %}
+
+        {% if dist_por_campanha %}
+        <section>
+            <h2 class="section-title">Distribuição por Campanha</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Campanha</th>
+                        <th class="text-center">Quantidade de Doações</th>
+                        <th class="text-right">Valor Total Arrecadado (R$)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in dist_por_campanha %}
+                    <tr>
+                        <td>{{ item.campanha__nome }}</td>
+                        <td class="text-center">{{ item.qtd_doacoes }}</td>
+                        <td class="text-right">{{ item.total_valor|floatformat:2 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+        {% endif %}
+
+        {% if dist_por_metodo %}
+        <section>
+            <h2 class="section-title">Distribuição por Método de Pagamento</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Método</th>
+                        <th class="text-center">Quantidade de Doações</th>
+                        <th class="text-right">Valor Total Arrecadado (R$)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in dist_por_metodo %}
+                    <tr>
+                        <td>{{ item.metodo }}</td>
+                        <td class="text-center">{{ item.qtd_doacoes }}</td>
+                        <td class="text-right">{{ item.total_valor|floatformat:2 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+        {% endif %}
+    {% else %}
+        <div class="no-data">Não há doações concluídas para gerar o relatório no momento.</div>
+    {% endif %}
+</body>
+</html>

@@ -1,101 +1,259 @@
+:root {
+    --cor-fundo-geral: #f5f9ff;
+    --cor-fundo-card: #ffffff;
+    --cor-texto-principal: #34495e;
+    --cor-texto-secundario: #6b7280;
+    --cor-borda-padrao: #e0e7ff;
+    --cor-sombra-leve: rgba(0, 0, 0, 0.05);
+    --cor-sombra-media: rgba(0, 0, 0, 0.1);
+    --azul-titulo: #1e40af;
+    --azul-destaque: #3b82f6;
+    --azul-card-titulo: #1e40af;
+    --azul-fundo-filtro: #e0e7ff;
+    --status-enviado-fundo: #e0f2fe;
+    --status-enviado-texto: #2563eb;
+    --status-entregue-aceita-fundo: #dcfce7;
+    --status-entregue-aceita-texto: #16a34a;
+    --status-lido-fundo: #fffbe6;
+    --status-lido-texto: #d97706;
+    --status-erro-fundo: #fee2e2;
+    --status-erro-texto: #dc2626;
+}
+
 .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 30px;
     font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background-color: #f5f9ff; 
+    background-color: var(--cor-fundo-geral);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px var(--cor-sombra-leve);
 }
 
 h1 {
-    color: #1a365d; 
-    margin-bottom: 20px;
-    font-size: 24px;
-    font-weight: 600;
-    border-bottom: 2px solid #4299e1;
-    padding-bottom: 10px;
+    color: var(--azul-titulo);
+    margin-bottom: 25px;
+    font-size: 28px;
+    font-weight: 700;
+    border-bottom: 3px solid var(--azul-destaque);
+    padding-bottom: 15px;
+    text-align: center;
 }
 
 .messages-list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
 }
 
 .message-card {
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(66, 153, 225, 0.15); 
-    padding: 20px;
-    border-left: 4px solid #4299e1; 
-    transition: transform 0.2s ease;
+    background-color: var(--cor-fundo-card);
+    border-radius: 10px;
+    box-shadow: 0 4px 12px var(--cor-sombra-media);
+    padding: 25px;
+    border-left: 5px solid var(--azul-destaque);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .message-card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(66, 153, 225, 0.25);
 }
 
 .message-card h3 {
-    color: #2b6cb0;
+    color: var(--azul-card-titulo);
     margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 18px;
-    font-weight: 500;
+    margin-bottom: 12px;
+    font-size: 20px;
+    font-weight: 600;
 }
 
 .message-card p {
-    color: #4a5568;
-    margin-bottom: 15px;
-    line-height: 1.5;
+    color: var(--cor-texto-principal);
+    margin-bottom: 18px;
+    line-height: 1.6;
+    font-size: 15px;
 }
 
 .message-meta {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 14px;
-    color: #718096; 
+    font-size: 13px;
+    color: var(--cor-texto-secundario);
+    border-top: 1px solid var(--cor-borda-padrao);
+    padding-top: 15px;
+    margin-top: 10px;
 }
 
 .status {
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-weight: 500;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 1px 3px var(--cor-sombra-leve);
 }
 
-
 .status.enviado {
-    background-color: #ebf8ff;
-    color: #3182ce;
+    background-color: var(--status-enviado-fundo);
+    color: var(--status-enviado-texto);
 }
 
 .status.entregue, .status.aceita {
-    background-color: #f0fff4; 
-    color: #38a169;
+    background-color: var(--status-entregue-aceita-fundo);
+    color: var(--status-entregue-aceita-texto);
 }
 
 .status.lido {
-    background-color: #fffaf0;
-    color: #dd6b20;
+    background-color: var(--status-lido-fundo);
+    color: var(--status-lido-texto);
 }
 
 .status.erro {
-    background-color: #fff5f5;
-    color: #e53e3e;
+    background-color: var(--status-erro-fundo);
+    color: var(--status-erro-texto);
 }
 
 .empty-message {
     text-align: center;
-    color: #718096;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    border: 1px dashed #cbd5e0;
+    color: var(--cor-texto-secundario);
+    padding: 30px;
+    background-color: var(--cor-fundo-card);
+    border-radius: 10px;
+    border: 2px dashed var(--cor-borda-padrao);
+    font-style: italic;
+    font-size: 16px;
 }
 
-
 .status-filter {
-    margin-bottom: 20px;
-    padding: 10px;
-    background-color: #ebf8ff;
-    border-radius: 8px;
+    margin-bottom: 25px;
+    padding: 15px;
+    background-color: var(--azul-fundo-filtro);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    box-shadow: 0 2px 8px var(--cor-sombra-leve);
+}
+
+.status-filter label {
+    color: var(--azul-card-titulo);
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.status-filter select {
+    padding: 8px 12px;
+    border: 1px solid var(--cor-borda-padrao);
+    border-radius: 6px;
+    background-color: var(--cor-fundo-card);
+    color: var(--cor-texto-principal);
+    font-size: 15px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.status-filter select:focus {
+    outline: none;
+    border-color: var(--azul-destaque);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+    }
+
+    .message-card {
+        padding: 20px;
+    }
+
+    .message-card h3 {
+        font-size: 18px;
+    }
+
+    .message-card p {
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+
+    .message-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding-top: 10px;
+        margin-top: 8px;
+    }
+
+    .status {
+        font-size: 11px;
+        padding: 5px 8px;
+    }
+
+    .status-filter {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+        margin: 15px auto;
+    }
+
+    h1 {
+        font-size: 22px;
+        margin-bottom: 15px;
+    }
+
+    .messages-list {
+        gap: 15px;
+    }
+
+    .message-card {
+        padding: 15px;
+        border-left-width: 3px;
+    }
+
+    .message-card h3 {
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+
+    .message-card p {
+        font-size: 13px;
+        margin-bottom: 12px;
+    }
+
+    .message-meta {
+        font-size: 12px;
+    }
+
+    .status {
+        font-size: 10px;
+        padding: 4px 7px;
+    }
+
+    .empty-message {
+        padding: 20px;
+        font-size: 14px;
+    }
+
+    .status-filter {
+        padding: 8px;
+    }
+
+    .status-filter label, .status-filter select {
+        font-size: 14px;
+    }
 }

@@ -1,0 +1,42 @@
+{% load humanize %}
+{% load l10n %}
+
+<div class="cabecalho-secao">
+    <h1>Campanhas Ativas</h1>
+    <p>Contribua para nossas causas e ajude a transformar vidas!</p>
+</div>
+
+{% if campanhas_ativas %}
+<div class="lista-campanhas-doador">
+    {% for campanha in campanhas_ativas %}
+    <div class="cartao-campanha-doador">
+        <div class="card-body">
+            <h5 class="card-title">{{ campanha.nome }}</h5>
+            <p class="card-text">{{ campanha.descricao|truncatewords:25 }}</p>
+            <p>
+                <strong>Meta:</strong> R$ {{ campanha.meta_arrecadacao|floatformat:2|intcomma }} <br>
+                <strong>Arrecadado:</strong> R$ {{ campanha.valor_arrecadado|floatformat:2|intcomma }}
+            </p>
+            <div class="progress mb-2" style="height: 20px; background-color: #e9ecef;">
+                <div class="progress-bar {% if campanha.progresso >= 100 %}bg-success{% else %}bg-primary{% endif %}" role="progressbar" style="width: {{ campanha.progresso|floatformat:2 }}%;" aria-valuenow="{{ campanha.progresso|floatformat:2 }}" aria-valuemin="0" aria-valuemax="100">
+                    {{ campanha.progresso|floatformat:0 }}%
+                </div>
+            </div>
+            <p><strong>Faltam:</strong> R$ {{ campanha.faltando_para_meta|floatformat:2|intcomma }}</p>
+            {% if campanha.data_fim %}
+                <p><small class="text-muted">Encerra em: {{ campanha.data_fim|date:"d/m/Y" }}</small></p>
+            {% endif %}
+            <button class="botao-primario abrir-modal-doar-campanha"
+                    data-campanha-id="{{ campanha.id }}"
+                    data-campanha-nome="{{ campanha.nome }}">
+                Doar para esta Campanha
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="sem-registros">
+    <p>Nenhuma campanha ativa no momento. Volte em breve!</p>
+</div>
+{% endif %}

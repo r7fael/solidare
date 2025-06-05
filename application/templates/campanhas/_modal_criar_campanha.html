@@ -1,0 +1,30 @@
+{% load l10n %}
+<div id="modal-criar-campanha" class="modal" style="display: none;">
+    <div class="modal-conteudo">
+        <span class="fechar-modal fechar-modal-criar-campanha">&times;</span>
+        <h2>Nova Campanha</h2>
+        <form id="form-criar-campanha" method="POST" action="{% url 'campanhas:criar_campanha' %}">
+            {% csrf_token %}
+            <div class="campo-formulario">
+                <label for="criar-campanha-nome">Nome*</label>
+                <input type="text" id="criar-campanha-nome" name="nome" required>
+            </div>
+            <div class="campo-formulario">
+                <label for="criar-campanha-descricao">Descrição*</label>
+                <textarea id="criar-campanha-descricao" name="descricao" rows="3" required></textarea>
+            </div>
+            <div class="campo-formulario">
+                <label for="criar-campanha-meta">Meta de Arrecadação (R$)*</label>
+                <input type="text" id="criar-campanha-meta" name="meta_arrecadacao" placeholder="Ex: 10000,00" required>
+            </div>
+            <div class="campo-formulario">
+                <label for="criar-campanha-data_fim">Data de Término (Opcional)</label>
+                <input type="date" id="criar-campanha-data_fim" name="data_fim">
+            </div>
+            <div class="acoes-formulario">
+                <button type="submit" class="botao-primario">Criar Campanha</button>
+                <button type="button" class="botao-secundario fechar-modal-criar-campanha">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
