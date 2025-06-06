@@ -315,7 +315,7 @@
                     </div>
                 </div>
                 <div class="lista-mensagens">
-                    {% for mensagem_item in mensagens_do_usuario %}
+                    {% for mensagem_item in mensagens %}
                     <div class="cartao-mensagem" data-status="{{ mensagem_item.status|lower|unlocalize }}">
                         <div class="cabecalho-mensagem">
                             <div class="info-basica-mensagem">
@@ -408,16 +408,20 @@
                         {% if visitas_agendadas %}
                             <ul class="lista-minhas-visitas">
                             {% for agendamento in visitas_agendadas %}
-                                <li>
-                                    <span>{{ agendamento.data_visita.data|date:"d/m/Y" }} - {{ agendamento.data_visita.get_status_display }}</span>
-                                    {% if agendamento.data_visita.status == 'DISPONIVEL' %}
-                                    <form method="POST" action="{% url 'usuarios:painel_doador' %}" style="display: inline; margin-left: 10px;">
+                                <li class="item-visita-agendada">
+                                    <div class="info-visita">
+                                        <span class="status-visita status-{{ agendamento.status|lower }}">
+                                            Confirmado
+                                        </span>
+                                        | Dia:
+                                        <span class="data-visita">{{ agendamento.data|date:"d/m/Y" }}</span>
+                                    </div>
+                                    <form method="POST" action="{% url 'usuarios:painel_doador' %}" class="form-cancelar-visita">
                                         {% csrf_token %}
                                         <input type="hidden" name="action" value="cancelar_agendamento_painel">
                                         <input type="hidden" name="agendamento_id" value="{{ agendamento.id }}">
                                         <button type="submit" class="botao-pequeno excluir">Cancelar</button>
                                     </form>
-                                    {% endif %}
                                 </li>
                             {% endfor %}
                             </ul>

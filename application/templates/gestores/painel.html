@@ -373,7 +373,7 @@
                                 {% endif %}
                             </div>
                             <div class="rodape-modal">
-                                {% if mensagem_item.status == 'AGUARDANDO' %}
+                                {% if mensagem_item.status == 'aguardando' %}
                                 <div class="acoes-modal">
                                     <form method="POST" action="{% url 'mensagens:aprovar_mensagem' mensagem_item.id %}" style="display: inline;">
                                         {% csrf_token %}

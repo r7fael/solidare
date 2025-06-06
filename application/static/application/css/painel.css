@@ -525,7 +525,11 @@
     align-items: center;
     justify-content: center;
 }
-@keyframes fadeInModalPainel { from { opacity: 0; } to { opacity: 1; } }
+
+@keyframes fadeInModalPainel {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
 
 .modal-conteudo {
     background-color: var(--cor-fundo-card-solido);
@@ -539,7 +543,12 @@
     max-height: 90vh;
     overflow-y: auto;
 }
-@keyframes slideInModalPainel { from { transform: translateY(-30px) scale(0.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+
+
+@keyframes slideInModalPainel {
+    from { transform: translateY(-30px) scale(0.95); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+}
 
 .modal-conteudo .cabecalho-modal {
     display: flex;
@@ -556,17 +565,60 @@
     font-weight: 600;
 }
 .fechar-modal {
-    background: none; border: none; font-size: 1.8rem; color: var(--cor-texto-medio); cursor: pointer; transition: color 0.2s;
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: var(--cor-texto-medio);
+    cursor: pointer;
+    transition: color 0.2s;
 }
 .fechar-modal:hover { color: var(--cor-vermelho-alerta); }
 
 .corpo-modal p { margin-bottom: 10px; color: var(--cor-texto-medio); font-size: 0.95rem; }
-.corpo-modal p strong { color: var(--cor-texto-escuro); }
-.corpo-modal h4 { margin-top: 15px; margin-bottom: 8px; color: var(--cor-texto-escuro); font-size: 1rem; font-weight: 600;}
-.conteudo-mensagem-modal { white-space: pre-wrap; word-wrap: break-word; max-height: 200px; overflow-y: auto; background: #f9f9f9; padding: 10px; border-radius: 4px; border: 1px solid var(--cor-borda-suave);}
-.motivo-rejeicao { color: var(--cor-vermelho-alerta); background-color: rgba(235,100,96,0.1); padding: 8px; border-radius: 4px; font-size: 0.9rem; margin-top: 10px; border-left: 3px solid var(--cor-vermelho-alerta);}
 
-.rodape-modal { margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--cor-borda-suave); display: flex; justify-content: flex-end; gap: 10px; }
+.corpo-modal p strong {
+    color: var(--cor-texto-escuro);
+}
+
+.corpo-modal h4 {
+    margin-top: 15px;
+    margin-bottom: 8px;
+    color: var(--cor-texto-escuro);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.conteudo-mensagem-modal {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 200px;
+    overflow-y: auto;
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid var(--cor-borda-suave);
+}
+
+.motivo-rejeicao {
+    color: var(--cor-vermelho-alerta);
+    background-color: rgba(235,100,96,0.1);
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    border-left: 3px solid var(--cor-vermelho-alerta);
+}
+
+.rodape-modal {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid var(--cor-borda-suave);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+
 .acoes-modal { display: flex; gap: 10px; }
 
 .alerta {
