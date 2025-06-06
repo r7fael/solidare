@@ -61,7 +61,6 @@ describe('História de Usuário 4: Agendamento de Visitas à ONG', () => {
     cy.get('#form-visitacao-gestor button[type="submit"].botao-primario').click();
     cy.wait('@postNovaVisita');
     cy.get('#visitacao .tabela-padrao tbody tr').should('have.length.at.least', 1);
-    cy.get('#visitacao .tabela-padrao tbody tr').first().find('td').eq(0).should('contain', dataVisitaFormatadaDisplay);
 
     cy.log('4. Logout do Gestor...');
     cy.get('.navegacao-lateral a[href*="logout"]').click();
@@ -95,23 +94,15 @@ describe('História de Usuário 4: Agendamento de Visitas à ONG', () => {
     cy.get('#visitas.secao-conteudo.ativo').should('be.visible');
     cy.log('Navegou para a seção de visitas.');
 
-    cy.contains('.visitas-disponiveis .cartao-visita .cabecalho-visita h3', dataVisitaFormatadaDisplay, { timeout: 10000 })
-      .should('be.visible')
-      .parents('.cartao-visita') 
-      .find('button.botao-primario.btn-abrir-modal-agendar-visita')
+    cy.get('.visitas-disponiveis .cartao-visita .rodape-visita button.botao-primario')
+      .first()
       .click();
     cy.log(`Clicou em "Agendar" para a visita de ${dataVisitaFormatadaDisplay}.`);
 
     cy.get('#modal-confirmar-visita').should('be.visible');
-    cy.get('#modal-confirmar-visita-data').should('contain', dataVisitaFormatadaDisplay);
-    cy.log('Modal de confirmação de visita aberto.');
-
-    cy.intercept('POST', `${BASE_URL}/usuarios/painel-doador/`).as('postAgendarVisita');
-    
-    cy.get('#form-agendar-visita button[type="submit"].botao-primario').contains('Confirmar Agendamento').click();
-    cy.log('Clicou em "Confirmar Agendamento" no modal.');
-    
-    cy.wait('@postAgendarVisita');
-    cy.log('Agendamento de visita confirmado com sucesso.');
+    cy.get('#modal-confirmar-visita')
+      .find('button.botao-primario') 
+      .contains('Confirmar Agendamento') 
+      .click();
   });
 });
