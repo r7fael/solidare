@@ -141,6 +141,9 @@ Disponíveis nos links: [YouTube | Deploy](https://youtu.be/ttYzjI8gwuo),
 **Screencast Testes**
 [Testes Automatizados](https://youtu.be/HqFx3cXjee0)
 
+**Screencast CI/CD**
+[Testes Automatizados](https://youtu.be/0r-HlpRgEiw)
+
 
 [Link do Deployment](https://solidare.azurewebsites.net/)
 </details>
