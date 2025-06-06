@@ -137,6 +137,12 @@ Disponíveis nos links: [YouTube | Deploy](https://youtu.be/ttYzjI8gwuo),
 [YouTube | Protótipo]()
 <br>
 
+
+**Screencast Testes Automatizados**
+
+[ScreenCast](https://youtu.be/HqFx3cXjee0)
+
+
 [Link do Deployment](https://solidare.azurewebsites.net/)
 </details>
 
