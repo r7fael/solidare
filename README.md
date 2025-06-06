@@ -103,7 +103,7 @@ Disponíveis nos links: [YouTube | Deploy](https://youtu.be/PYPbtUBx-JU),
   
 **Historias**
 <br>
-As oito histórias de usuário definidas para aprimorar a compreensão do futuro produto e assegurar o atendimento às expectativas foram detalhadas com três cenários distintos cada. Estes cenários, validados pela metodologia BDD (Behavior-Driven Development) e estruturados no formato Dado - Quando - Então, exploram diversas situações, abrangendo desde fluxos ideais até potenciais falhas, garantindo uma cobertura abrangente dos requisitos.
+As sete histórias de usuário definidas para aprimorar a compreensão do futuro produto e assegurar o atendimento às expectativas foram detalhadas com três cenários distintos cada. Estes cenários, validados pela metodologia BDD (Behavior-Driven Development) e estruturados no formato Dado - Quando - Então, exploram diversas situações, abrangendo desde fluxos ideais até potenciais falhas, garantindo uma cobertura abrangente dos requisitos.
 
 As histórias e seus respectivos cenários podem ser acessados e revisados no seguinte documento: [Histórias de Usuário](https://docs.google.com/document/d/15lNQA87yBFTOUeHxDLRP9XGcK0BDhXuryyQLcdqMKJI/edit?usp=sharing).
 
