@@ -133,7 +133,7 @@ Disponível através do [Figma](https://www.figma.com/design/G0Yuk7esIEczckooTxz
 
 **ScreenCasts**
 <br>
-Disponíveis nos links: [YouTube | Deploy](https://youtu.be/ttYzjI8gwuo), 
+Disponíveis nos links: [YouTube | Deploy](https://youtu.be/xhEW5bWJVXc), 
 [YouTube | Protótipo]()
 <br>
 
