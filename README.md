@@ -118,7 +118,8 @@ As histórias e seus respectivos cenários podem ser acessados e revisados no se
 
 
 **Bug Tracker**
-![Bug Tracker]()
+
+![Captura de tela 2025-06-05 231355](https://github.com/user-attachments/assets/e532d37f-61cf-4afd-a237-f6edfe6caae5)
 
 **Diagrama de Atividades**
 ![Diagrama_1](https://github.com/user-attachments/assets/1790e053-2a1e-4f61-bd23-dc96fb9e6040)
