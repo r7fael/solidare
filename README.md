@@ -109,11 +109,13 @@ As histórias e seus respectivos cenários podem ser acessados e revisados no se
 
 **Backlog**
 
-![Captura de tela 2025-06-05 203415](https://github.com/user-attachments/assets/1738ccf7-5366-4ad9-a92e-c2f3f6e192b9)
+![Captura de tela 2025-06-05 230900](https://github.com/user-attachments/assets/911280a3-afe6-471e-8d06-218468077757)
+
 
 **Painel**
 
-![Captura de tela 2025-06-05 203432](https://github.com/user-attachments/assets/599da8a0-be8c-440c-acc6-5ec7ab750485)
+![Captura de tela 2025-06-05 230931](https://github.com/user-attachments/assets/98778f4f-fc67-46af-84e5-717162c75b67)
+
 
 **Bug Tracker**
 ![Bug Tracker]()
