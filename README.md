@@ -123,7 +123,8 @@ As histórias e seus respectivos cenários podem ser acessados e revisados no se
 
 **Programação em Par**
 <br>
-Durante o desenvolvimento do projeto Solidare, a equipe adotou, em determinados momentos, a técnica de programação em par como estratégia para potencializar a qualidade do código e promover a colaboração ativa entre os integrantes. Essa abordagem permitiu a troca contínua de conhecimento, revisão imediata das implementações e maior eficiência na resolução de problemas mais complexos. No entanto, a programação em par não foi empregada em todas as etapas do desenvolvimento. Em diversas ocasiões, optamos por uma divisão de tarefas mais individualizada, permitindo que cada membro da equipe focasse em demandas específicas de forma paralela, otimizando o tempo e a produtividade do grupo como um todo. A escolha entre trabalhar em par ou individualmente foi feita de forma estratégica, considerando o tipo de tarefa, o nível de complexidade envolvido e a necessidade de colaboração naquele momento do projeto.
+Durante o desenvolvimento do projeto Solidare, a equipe utilizou a técnica de programação em par de forma limitada. Embora conhecêssemos o potencial dessa abordagem para melhorar a qualidade do código e promover a colaboração, a falta de compatibilidade de horários entre os membros da equipe dificultou sua aplicação frequente. Em muitas ocasiões, também notamos um certo desinteresse de alguns integrantes do projeto, o que impactou ainda mais a adoção da programação em par.
+Por conta dessas limitações, novamente optamos pela divisão de tarefas mais individualizada na maior parte do tempo. Cada membro da equipe focou em demandas específicas de forma paralela, o que ajudou a otimizar o tempo e a produtividade do grupo como um todo. A escolha por trabalhar individualmente foi, portanto, uma adaptação estratégica diante dos desafios de disponibilidade e engajamento que enfrentamos.
 
 **Sketches do Protótipo Lo-Fi**
 <br>
